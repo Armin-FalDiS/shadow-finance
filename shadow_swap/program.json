@@ -1,0 +1,10 @@
+{
+    "program": "shadow_swap.aleo",
+    "version": "0.0.0",
+    "description": "",
+    "development": {
+        "private_key": "APrivateKey1zkpJ7bTh9gauW3hDVeeaauWNA43isk8DJyJGZFAVKbT33qm",
+        "address": "aleo1mh42gesuplnxvlan6048787qv7s0pdze7vkwgvh95gw25aa2qypsyw72ar"
+    },
+    "license": "MIT"
+}

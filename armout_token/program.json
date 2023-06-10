@@ -1,0 +1,10 @@
+{
+    "program": "armout_token.aleo",
+    "version": "0.0.0",
+    "description": "",
+    "development": {
+        "private_key": "APrivateKey1zkpA4VDJVm7SnSdaMhDqRFRWxPB6ejiXZfRzEoneeWZ5b4G",
+        "address": "aleo1p8l6ct9u2wdm6uxd6e9c28v07a6sav0nuut86fwerg04y6ykkqgq0n6ulz"
+    },
+    "license": "MIT"
+}
