@@ -1,4 +1,11 @@
-// The program input for shadow_swap/src/main.leo
-[main]
-public a: u32 = 1u32;
-b: u32 = 2u32;
+[mint_lp_shadow]
+token0: ArminToken = ArminToken {
+  owner: aleo1nfd57vm8rvtqxxccmpypzpv5ne8lgwrpff5ppa4554hhqevvjsfqz603m2,
+  amount: 100000u64,
+  _nonce: 6305787513644239369568905544642707281270610186182272358954549475743197991668group,
+};
+token1: ArmoutToken = ArmoutToken {
+  owner: aleo1p8l6ct9u2wdm6uxd6e9c28v07a6sav0nuut86fwerg04y6ykkqgq0n6ulz,
+  amount: 100000u64,
+  _nonce: 6305787513644239369568905544642707281270610186182272358954549475743197991668group,
+};
