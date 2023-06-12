@@ -3,7 +3,7 @@ import armout_token.leo;
 
 program shadow_swap.aleo {    
     mapping reserves_shadow: u8 => u64;
-    // only holds total supply since mapping is the only option
+    // Only holds total supply since mapping is the only option
     mapping supply_shadow: u8 => u64;
     // LP token balances
     mapping lp_tokens_shadow: address => u64;
@@ -43,5 +43,40 @@ program shadow_swap.aleo {
     
     inline math_min(n1: u64, n2: u64) -> u64 {
         return n1 < n2 ? n1 : n2;
+    }
+
+    transition burn_lp_shadow(receiver: address, amount0: u64, amount1: u64) -> (armin_token.leo/ArminToken, armout_token.leo/ArmoutToken) {
+        let token0: ArminToken = armin_token.leo/transfer_armin_from_program(receiver, amount0);
+        let token1: ArmoutToken = armout_token.leo/transfer_armout_from_program(receiver, amount1);
+
+        return then finalize(receiver, amount0, amount1);
+    }
+    finalize burn_lp_shadow(receiver: address, amount0: u64, amount1: u64) {
+        assert_neq(amount0, 0u64);
+        assert_neq(amount1, 0u64);
+
+        let total_supply: u64 = Mapping::get_or_init(supply_shadow, 0u8, 0u64);
+        assert_neq(total_supply, 0u64);
+
+        let lp: u64 = Mapping::get_or_init(lp_tokens_shadow, receiver, 0u64);
+        assert_neq(lp, 0u64);
+
+
+        let reserve0: u64 = Mapping::get_or_init(reserves_shadow, 0u8, 0u64);
+        assert_neq(reserve0, 0u64);
+
+        let reserve1: u64 = Mapping::get_or_init(reserves_shadow, 1u8, 0u64);
+        assert_neq(reserve1, 0u64);
+
+        // Calculate lp tokens based on amounts given
+        let lp0: u64 = (reserve0 * lp * lp) / (total_supply * amount0);
+        let lp1: u64 = (reserve1 * lp * lp) / (total_supply * amount1);
+
+        assert_eq(lp0, lp1);
+
+        Mapping::set(reserves_shadow, 0u8, reserve0 - amount0);
+        Mapping::set(reserves_shadow, 1u8, reserve1 - amount1);
+
+        Mapping::set(lp_tokens_shadow, receiver, 0u64);
     }
 }
