@@ -23,7 +23,7 @@ program shadow_swap.aleo {
         let liquidity: u64 = 0u64;
         if(total_supply == 0u64) {
             liquidity = token0 * token1;
-            // liquidity = liquidity.square_root();
+            //liquidity = liquidity.square_root();
             liquidity = liquidity - 1000u64;
         } else {
             let lp0: u64 = (token0 * total_supply) / reserve0;
@@ -72,10 +72,13 @@ program shadow_swap.aleo {
         let lp0: u64 = (reserve0 * lp * lp) / (total_supply * amount0);
         let lp1: u64 = (reserve1 * lp * lp) / (total_supply * amount1);
 
+        // Equality of the calculated values means they are equal to lp
         assert_eq(lp0, lp1);
 
         Mapping::set(reserves_shadow, 0u8, reserve0 - amount0);
         Mapping::set(reserves_shadow, 1u8, reserve1 - amount1);
+
+        Mapping::set(supply_shadow, 0u8, total_supply - lp);
 
         Mapping::set(lp_tokens_shadow, receiver, 0u64);
     }
