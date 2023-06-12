@@ -6,8 +6,11 @@ program shadow_swap.aleo {
     mapping supply_shadow: u8 => u64;
     mapping liquidity_shadow: address => u64;
 
-    transition mint_lp_shadow(token0: armin_token.leo/ArminToken, token1: armout_token.leo/ArmoutToken) {
-        return then finalize(token0.amount, token1.amount);
+    transition mint_lp_shadow(token0: armin_token.leo/ArminToken, amount0: u64, token1: armout_token.leo/ArmoutToken, amount1: u64) -> (armin_token.leo/ArminToken, armout_token.leo/ArmoutToken) {
+        let remaining0: armin_token.leo/transfer_armin_to_program = armin_token.leo/transfer_armin_to_program(token0, amount0);
+        let remaining1: armout_token.leo/transfer_armout_to_program = armout_token.leo/transfer_armout_to_program(token1, amount1);
+
+        return (remaining0, remaining1) then finalize(amount0, amount1);
     }
     finalize mint_lp_shadow(token0: u64, token1: u64) {
         let total_supply: u64 = Mapping::get_or_init(supply_shadow, 0u8, 0u64);
@@ -32,8 +35,8 @@ program shadow_swap.aleo {
 
         Mapping::set(supply_shadow, 0u8, total_supply + liquidity);
 
-        let current_lp: u64 = Mapping::get_or_init(liquidity_shadow, self.caller, 0u64);
-        Mapping::set(liquidity_shadow, self.caller, current_lp + liquidity);
+        let liquidity_last: u64 = Mapping::get_or_init(liquidity_shadow, self.caller, 0u64);
+        Mapping::set(liquidity_shadow, self.caller, liquidity_last + liquidity);
     }
     
     inline math_min(n1: u64, n2: u64) -> u64 {
