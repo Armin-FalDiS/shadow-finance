@@ -61,16 +61,18 @@ program shadow_swap.aleo {
         let lp: u64 = Mapping::get_or_init(lp_tokens_shadow, receiver, 0u64);
         assert_neq(lp, 0u64);
 
-
         let reserve0: u64 = Mapping::get_or_init(reserves_shadow, 0u8, 0u64);
         assert_neq(reserve0, 0u64);
 
         let reserve1: u64 = Mapping::get_or_init(reserves_shadow, 1u8, 0u64);
         assert_neq(reserve1, 0u64);
 
+        // Improve gas usage by separating repeated calculation
+        let lp2total: u64 = (lp * lp) / total_supply;
+
         // Calculate lp tokens based on amounts given
-        let lp0: u64 = (reserve0 * lp * lp) / (total_supply * amount0);
-        let lp1: u64 = (reserve1 * lp * lp) / (total_supply * amount1);
+        let lp0: u64 = (reserve0 / amount0) * lp2total;
+        let lp1: u64 = (reserve1 / amount1) * lp2total;
 
         // Equality of the calculated values means they are equal to lp
         assert_eq(lp0, lp1);
