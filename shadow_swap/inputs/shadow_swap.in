@@ -9,3 +9,8 @@ token1: ArmoutToken = ArmoutToken {
   amount: 100000u64,
   _nonce: 6305787513644239369568905544642707281270610186182272358954549475743197991668group,
 };
+
+[burn_lp_shadow]
+receiver: address = aleo1mh42gesuplnxvlan6048787qv7s0pdze7vkwgvh95gw25aa2qypsyw72ar;
+amount0: u64 = 1u64;
+amount1: u64 = 5u64;
