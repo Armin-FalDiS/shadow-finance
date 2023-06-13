@@ -84,4 +84,48 @@ program shadow_swap.aleo {
 
         Mapping::set(lp_tokens_shadow, receiver, 0u64);
     }
+
+    transition swap_to_0_shadow(receiver: address, token1In: armout_token.leo/ArmoutToken, amount1In: u64, amount0Out: u64) -> (armin_token.leo/ArminToken, armout_token.leo/ArmoutToken) {
+        assert_neq(amount0Out, 0u64);
+        assert_neq(amount1In, 0u64);
+        
+        let token0: ArminToken = armin_token.leo/transfer_armin_from_program(receiver, amount0Out);
+        let token1: ArmoutToken = armout_token.leo/transfer_armout_to_program(token1In, amount1In);
+
+        return (token0, token1) then finalize(amount1In, amount0Out);
+    }
+    finalize swap_to_0_shadow(amount1In: u64, amount0Out: u64) {
+        let reserve0: u64 = Mapping::get_or_init(reserves_shadow, 0u8, 0u64);
+        let reserve1: u64 = Mapping::get_or_init(reserves_shadow, 1u8, 0u64);
+
+        let new_reserve0: u64 = reserve0 - amount0Out;
+        let new_reserve1: u64 = reserve1 + amount1In;
+
+        assert(new_reserve0 * new_reserve1 >= reserve0 * reserve1);
+
+        Mapping::set(reserves_shadow, 0u8, new_reserve0);
+        Mapping::set(reserves_shadow, 1u8, new_reserve1);
+    }
+
+    transition swap_to_1_shadow(receiver: address, token0In: armin_token.leo/ArminToken, amount0In: u64, amount1Out: u64) -> (armin_token.leo/ArminToken, armout_token.leo/ArmoutToken) {
+        assert_neq(amount0In, 0u64);
+        assert_neq(amount1Out, 0u64);
+        
+        let token0: ArminToken = armin_token.leo/transfer_armin_to_program(token0In, amount0In);
+        let token1: ArmoutToken = armout_token.leo/transfer_armout_from_program(receiver, amount1Out);
+
+        return (token0, token1) then finalize(amount0In, amount1Out);
+    }
+    finalize swap_to_1_shadow(amount0In: u64, amount1Out: u64) {
+        let reserve0: u64 = Mapping::get_or_init(reserves_shadow, 0u8, 0u64);
+        let reserve1: u64 = Mapping::get_or_init(reserves_shadow, 1u8, 0u64);
+
+        let new_reserve0: u64 = reserve0 + amount0In;
+        let new_reserve1: u64 = reserve1 - amount1Out;
+
+        assert(new_reserve0 * new_reserve1 >= reserve0 * reserve1);
+
+        Mapping::set(reserves_shadow, 0u8, new_reserve0);
+        Mapping::set(reserves_shadow, 1u8, new_reserve1);
+    }
 }
