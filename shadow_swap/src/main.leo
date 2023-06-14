@@ -8,6 +8,30 @@ program shadow_swap.aleo {
     // LP token balances
     mapping lp_tokens_shadow: field => u64;
 
+    // For when the total supply of LP tokens are 0
+    transition mint_lp_init_shadow(receiver: address, token0: armin_token.leo/ArminToken, amount0: u64, token1: armout_token.leo/ArmoutToken, amount1: u64) -> (armin_token.leo/ArminToken, armout_token.leo/ArmoutToken) {
+        let remaining0: ArminToken = armin_token.leo/transfer_armin_to_program(token0, amount0);
+        let remaining1: ArmoutToken = armout_token.leo/transfer_armout_to_program(token1, amount1);
+
+        let initial_lp: u64 = amount0 * amount1;
+        //initial_lp = initial_lp.square_root();
+        initial_lp -= 1000u64;
+
+        return (remaining0, remaining1) then finalize(BHP256::hash(receiver), amount0, amount1, initial_lp);
+    }
+    finalize mint_lp_init_shadow(receiver: field, token0: u64, token1: u64, initial_lp: u64) {
+        let total_supply: u64 = Mapping::get_or_init(supply_shadow, 0u8, 0u64);
+
+        assert_eq(total_supply, 0u64);
+
+        Mapping::set(reserves_shadow, 0u8, token0);
+        Mapping::set(reserves_shadow, 1u8, token1);
+
+        Mapping::set(supply_shadow, 0u8, initial_lp);
+
+        Mapping::set(lp_tokens_shadow, receiver, initial_lp);
+    }
+
     transition mint_lp_shadow(receiver: address, token0: armin_token.leo/ArminToken, amount0: u64, token1: armout_token.leo/ArmoutToken, amount1: u64) -> (armin_token.leo/ArminToken, armout_token.leo/ArmoutToken) {
         let remaining0: ArminToken = armin_token.leo/transfer_armin_to_program(token0, amount0);
         let remaining1: ArmoutToken = armout_token.leo/transfer_armout_to_program(token1, amount1);
@@ -17,28 +41,23 @@ program shadow_swap.aleo {
     finalize mint_lp_shadow(receiver: field, token0: u64, token1: u64) {
         let total_supply: u64 = Mapping::get_or_init(supply_shadow, 0u8, 0u64);
 
+        assert_neq(total_supply, 0u64);
+
         let reserve0: u64 = Mapping::get_or_init(reserves_shadow, 0u8, 0u64);
         let reserve1: u64 = Mapping::get_or_init(reserves_shadow, 1u8, 0u64);
         
-        let liquidity: u64 = 0u64;
-        if(total_supply == 0u64) {
-            liquidity = token0 * token1;
-            //liquidity = liquidity.square_root();
-            liquidity = liquidity - 1000u64;
-        } else {
-            let lp0: u64 = (token0 * total_supply) / reserve0;
-            let lp1: u64 = (token1 * total_supply) / reserve1;
+        let lp0: u64 = (token0 * total_supply) / reserve0;
+        let lp1: u64 = (token1 * total_supply) / reserve1;
 
-            liquidity = math_min(lp0, lp1);
-        }
+        let lp: u64 = math_min(lp0, lp1);
 
         Mapping::set(reserves_shadow, 0u8, reserve0 + token0);
         Mapping::set(reserves_shadow, 1u8, reserve1 + token1);
 
-        Mapping::set(supply_shadow, 0u8, total_supply + liquidity);
+        Mapping::set(supply_shadow, 0u8, total_supply + lp);
 
-        let liquidity_last: u64 = Mapping::get_or_init(lp_tokens_shadow, receiver, 0u64);
-        Mapping::set(lp_tokens_shadow, receiver, liquidity_last + liquidity);
+        let lp_last: u64 = Mapping::get_or_init(lp_tokens_shadow, receiver, 0u64);
+        Mapping::set(lp_tokens_shadow, receiver, lp_last + lp);
     }
     
     inline math_min(n1: u64, n2: u64) -> u64 {
