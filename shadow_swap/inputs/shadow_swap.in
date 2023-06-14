@@ -1,14 +1,32 @@
-[mint_lp_shadow]
+[mint_lp_init_shadow]
+receiver: address = aleo1mh42gesuplnxvlan6048787qv7s0pdze7vkwgvh95gw25aa2qypsyw72ar;
 token0: ArminToken = ArminToken {
   owner: aleo1mh42gesuplnxvlan6048787qv7s0pdze7vkwgvh95gw25aa2qypsyw72ar,
   amount: 100000u64,
   _nonce: 6305787513644239369568905544642707281270610186182272358954549475743197991668group,
 };
+amount0: u64 = 1000u64;
 token1: ArmoutToken = ArmoutToken {
   owner: aleo1mh42gesuplnxvlan6048787qv7s0pdze7vkwgvh95gw25aa2qypsyw72ar,
   amount: 100000u64,
   _nonce: 6305787513644239369568905544642707281270610186182272358954549475743197991668group,
 };
+amount1: u64 = 5000u64;
+
+[mint_lp_shadow]
+receiver: address = aleo1mh42gesuplnxvlan6048787qv7s0pdze7vkwgvh95gw25aa2qypsyw72ar;
+token0: ArminToken = ArminToken {
+  owner: aleo1mh42gesuplnxvlan6048787qv7s0pdze7vkwgvh95gw25aa2qypsyw72ar,
+  amount: 100000u64,
+  _nonce: 6305787513644239369568905544642707281270610186182272358954549475743197991668group,
+};
+amount0: u64 = 2000u64;
+token1: ArmoutToken = ArmoutToken {
+  owner: aleo1mh42gesuplnxvlan6048787qv7s0pdze7vkwgvh95gw25aa2qypsyw72ar,
+  amount: 100000u64,
+  _nonce: 6305787513644239369568905544642707281270610186182272358954549475743197991668group,
+};
+amount1: u64 = 10000u64;
 
 [burn_lp_shadow]
 receiver: address = aleo1mh42gesuplnxvlan6048787qv7s0pdze7vkwgvh95gw25aa2qypsyw72ar;

@@ -13,9 +13,7 @@ program shadow_swap.aleo {
         let remaining0: ArminToken = armin_token.leo/transfer_armin_to_program(token0, amount0);
         let remaining1: ArmoutToken = armout_token.leo/transfer_armout_to_program(token1, amount1);
 
-        let initial_lp: u64 = amount0 * amount1;
-        //initial_lp = initial_lp.square_root();
-        initial_lp -= 1000u64;
+        let initial_lp: u64 = square_root(amount0 * amount1) - 1000u64;
 
         return (remaining0, remaining1) then finalize(BHP256::hash(receiver), amount0, amount1, initial_lp);
     }
@@ -62,6 +60,22 @@ program shadow_swap.aleo {
     
     inline math_min(n1: u64, n2: u64) -> u64 {
         return n1 < n2 ? n1 : n2;
+    }
+
+    function square_root(x: u64) -> u64 {
+        let z: u64 = (x + 1u64) / 2u64;
+        let y: u64 = x;
+
+        for i: u8 in 0u8..42u8 {
+            if(z >= y) {
+                return y;
+            }
+
+            y = z;
+            z = (x / z + z) / 2u64;
+        }
+
+        return 0u64;
     }
 
     transition burn_lp_shadow(receiver: address, amount0: u64, amount1: u64) -> (armin_token.leo/ArminToken, armout_token.leo/ArmoutToken) {
