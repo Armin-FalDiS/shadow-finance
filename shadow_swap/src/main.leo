@@ -15,10 +15,10 @@ program shadow_swap.aleo {
 
         let initial_lp: u64 = square_root(amount0 * amount1) - 1000u64;
 
-        return (remaining0, remaining1) then finalize(BHP256::hash(receiver), amount0, amount1, initial_lp);
+        return (remaining0, remaining1) then finalize(BHP256::hash_to_field(receiver), amount0, amount1, initial_lp);
     }
     finalize mint_lp_init_shadow(receiver: field, token0: u64, token1: u64, initial_lp: u64) {
-        let total_supply: u64 = Mapping::get_or_init(supply_shadow, 0u8, 0u64);
+        let total_supply: u64 = Mapping::get_or_use(supply_shadow, 0u8, 0u64);
 
         assert_eq(total_supply, 0u64);
 
@@ -34,15 +34,15 @@ program shadow_swap.aleo {
         let remaining0: ArminToken = armin_token.leo/transfer_armin_to_program(token0, amount0);
         let remaining1: ArmoutToken = armout_token.leo/transfer_armout_to_program(token1, amount1);
 
-        return (remaining0, remaining1) then finalize(BHP256::hash(receiver), amount0, amount1);
+        return (remaining0, remaining1) then finalize(BHP256::hash_to_field(receiver), amount0, amount1);
     }
     finalize mint_lp_shadow(receiver: field, token0: u64, token1: u64) {
-        let total_supply: u64 = Mapping::get_or_init(supply_shadow, 0u8, 0u64);
+        let total_supply: u64 = Mapping::get(supply_shadow, 0u8);
 
         assert_neq(total_supply, 0u64);
 
-        let reserve0: u64 = Mapping::get_or_init(reserves_shadow, 0u8, 0u64);
-        let reserve1: u64 = Mapping::get_or_init(reserves_shadow, 1u8, 0u64);
+        let reserve0: u64 = Mapping::get(reserves_shadow, 0u8);
+        let reserve1: u64 = Mapping::get(reserves_shadow, 1u8);
         
         let lp0: u64 = (token0 * total_supply) / reserve0;
         let lp1: u64 = (token1 * total_supply) / reserve1;
@@ -54,7 +54,7 @@ program shadow_swap.aleo {
 
         Mapping::set(supply_shadow, 0u8, total_supply + lp);
 
-        let lp_last: u64 = Mapping::get_or_init(lp_tokens_shadow, receiver, 0u64);
+        let lp_last: u64 = Mapping::get_or_use(lp_tokens_shadow, receiver, 0u64);
         Mapping::set(lp_tokens_shadow, receiver, lp_last + lp);
     }
     
@@ -79,26 +79,23 @@ program shadow_swap.aleo {
     }
 
     transition burn_lp_shadow(receiver: address, amount0: u64, amount1: u64) -> (armin_token.leo/ArminToken, armout_token.leo/ArmoutToken) {
-        let token0: ArminToken = armin_token.leo/transfer_armin_from_program(receiver, amount0);
-        let token1: ArmoutToken = armout_token.leo/transfer_armout_from_program(receiver, amount1);
-
-        return then finalize(BHP256::hash(receiver), amount0, amount1);
-    }
-    finalize burn_lp_shadow(receiver: field, amount0: u64, amount1: u64) {
         assert_neq(amount0, 0u64);
         assert_neq(amount1, 0u64);
 
-        let total_supply: u64 = Mapping::get_or_init(supply_shadow, 0u8, 0u64);
+        let token0: ArminToken = armin_token.leo/transfer_armin_from_program(receiver, amount0);
+        let token1: ArmoutToken = armout_token.leo/transfer_armout_from_program(receiver, amount1);
+
+        return then finalize(BHP256::hash_to_field(receiver), amount0, amount1);
+    }
+    finalize burn_lp_shadow(receiver: field, amount0: u64, amount1: u64) {
+        let total_supply: u64 = Mapping::get(supply_shadow, 0u8);
         assert_neq(total_supply, 0u64);
 
-        let lp: u64 = Mapping::get_or_init(lp_tokens_shadow, receiver, 0u64);
+        let lp: u64 = Mapping::get(lp_tokens_shadow, receiver);
         assert_neq(lp, 0u64);
 
-        let reserve0: u64 = Mapping::get_or_init(reserves_shadow, 0u8, 0u64);
-        assert_neq(reserve0, 0u64);
-
-        let reserve1: u64 = Mapping::get_or_init(reserves_shadow, 1u8, 0u64);
-        assert_neq(reserve1, 0u64);
+        let reserve0: u64 = Mapping::get(reserves_shadow, 0u8);
+        let reserve1: u64 = Mapping::get(reserves_shadow, 1u8);
 
         // Improve gas usage by separating repeated calculation
         let lp2total: u64 = (lp * lp) / total_supply;
@@ -128,8 +125,8 @@ program shadow_swap.aleo {
         return (token0, token1) then finalize(amount1In, amount0Out);
     }
     finalize swap_to_0_shadow(amount1In: u64, amount0Out: u64) {
-        let reserve0: u64 = Mapping::get_or_init(reserves_shadow, 0u8, 0u64);
-        let reserve1: u64 = Mapping::get_or_init(reserves_shadow, 1u8, 0u64);
+        let reserve0: u64 = Mapping::get(reserves_shadow, 0u8);
+        let reserve1: u64 = Mapping::get(reserves_shadow, 1u8);
 
         let new_reserve0: u64 = reserve0 - amount0Out;
         let new_reserve1: u64 = reserve1 + amount1In;
@@ -150,8 +147,8 @@ program shadow_swap.aleo {
         return (token0, token1) then finalize(amount0In, amount1Out);
     }
     finalize swap_to_1_shadow(amount0In: u64, amount1Out: u64) {
-        let reserve0: u64 = Mapping::get_or_init(reserves_shadow, 0u8, 0u64);
-        let reserve1: u64 = Mapping::get_or_init(reserves_shadow, 1u8, 0u64);
+        let reserve0: u64 = Mapping::get(reserves_shadow, 0u8);
+        let reserve1: u64 = Mapping::get(reserves_shadow, 1u8);
 
         let new_reserve0: u64 = reserve0 + amount0In;
         let new_reserve1: u64 = reserve1 - amount1Out;
