@@ -16,7 +16,7 @@ program armout_token.aleo {
         } then finalize(amount);
     }
     finalize mint_armout(amount: u64) {
-        let total_supply_armout: u64 = Mapping::get_or_init(supply_armout, 0u8, 0u64);
+        let total_supply_armout: u64 = Mapping::get_or_use(supply_armout, 0u8, 0u64);
         let current_supply_armout: u64 = total_supply_armout + amount;
 
         assert(current_supply_armout <= 100000000000u64);
@@ -52,9 +52,9 @@ program armout_token.aleo {
     }
     finalize transfer_armout_to_program(amount: u64) {
         // Hard-coded 0u8 is to be replaced by self.parent proposed by ARC-0030 
-        let program_id: field = BHP256::hash(0u8);
+        let program_id: field = BHP256::hash_to_field(0u8);
 
-        let program_balance: u64 = Mapping::get_or_init(programs_armout, program_id, 0u64);
+        let program_balance: u64 = Mapping::get_or_use(programs_armout, program_id, 0u64);
         Mapping::set(programs_armout, program_id, program_balance + amount);
     }
 
@@ -68,9 +68,9 @@ program armout_token.aleo {
     }
     finalize transfer_armout_from_program(amount: u64) {
         // Hard-coded 0u8 is to be replaced by self.parent proposed by ARC-0030 
-        let program_id: field = BHP256::hash(0u8);
+        let program_id: field = BHP256::hash_to_field(0u8);
 
-        let program_balance: u64 = Mapping::get_or_init(programs_armout, program_id, 0u64);
+        let program_balance: u64 = Mapping::get_or_use(programs_armout, program_id, 0u64);
         Mapping::set(programs_armout, program_id, program_balance - amount);
     }
 }
