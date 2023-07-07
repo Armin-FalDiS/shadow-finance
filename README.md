@@ -6,3 +6,13 @@ At present, the project supports a limited selection of two premade tokens, prim
 
 
 ### How To Get Started
+
+
+
+### Functions
+To use the swap , you must first mint tokens from the token programs or receive tokens from another account. Here is a list of token functions and their descriptions (both tokens have identical functions):
+
+
+# mint
+The mint(owner: address, amount: u64) function serves as a mechanism to assign a user an arbitrary number of tokens, effectively creating a record of ownership. Currently, anyone can utilize the mint function. Once the mint process is finalized, the total supply of the token will be adjusted accordingly, reflecting the newly issued tokens. mint has an upper limit of 100000 for its input
+
