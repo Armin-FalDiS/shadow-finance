@@ -1,8 +1,42 @@
+
 # Shadow Finance
 
-Shadow Finance is a privacy-focused automated market maker (AMM) swap built on the Aleo blockchain. It leverages Aleo's zero-knowledge snark technology to enable trustless private trading.
+
+
+<!-- TABLE OF CONTENTS -->
+<details>
+  <summary>Table of Contents</summary>
+  <ol>
+    <li>
+      <a href="#about-the-project">About The Project</a>
+      <ul>
+        <li><a href="#built-with">Built With</a></li>
+      </ul>
+    </li>
+    <li>
+      <a href="#getting-started">Getting Started</a>
+      <ul>
+        <li><a href="#prerequisites">Prerequisites</a></li>
+        <li><a href="#installation">Installation</a></li>
+      </ul>
+    </li>
+    <li><a href="#usage">Usage</a></li>
+    <li><a href="#roadmap">Roadmap</a></li>
+    <li><a href="#contributing">Contributing</a></li>
+    <li><a href="#license">License</a></li>
+    <li><a href="#contact">Contact</a></li>
+    <li><a href="#acknowledgments">Acknowledgments</a></li>
+  </ol>
+</details>
+
+## About The Project
+
+
+TShadow Finance is a privacy-focused automated market maker (AMM) swap built on the Aleo blockchain. It leverages Aleo's zero-knowledge snark technology to enable trustless private trading.
 
 At present, the project supports a limited selection of two premade tokens, primarily designed for demonstration purposes. Each token has a set of functions that users can engage with. This setup allows for experimentation and exploration of the token functionalities within the project's framework. both tokens have a total supply limit of one hundred billion (100000000000).
+
+<p align="right">(<a href="#top">back to top</a>)</p>
 
 
 ## How To Get Started
