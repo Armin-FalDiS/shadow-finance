@@ -31,7 +31,7 @@
     <li>
       <a href="#About The Project">About The Project</a>
             <ul>
-        <li><a href="#Our Vision">Vision</a></li>    
+        <li><a href="#Our Vision">Our Vision</a></li>    
         <li><a href="#Prerequisites">Prerequisites</a></li>
         <li><a href="#Installation">Installation</a></li>
         <li><a href="#Getting Started">Getting Started</a></li>
@@ -100,5 +100,22 @@ transfer_armout_from_program
 <p align="right">(<a href="#top">back to top</a>)</p>
 
 ## Swap Functions
+
+### Mint LP Init Shadow
+mint_lp_init_shadow(receiver: address, token0: armin_token.leo/ArminToken, amount0: u64, token1: armout_token.leo/ArmoutToken, amount1: u64)  
+This function initializes the liquidity pool and allows you to set the initial price for the tokens. The price is set based on the proportion of tokens you deposit into the pool.
+Upon finalization of the process, the reserves for both tokens will be adjusted accordingly, and LP tokens will be issued to the liquidity provider. All of this information is stored in mappings.To avoid excessive appreciation of a single LP token, the initial issuance of LP tokens will be reduced by 1000.  
+
+### Mint LP Shadow  
+mint_lp_shadow(receiver: address, token0: armin_token.leo/ArminToken, amount0: u64, token1: armout_token.leo/ArmoutToken, amount1: u64)  
+This function enables any user to deposit tokens in proportion to the current price into the pool. The reserves for the tokens will be adjusted accordingly, and LP tokens will be generated and issued to the liquidity provider. Additionally, the total supply of LP tokens will be updated.  
+
+### Burn LP Shadow
+(receiver: address, amount0: u64, amount1: u64)    
+This function allows the owner of an address  to burn their LP tokens and receive Liquidity in exchange. The proportion of tokens returned will depend on the current price in the pool. Once finalized, the token reserves and LP token mappings will be updated accordingly.  
+
+### Swap To Shadow  
+
+
 
 <p align="right">(<a href="#top">back to top</a>)</p>
