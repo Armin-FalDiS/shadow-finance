@@ -1,25 +1,45 @@
 # Shadow Finance
 
+
+<!-- PROJECT LOGO -->
+<br />
+<div align="center">
+  <a href="https://github.com/Armin-FalDis/shadow-finance">
+    <img src="images/logo.svg" alt="Logo" width="80" height="80">
+  </a>
+
+  <h3 align="center">Shadow Finance</h3>
+
+  <p align="center">
+    Private Swap along with tokens for Aleo deploy incentives program !
+    <br />
+    <a href="https://github.com/Armin-FalDis/shadow-finance"><strong>Explore the docs »</strong></a>
+    <br />
+    <br />
+    <a href="https://github.com/Armin-FalDis/shadow-finance">View Demo</a>
+    ·
+    <a href="https://github.com/Armin-FalDis/shadow-finance">Report Bug</a>
+    ·
+    <a href="https://github.com/Armin-FalDis/shadow-finance">Request Feature</a>
+  </p>
+</div>
+
 <!-- TABLE OF CONTENTS -->
 <details>
   <summary>Table of Contents</summary>
   <ol>
     <li>
       <a href="#About The Project">About The Project</a>
-      <ul>
-        <li><a href="#Token Functions">Token Functions</a></li>
-      </ul>
             <ul>
+        <li><a href="#Our Vision">Vision</a></li>    
         <li><a href="#Prerequisites">Prerequisites</a></li>
         <li><a href="#Installation">Installation</a></li>
-            <li>
-      <a href="#Getting Started">Getting Started</a>
-</li>
+        <li><a href="#Getting Started">Getting Started</a></li>
       </ul>
     </li>
 
 <li><a href="#Token Functions">Token Functions</a></li>
-<li><a href="#Swap Functions">Token Functions</a></li>
+<li><a href="#Swap Functions">Swap Functions</a></li>
 
   </ol>
 </details>
@@ -32,6 +52,8 @@ At present, the project supports a limited selection of two premade tokens, prim
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
+
+## Our Vision
 
 ## Prerequisites
 
