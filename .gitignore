@@ -1,3 +1,4 @@
 outputs/
 build/
 .vscode
+node_modules/
