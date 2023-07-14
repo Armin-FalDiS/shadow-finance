@@ -33,7 +33,6 @@
             <ul>
         <li><a href="#Our Vision">Our Vision</a></li>    
         <li><a href="#Prerequisites">Prerequisites</a></li>
-        <li><a href="#Installation">Installation</a></li>
         <li><a href="#Getting Started">Getting Started</a></li>
       </ul>
     </li>
@@ -56,10 +55,11 @@ At present, the project supports a limited selection of two premade tokens, prim
 ## Our Vision
 
 ## Prerequisites
-
-## Installation
+ Snarkos
+ python 3.11
 
 ## Getting Started
+You can either execute all of the functions directly with aleo sdk/snarkOS and tools like aleo.tools or use shadow-cli which is provided alongside the project
 
 ## Token Functions
 
