@@ -1,8 +1,9 @@
-import { Card, Divider, Form, Input } from "antd";
+import { Card, Divider, Form, Input, Row, Col, Button } from "antd";
 import { CopyButton } from "../../components/CopyButton";
 import { useAleoWASM } from "../../aleo-wasm-hook";
 import { useContext } from "react";
 import { AppContext } from "../../App";
+import { useState } from "react";
 
 export const Account = ({ setAccount }) => {
     const { account, setFee, setArmInToken, setArmOutToken } = useContext(AppContext);
@@ -68,6 +69,7 @@ export const Account = ({ setAccount }) => {
                         </Button>
                     </Col>
                 </Row>
+                <br />
                 <Form {...layout}>
                     <Form.Item label="Private Key" colon={false}>
                         <Input

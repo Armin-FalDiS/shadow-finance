@@ -3,6 +3,7 @@ import { CopyButton } from "../../components/CopyButton";
 import { useAleoWASM } from "../../aleo-wasm-hook";
 import { useContext } from "react";
 import { AppContext } from "../../App";
+import { useState } from "react";
 
 export const Fee = () => {
     const { account, fee, setFee } = useContext(AppContext);
@@ -12,9 +13,7 @@ export const Fee = () => {
         setFee(null);
         try {
             if (event.target.value && account) {
-                setFee(
-                    account.to_view_key().decrypt(event.target.value),
-                );
+                setFee(account.to_view_key().decrypt(event.target.value));
             }
         } catch (error) {
             console.error(error);
@@ -30,7 +29,7 @@ export const Fee = () => {
                 bordered={false}
             >
                 <Form {...layout}>
-                    <Form.Item label="Fee Record (Encrypted)" colon={false}>
+                    <Form.Item label="Fee (Encrypted)" colon={false}>
                         <Input
                             name="feeRecordEncrypted"
                             size="large"
@@ -40,13 +39,14 @@ export const Fee = () => {
                             style={{ borderRadius: "20px" }}
                         />
                     </Form.Item>
-                    <Divider />
+                    <br />
                     <Form.Item label="Fee Record" colon={false}>
                         <Input
                             name="feeRecord"
                             size="large"
-                            placeholder="{ owner: aleo1..., microcredits: Xu64, _nonce: 12345field }"
+                            placeholder="{ owner: aleo1..., microcredits: 12345u64, _nonce: 12345group.public }"
                             allowClear
+                            onChange={(e) => setFee(e.target.value)}
                             value={fee}
                             style={{ borderRadius: "20px" }}
                         />
