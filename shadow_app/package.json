@@ -5,15 +5,12 @@
     "type": "module",
     "scripts": {
         "!preinstall": "cd ../wasm && export RUSTFLAGS='-C target-feature=+atomics,+bulk-memory,+mutable-globals -C link-arg=--max-memory=4294967296' && rustup run nightly-2023-05-24 wasm-pack build --release --target web --scope aleohq --out-dir pkg-parallel -- --features \"parallel, browser\" --no-default-features -Z build-std=panic_abort,std",
-        "dev": "vite",
         "build": "webpack --config webpack.config.js",
-        "build:vite": "vite build",
         "lint": "eslint src --ext js,jsx --report-unused-disable-directives --max-warnings 0 && prettier . --check",
-        "pretty": "prettier . --write",
-        "preview": "vite preview"
+        "pretty": "prettier . --write"
     },
     "dependencies": {
-        "@aleohq/wasm": "^0.5.0",
+        "@aleohq/wasm": "file:./pkg-parallel",
         "@ant-design/icons": "^4.4.0",
         "antd": "^5.6.4",
         "axios": "^1.1.3",

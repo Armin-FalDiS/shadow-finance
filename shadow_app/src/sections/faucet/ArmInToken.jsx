@@ -15,12 +15,10 @@ import {
 import { FormGenerator } from "../../components/InputForm";
 import axios from "axios";
 import init, * as aleo from "@aleohq/wasm";
-import { AccountContext } from "../../App";
 
 await init();
 
-export const Faucet = () => {
-    const { account } = useContext(AccountContext);
+export const ArmInToken = () => {
     const [executionFeeRecord, setExecutionFeeRecord] = useState(null);
     const [executeUrl, setExecuteUrl] = useState("https://vm.aleo.org/api");
     const [functionID, setFunctionID] = useState(null);
@@ -246,12 +244,12 @@ export const Faucet = () => {
         setProgramID("hello_hello.aleo");
         setProgram(
             "program hello_hello.aleo;\n" +
-            "\n" +
-            "function hello:\n" +
-            "    input r0 as u32.public;\n" +
-            "    input r1 as u32.private;\n" +
-            "    add r0 r1 into r2;\n" +
-            "    output r2 as u32.private;\n",
+                "\n" +
+                "function hello:\n" +
+                "    input r0 as u32.public;\n" +
+                "    input r1 as u32.private;\n" +
+                "    add r0 r1 into r2;\n" +
+                "    output r2 as u32.private;\n",
         );
         setInputs("5u32 5u32");
         setFunctionID("hello");
@@ -395,7 +393,7 @@ export const Faucet = () => {
     const peerUrl = () => (executeUrl !== null ? executeUrl : "");
     return (
         <Card
-            title={"Execute Program" + " " + (account !== null ? account.to_address().to_string() : "")}
+            title={"Execute Program"}
             style={{ width: "100%", borderRadius: "20px" }}
             bordered={false}
             extra={

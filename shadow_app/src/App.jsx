@@ -2,7 +2,9 @@ import "./App.css";
 import { createContext, useContext, useEffect, useState } from "react";
 import { ConfigProvider, Layout, Menu, theme } from "antd";
 import { Outlet, useLocation, useNavigate } from "react-router-dom";
-import { Account } from './tabs/shadow/Account'
+import { Account } from "./sections/state/Account";
+import { Fee } from "./sections/state/Fee";
+import { Tokens } from "./sections/state/Tokens";
 import {
     ApiOutlined,
     CodeOutlined,
@@ -14,11 +16,14 @@ import {
 
 const { Content, Sider } = Layout;
 
-export const AccountContext = createContext({ account: null });
+export const AppContext = createContext();
 
 function App() {
     const [menuIndex, setMenuIndex] = useState("faucet");
     const [account, setAccount] = useState(null);
+    const [fee, setFee] = useState(null);
+    const [armInToken, setArmInToken] = useState(null);
+    const [armOutToken, setArmOutToken] = useState(null);
 
     const navigate = useNavigate();
     const location = useLocation();
@@ -40,11 +45,6 @@ function App() {
             icon: <ProfileOutlined />,
         },
         {
-            label: "Init Liquidity Pool",
-            key: "/init-pool",
-            icon: <UserOutlined />,
-        },
-        {
             label: "Liquidity",
             key: "/liquidity",
             icon: <ApiOutlined />,
@@ -57,7 +57,17 @@ function App() {
     ];
 
     return (
-        <AccountContext.Provider value={{ account }}>
+        <AppContext.Provider
+            value={{
+                account,
+                fee,
+                setFee,
+                armInToken,
+                armOutToken,
+                setArmInToken,
+                setArmOutToken,
+            }}
+        >
             <ConfigProvider
                 theme={{
                     algorithm: theme.darkAlgorithm,
@@ -67,9 +77,10 @@ function App() {
                 }}
             >
                 <Layout style={{ minHeight: "100vh" }}>
-
                     <Content style={{ padding: "50px 50px" }}>
                         <Account setAccount={setAccount} />
+                        <Fee />
+                        <Tokens />
                     </Content>
                     <Sider breakpoint="lg" collapsedWidth="0" theme="light">
                         <div alt="Aleo SDK Logo" className="logo"></div>
@@ -88,7 +99,7 @@ function App() {
                     </Layout>
                 </Layout>
             </ConfigProvider>
-        </AccountContext.Provider >
+        </AppContext.Provider>
     );
 }
 

@@ -1,9 +1,11 @@
 import { createBrowserRouter, Navigate } from "react-router-dom";
 import App from "./App.jsx";
-import { Faucet } from './tabs/shadow/Faucet.jsx';
-import { InitPool } from './tabs/shadow/InitPool.jsx';
-import { ProvideLiquidity } from './tabs/shadow/ProvideLiquidity.jsx';
-import { Swap } from './tabs/shadow/Swap.jsx';
+import { ArmInToken } from "./sections/faucet/ArmInToken.jsx";
+import { ArmOutToken } from "./sections/faucet/ArmOutToken.jsx";
+import { InitPool } from "./sections/liquidity/InitPool.jsx";
+import { ProvideLiquidity } from "./sections/liquidity/ProvideLiquidity.jsx";
+import { BurnLiquidity } from "./sections/liquidity/BurnLiquidity.jsx";
+import { Swap } from "./sections/swap/Swap.jsx";
 
 export const router = createBrowserRouter([
     {
@@ -17,15 +19,8 @@ export const router = createBrowserRouter([
                 path: "/faucet",
                 element: (
                     <>
-                        <Faucet />
-                    </>
-                ),
-            },
-            {
-                path: "/init-pool",
-                element: (
-                    <>
-                        <InitPool />
+                        <ArmInToken />
+                        <ArmOutToken />
                     </>
                 ),
             },
@@ -33,7 +28,9 @@ export const router = createBrowserRouter([
                 path: "/liquidity",
                 element: (
                     <>
+                        <InitPool />
                         <ProvideLiquidity />
+                        <BurnLiquidity />
                     </>
                 ),
             },

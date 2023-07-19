@@ -1,19 +1,17 @@
 import { Card, Divider, Form, Input } from "antd";
-import { CopyButton } from "../components/CopyButton";
-import { useAleoWASM } from "../aleo-wasm-hook";
+import { CopyButton } from "../../components/CopyButton";
+import { useAleoWASM } from "../../aleo-wasm-hook";
 import { useContext } from "react";
-import { AccountContext } from "../App";
+import { AppContext } from "../../App";
 
 export const Account = ({ setAccount }) => {
-    const { account } = useContext(AccountContext);
+    const { account } = useContext(AppContext);
     const aleo = useAleoWASM();
 
     const onChange = (event) => {
         setAccount(null);
         try {
-            setAccount(
-                aleo.PrivateKey.from_string(event.target.value),
-            );
+            setAccount(aleo.PrivateKey.from_string(event.target.value));
         } catch (error) {
             console.error(error);
         }
@@ -23,13 +21,9 @@ export const Account = ({ setAccount }) => {
 
     if (aleo !== null) {
         const viewKey = () =>
-            account !== null
-                ? account.to_view_key().to_string()
-                : "";
+            account !== null ? account.to_view_key().to_string() : "";
         const address = () =>
-            account !== null
-                ? account.to_address().to_string()
-                : "";
+            account !== null ? account.to_address().to_string() : "";
 
         return (
             <Card
