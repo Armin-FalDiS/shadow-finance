@@ -5,8 +5,8 @@ import { useContext } from "react";
 import { AppContext } from "../../App";
 import { useState } from "react";
 
-export const Account = ({ setAccount }) => {
-    const { account, setFee, setArmInToken, setArmOutToken } = useContext(AppContext);
+export const Account = () => {
+    const { account, setAccount, setFee, setArmInToken, setArmOutToken } = useContext(AppContext);
     const [loading, setLoading] = useState(false);
     const aleo = useAleoWASM();
     
