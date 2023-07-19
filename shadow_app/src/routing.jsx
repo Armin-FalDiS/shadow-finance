@@ -20,6 +20,7 @@ export const router = createBrowserRouter([
                 element: (
                     <>
                         <ArmInToken />
+                        <br />
                         <ArmOutToken />
                     </>
                 ),
@@ -29,7 +30,9 @@ export const router = createBrowserRouter([
                 element: (
                     <>
                         <InitPool />
+                        <br />
                         <ProvideLiquidity />
+                        <br />
                         <BurnLiquidity />
                     </>
                 ),

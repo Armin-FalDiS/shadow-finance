@@ -79,7 +79,9 @@ function App() {
                 <Layout style={{ minHeight: "100vh" }}>
                     <Content style={{ padding: "50px 50px" }}>
                         <Account setAccount={setAccount} />
+                        <br />
                         <Fee />
+                        <br />
                         <Tokens />
                     </Content>
                     <Sider breakpoint="lg" collapsedWidth="0" theme="light">
