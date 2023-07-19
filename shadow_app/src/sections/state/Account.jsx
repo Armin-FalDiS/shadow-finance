@@ -5,8 +5,20 @@ import { useContext } from "react";
 import { AppContext } from "../../App";
 
 export const Account = ({ setAccount }) => {
-    const { account } = useContext(AppContext);
+    const { account, setFee, setArmInToken, setArmOutToken } = useContext(AppContext);
+    const [loading, setLoading] = useState(false);
     const aleo = useAleoWASM();
+    
+    const generateAccount = async () => {
+        setLoading(true);
+        setFee(null);
+        setArmInToken(null);
+        setArmOutToken(null);
+        setTimeout(() => {
+            setAccount(new aleo.PrivateKey());
+            setLoading(false);
+        }, 25);
+    };
 
     const onChange = (event) => {
         setAccount(null);
@@ -17,6 +29,13 @@ export const Account = ({ setAccount }) => {
         }
     };
 
+    const clear = () => {
+        setAccount(null);
+        setFee(null);
+        setArmInToken(null);
+        setArmOutToken(null);
+    };
+    
     const layout = { labelCol: { span: 3 }, wrapperCol: { span: 21 } };
 
     if (aleo !== null) {
@@ -27,10 +46,28 @@ export const Account = ({ setAccount }) => {
 
         return (
             <Card
-                title="Load Account from Private Key"
+                title="Account Information"
                 style={{ width: "100%", borderRadius: "20px" }}
                 bordered={false}
             >
+                <Row justify="center">
+                    <Col>
+                        <Button
+                            type="primary"
+                            shape="round"
+                            size="large"
+                            onClick={generateAccount}
+                            loading={!!loading}
+                        >
+                            Generate New Account
+                        </Button>
+                    </Col>
+                    <Col offset="1">
+                        <Button shape="round" size="large" onClick={clear}>
+                            Clear
+                        </Button>
+                    </Col>
+                </Row>
                 <Form {...layout}>
                     <Form.Item label="Private Key" colon={false}>
                         <Input
