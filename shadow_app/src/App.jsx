@@ -1,5 +1,5 @@
 import "./App.css";
-import React, { createContext, useContext, useEffect, useState } from "react";
+import { createContext, useEffect, useState, Context } from "react";
 import { ConfigProvider, Layout, Menu, theme } from "antd";
 import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import {
@@ -24,7 +24,7 @@ const { Content, Sider } = Layout;
  */
 
 /**
- * @type {React.Context<ShadowSwapContext>}
+ * @type {Context<ShadowSwapContext>}
  */
 export const AppContext = createContext();
 

@@ -1,9 +1,7 @@
-import { Card, Divider, Form, Input } from "antd";
-import { CopyButton } from "../../components/CopyButton";
+import { Card, Form, Input } from "antd";
 import { useAleoWASM } from "../../aleo-wasm-hook";
 import { useContext } from "react";
 import { AppContext } from "../../App";
-import { useState } from "react";
 
 export const Fee = () => {
     const { account, fee, setFee } = useContext(AppContext);
