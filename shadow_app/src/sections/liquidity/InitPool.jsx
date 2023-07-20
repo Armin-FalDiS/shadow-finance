@@ -16,6 +16,7 @@ import { FormGenerator } from "../../components/InputForm";
 import axios from "axios";
 import init, * as aleo from "@aleohq/wasm";
 import { AppContext } from "../../App";
+import { ArmOutToken } from "../faucet/ArmOutToken";
 
 
 
@@ -40,6 +41,8 @@ export const InitPool = () => {
     const [programInputs, setProgramInputs] = useState(null);
     const [tip, setTip] = useState("Executing Program...");
     let { account } = useContext(AppContext)
+    const [arminAmount,setArminAmount] = useState("")
+    const [armoutAmount,setArmoutAmount] = useState("")
     const privateKey = () =>
         account !== null ? account.to_string() : "";
     const address = () =>
@@ -162,7 +165,7 @@ export const InitPool = () => {
         let functionInputs = [];
         try {
             if (inputs) {
-                functionInputs = [address(), "Armin_token",]
+                functionInputs = [address(), "Armin_token",arminAmount,"armout",armoutAmount]
             }
         } catch (e) {
             setExecutionError("Inputs are not valid");
@@ -191,20 +194,15 @@ export const InitPool = () => {
 
 
 
-    const onArminChange = (value)=>{
-        pass
+    const onArminChange = (event)=>{
+        if (event.target.value !== null) {
+            setArminAmount(event.target.value);
+        }
     }
-    const onArmoutChange = (value)=>{
-        pass
+    const onArmoutChange = (event)=>{
+        setArmoutAmount(event.target.value)
     }
 
-
-
-
-    // Calls `tryRequest` when the search bar input is entered.
-
-
-    // Attempts to request the program bytecode with the given program id.
 
 
     const layout = { labelCol: { span: 3 }, wrapperCol: { span: 21 } };
@@ -244,7 +242,7 @@ export const InitPool = () => {
                                     placeholder={0}
                                     allowClear
                                     onChange={onArminChange}
-                                    value={11}
+                                    value={arminAmount}
                                     style={{ borderRadius: "20px" }}
                                 />
                             </Form.Item>
@@ -259,7 +257,7 @@ export const InitPool = () => {
                                     size="large"
                                     placeholder={0}
                                     onChange={onArmoutChange}
-                                    value={11}
+                                    value={armoutAmount}
                                     style={{ borderRadius: "20px" }}
                                 />
                             </Form.Item>
