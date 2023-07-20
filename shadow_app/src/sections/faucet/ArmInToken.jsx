@@ -1,13 +1,5 @@
 import { useState, useEffect, useContext } from "react";
-import {
-    Button,
-    Card,
-    Col,
-    Form,
-    Row,
-    Result,
-    Space,
-} from "antd";
+import { Button, Card, Col, Form, Row, Result, Space } from "antd";
 import axios from "axios";
 import init from "@aleohq/wasm";
 import { AppContext } from "../../App";
@@ -48,26 +40,34 @@ export const ArmInToken = () => {
                             },
                         },
                     )
-                    .then(async (res) => {
+                    .then((res) => {
                         setProgramResponse(null);
                         setExecutionError(null);
                         setTransactionID(res.data);
 
-                        const response = await axios.get(
-                            `${url}/testnet3/transaction/${transactionID}`,
-                        );
-                        const tx = response.data;
+                        axios
+                            .get(`${url}/testnet3/transaction/${transactionID}`)
+                            .then((response) => {
+                                const tx = response.data;
 
-                        const encyptedFeeRecord =
-                            tx.fee.transition.outputs[0].value;
-                        setFee(account.to_view_key.decrypt(encyptedFeeRecord));
+                                const encyptedFeeRecord =
+                                    tx.fee.transition.outputs[0].value;
+                                setFee(
+                                    account.to_view_key.decrypt(
+                                        encyptedFeeRecord,
+                                    ),
+                                );
 
-                        const encryptedArminRecord =
-                            tx.execution.transitions[0].outputs[0].value;
+                                const encryptedArmInRecord =
+                                    tx.execution.transitions[0].outputs[0]
+                                        .value;
 
-                        setArmInToken(
-                            account.to_view_key.decrypt(encryptedArminRecord),
-                        );
+                                setArmInToken(
+                                    account.to_view_key.decrypt(
+                                        encryptedArmInRecord,
+                                    ),
+                                );
+                            });
                     });
             } else if (ev.data.type == "ERROR") {
                 setProgramResponse(null);
@@ -136,7 +136,7 @@ export const ArmInToken = () => {
 
     return (
         <Card
-            title={"Mint Armin Token"}
+            title={"ArmIn Token"}
             style={{ width: "100%", borderRadius: "20px" }}
             bordered={false}
         >
@@ -150,7 +150,7 @@ export const ArmInToken = () => {
                                 size="middle"
                                 onClick={execute}
                             >
-                                Get Armin Token
+                                Mint ArmIn Token
                             </Button>
                         </Space>
                     </Col>
@@ -161,6 +161,7 @@ export const ArmInToken = () => {
                 gutter={[16, 32]}
                 style={{ marginTop: "48px" }}
             >
+                {loading && <Spin tip={tip} size="large" />}
                 {transactionID !== null && (
                     <Result
                         status="success"
