@@ -1,12 +1,25 @@
-import { Card, Divider, Form, Input } from "antd";
+import { Card, Divider, Form, Input, Row, Col, Button } from "antd";
 import { CopyButton } from "../../components/CopyButton";
 import { useAleoWASM } from "../../aleo-wasm-hook";
 import { useContext } from "react";
 import { AppContext } from "../../App";
+import { useState } from "react";
 
-export const Account = ({ setAccount }) => {
-    const { account } = useContext(AppContext);
+export const Account = () => {
+    const { account, setAccount, setFee, setArmInToken, setArmOutToken } = useContext(AppContext);
+    const [loading, setLoading] = useState(false);
     const aleo = useAleoWASM();
+    
+    const generateAccount = async () => {
+        setLoading(true);
+        setFee(null);
+        setArmInToken(null);
+        setArmOutToken(null);
+        setTimeout(() => {
+            setAccount(new aleo.PrivateKey());
+            setLoading(false);
+        }, 25);
+    };
 
     const onChange = (event) => {
         setAccount(null);
@@ -17,6 +30,13 @@ export const Account = ({ setAccount }) => {
         }
     };
 
+    const clear = () => {
+        setAccount(null);
+        setFee(null);
+        setArmInToken(null);
+        setArmOutToken(null);
+    };
+    
     const layout = { labelCol: { span: 3 }, wrapperCol: { span: 21 } };
 
     if (aleo !== null) {
@@ -27,10 +47,29 @@ export const Account = ({ setAccount }) => {
 
         return (
             <Card
-                title="Load Account from Private Key"
+                title="Account Information"
                 style={{ width: "100%", borderRadius: "20px" }}
                 bordered={false}
             >
+                <Row justify="center">
+                    <Col>
+                        <Button
+                            type="primary"
+                            shape="round"
+                            size="large"
+                            onClick={generateAccount}
+                            loading={!!loading}
+                        >
+                            Generate New Account
+                        </Button>
+                    </Col>
+                    <Col offset="1">
+                        <Button shape="round" size="large" onClick={clear}>
+                            Clear
+                        </Button>
+                    </Col>
+                </Row>
+                <br />
                 <Form {...layout}>
                     <Form.Item label="Private Key" colon={false}>
                         <Input

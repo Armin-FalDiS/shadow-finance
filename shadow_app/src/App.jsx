@@ -2,15 +2,10 @@ import "./App.css";
 import { createContext, useContext, useEffect, useState } from "react";
 import { ConfigProvider, Layout, Menu, theme } from "antd";
 import { Outlet, useLocation, useNavigate } from "react-router-dom";
-import { Account } from "./sections/state/Account";
-import { Fee } from "./sections/state/Fee";
-import { Tokens } from "./sections/state/Tokens";
 import {
-    ApiOutlined,
-    CodeOutlined,
-    ProfileOutlined,
+    BankOutlined,
     SwapOutlined,
-    ToolOutlined,
+    BgColorsOutlined,
     UserOutlined,
 } from "@ant-design/icons";
 
@@ -34,25 +29,30 @@ function App() {
     useEffect(() => {
         setMenuIndex(location.pathname);
         if (location.pathname === "/") {
-            navigate("/faucet");
+            navigate("/account");
         }
     }, [location, navigate]);
 
     const menuItems = [
         {
+            label: "My Account",
+            key: "/account",
+            icon: <UserOutlined />,
+        },
+        {
             label: "Faucet",
             key: "/faucet",
-            icon: <ProfileOutlined />,
+            icon: <BankOutlined />,
         },
         {
             label: "Liquidity",
             key: "/liquidity",
-            icon: <ApiOutlined />,
+            icon: <BgColorsOutlined />,
         },
         {
             label: "Swap",
             key: "/swap",
-            icon: <ToolOutlined />,
+            icon: <SwapOutlined />,
         },
     ];
 
@@ -60,11 +60,12 @@ function App() {
         <AppContext.Provider
             value={{
                 account,
+                setAccount,
                 fee,
                 setFee,
                 armInToken,
-                armOutToken,
                 setArmInToken,
+                armOutToken,
                 setArmOutToken,
             }}
         >
@@ -77,11 +78,6 @@ function App() {
                 }}
             >
                 <Layout style={{ minHeight: "100vh" }}>
-                    <Content style={{ padding: "50px 50px" }}>
-                        <Account setAccount={setAccount} />
-                        <Fee />
-                        <Tokens />
-                    </Content>
                     <Sider breakpoint="lg" collapsedWidth="0" theme="light">
                         <div alt="Aleo SDK Logo" className="logo"></div>
                         <Menu
@@ -91,7 +87,6 @@ function App() {
                             onClick={onClick}
                         />
                     </Sider>
-
                     <Layout>
                         <Content style={{ padding: "50px 50px" }}>
                             <Outlet />

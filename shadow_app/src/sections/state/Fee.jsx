@@ -3,15 +3,18 @@ import { CopyButton } from "../../components/CopyButton";
 import { useAleoWASM } from "../../aleo-wasm-hook";
 import { useContext } from "react";
 import { AppContext } from "../../App";
+import { useState } from "react";
 
 export const Fee = () => {
-    const { fee, setFee } = useContext(AppContext);
+    const { account, fee, setFee } = useContext(AppContext);
     const aleo = useAleoWASM();
-    
+
     const onChange = (event) => {
         setFee(null);
         try {
-            setFee(aleo.PrivateKey.from_string(event.target.value));
+            if (event.target.value && account) {
+                setFee(account.to_view_key().decrypt(event.target.value));
+            }
         } catch (error) {
             console.error(error);
         }
@@ -26,13 +29,25 @@ export const Fee = () => {
                 bordered={false}
             >
                 <Form {...layout}>
-                    <Form.Item label="Fee Record (Decrypted)" colon={false}>
+                    <Form.Item label="Fee (Encrypted)" colon={false}>
                         <Input
-                            name="privateKey"
+                            name="feeRecordEncrypted"
                             size="large"
-                            placeholder="Private Key"
+                            placeholder="record1..."
                             allowClear
                             onChange={onChange}
+                            style={{ borderRadius: "20px" }}
+                        />
+                    </Form.Item>
+                    <br />
+                    <Form.Item label="Fee Record" colon={false}>
+                        <Input
+                            name="feeRecord"
+                            size="large"
+                            placeholder="{ owner: aleo1..., microcredits: 12345u64, _nonce: 12345group.public }"
+                            allowClear
+                            onChange={(e) => setFee(e.target.value)}
+                            value={fee}
                             style={{ borderRadius: "20px" }}
                         />
                     </Form.Item>
