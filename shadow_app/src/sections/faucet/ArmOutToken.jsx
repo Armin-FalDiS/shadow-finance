@@ -1,13 +1,13 @@
 import { useState, useEffect, useContext } from "react";
 import { Button, Card, Col, Form, Row, Result, Space } from "antd";
 import axios from "axios";
-import init, * as aleo from "@aleohq/wasm";
+import init from "@aleohq/wasm";
 import { AppContext } from "../../App";
-import { node_url, armout_token } from "../../app.json";
+import { armout_token, node_url } from "../../app.json";
 
 await init();
 
-export const ArmInToken = () => {
+export const ArmOutToken = () => {
     let { account, fee, setFee, setArmOutToken } = useContext(AppContext);
     const program = armout_token.program;
     const functionID = armout_token.mint_function;
@@ -136,7 +136,7 @@ export const ArmInToken = () => {
 
     return (
         <Card
-            title={"ArmOut Token"}
+            title="ArmOut Token"
             style={{ width: "100%", borderRadius: "20px" }}
             bordered={false}
         >
@@ -161,7 +161,7 @@ export const ArmInToken = () => {
                 gutter={[16, 32]}
                 style={{ marginTop: "48px" }}
             >
-                {loading && <Spin tip="Executing..." size="large" />}
+                {/* {loading && <Spin tip="Executing..." size="large" />} */}
                 {transactionID !== null && (
                     <Result
                         status="success"
