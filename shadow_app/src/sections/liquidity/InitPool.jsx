@@ -7,7 +7,7 @@ import { armin_token,armout_token, node_url,shadow_swap } from "../../app.json";
 
 await init();
 
-export const ArmInToken = () => {
+export const InitPool = () => {
     let { account, fee, setFee, setArmInToken } = useContext(AppContext);
     const program = shadow_swap.program
     const functionID = shadow_swap.init_function;
