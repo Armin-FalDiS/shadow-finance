@@ -203,7 +203,7 @@ function makeMutClosure(arg0, arg1, dtor, f) {
     return real;
 }
 function __wbg_adapter_34(arg0, arg1, arg2) {
-    wasm._dyn_core__ops__function__FnMut__A____Output___R_as_wasm_bindgen__closure__WasmClosure___describe__invoke__h0bfe29e368864a44(arg0, arg1, addHeapObject(arg2));
+    wasm._dyn_core__ops__function__FnMut__A____Output___R_as_wasm_bindgen__closure__WasmClosure___describe__invoke__h2da4142fc877add4(arg0, arg1, addHeapObject(arg2));
 }
 
 function _assertClass(instance, klass) {
@@ -241,8 +241,8 @@ function handleError(f, args) {
         wasm.__wbindgen_exn_store(addHeapObject(e));
     }
 }
-function __wbg_adapter_227(arg0, arg1, arg2, arg3) {
-    wasm.wasm_bindgen__convert__closures__invoke2_mut__hdb7e33bdb2b880cf(arg0, arg1, addHeapObject(arg2), addHeapObject(arg3));
+function __wbg_adapter_228(arg0, arg1, arg2, arg3) {
+    wasm.wasm_bindgen__convert__closures__invoke2_mut__h2a17a0354144b786(arg0, arg1, addHeapObject(arg2), addHeapObject(arg3));
 }
 
 /**
@@ -977,6 +977,14 @@ export class Program {
         const ret = wasm.program_isEqual(this.__wbg_ptr, other.__wbg_ptr);
         return ret !== 0;
     }
+    /**
+    * Get program_imports
+    * @returns {Array<any>}
+    */
+    getImports() {
+        const ret = wasm.program_getImports(this.__wbg_ptr);
+        return takeObject(ret);
+    }
 }
 /**
 */
@@ -1002,50 +1010,6 @@ export class ProgramManager {
         wasm.__wbg_programmanager_free(ptr);
     }
     /**
-    * Split an Aleo credits record into two separate records. This function does not require a fee.
-    *
-    * @param private_key The private key of the sender
-    * @param split_amount The amount of the credit split. This amount will be subtracted from the
-    * value of the record and two new records will be created with the split amount and the remainder
-    * @param amount_record The record to split
-    * @param url The url of the Aleo network node to send the transaction to
-    * @param cache Cache the proving and verifying keys in the ProgramManager memory. If this is
-    * set to `true` the keys synthesized (or passed in as optional parameters via the
-    * `split_proving_key` and `split_verifying_key` arguments) will be stored in the
-    * ProgramManager's memory and used for subsequent transactions. If this is set to `false` the
-    * proving and verifying keys will be deallocated from memory after the transaction is executed
-    * @param split_proving_key (optional) Provide a proving key to use for the split function
-    * @param split_verifying_key (optional) Provide a verifying key to use for the split function
-    * @param {PrivateKey} private_key
-    * @param {number} split_amount
-    * @param {RecordPlaintext} amount_record
-    * @param {string} url
-    * @param {boolean} cache
-    * @param {ProvingKey | undefined} split_proving_key
-    * @param {VerifyingKey | undefined} split_verifying_key
-    * @returns {Promise<Transaction>}
-    */
-    split(private_key, split_amount, amount_record, url, cache, split_proving_key, split_verifying_key) {
-        _assertClass(private_key, PrivateKey);
-        var ptr0 = private_key.__destroy_into_raw();
-        _assertClass(amount_record, RecordPlaintext);
-        var ptr1 = amount_record.__destroy_into_raw();
-        const ptr2 = passStringToWasm0(url, wasm.__wbindgen_malloc, wasm.__wbindgen_realloc);
-        const len2 = WASM_VECTOR_LEN;
-        let ptr3 = 0;
-        if (!isLikeNone(split_proving_key)) {
-            _assertClass(split_proving_key, ProvingKey);
-            ptr3 = split_proving_key.__destroy_into_raw();
-        }
-        let ptr4 = 0;
-        if (!isLikeNone(split_verifying_key)) {
-            _assertClass(split_verifying_key, VerifyingKey);
-            ptr4 = split_verifying_key.__destroy_into_raw();
-        }
-        const ret = wasm.programmanager_split(this.__wbg_ptr, ptr0, split_amount, ptr1, ptr2, len2, cache, ptr3, ptr4);
-        return takeObject(ret);
-    }
-    /**
     * Execute an arbitrary function locally
     *
     * @param private_key The private key of the sender
@@ -1061,6 +1025,9 @@ export class ProgramManager {
     * `proving_key` and `verifying_key` arguments) will be stored in the ProgramManager's memory
     * and used for subsequent transactions. If this is set to 'false' the proving and verifying
     * keys will be deallocated from memory after the transaction is executed.
+    * @param imports (optional) Provide a list of imports to use for the function execution in the
+    * form of a javascript object where the keys are a string of the program name and the values
+    * are a string representing the program source code { "hello.aleo": "hello.aleo source code" }
     * @param proving_key (optional) Provide a verifying key to use for the function execution
     * @param verifying_key (optional) Provide a verifying key to use for the function execution
     * @param {PrivateKey} private_key
@@ -1068,11 +1035,12 @@ export class ProgramManager {
     * @param {string} _function
     * @param {Array<any>} inputs
     * @param {boolean} cache
+    * @param {object | undefined} imports
     * @param {ProvingKey | undefined} proving_key
     * @param {VerifyingKey | undefined} verifying_key
     * @returns {ExecutionResponse}
     */
-    execute_local(private_key, program, _function, inputs, cache, proving_key, verifying_key) {
+    execute_local(private_key, program, _function, inputs, cache, imports, proving_key, verifying_key) {
         try {
             const retptr = wasm.__wbindgen_add_to_stack_pointer(-16);
             _assertClass(private_key, PrivateKey);
@@ -1091,7 +1059,7 @@ export class ProgramManager {
                 _assertClass(verifying_key, VerifyingKey);
                 ptr4 = verifying_key.__destroy_into_raw();
             }
-            wasm.programmanager_execute_local(retptr, this.__wbg_ptr, ptr0, ptr1, len1, ptr2, len2, addHeapObject(inputs), cache, ptr3, ptr4);
+            wasm.programmanager_execute_local(retptr, this.__wbg_ptr, ptr0, ptr1, len1, ptr2, len2, addHeapObject(inputs), cache, isLikeNone(imports) ? 0 : addHeapObject(imports), ptr3, ptr4);
             var r0 = getInt32Memory0()[retptr / 4 + 0];
             var r1 = getInt32Memory0()[retptr / 4 + 1];
             var r2 = getInt32Memory0()[retptr / 4 + 2];
@@ -1118,6 +1086,9 @@ export class ProgramManager {
     * `proving_key` and `verifying_key` arguments) will be stored in the ProgramManager's memory
     * and used for subsequent transactions. If this is set to 'false' the proving and verifying
     * keys will be deallocated from memory after the transaction is executed.
+    * @param imports (optional) Provide a list of imports to use for the function execution in the
+    * form of a javascript object where the keys are a string of the program name and the values
+    * are a string representing the program source code { "hello.aleo": "hello.aleo source code" }
     * @param proving_key (optional) Provide a verifying key to use for the function execution
     * @param verifying_key (optional) Provide a verifying key to use for the function execution
     * @param fee_proving_key (optional) Provide a proving key to use for the fee execution
@@ -1130,13 +1101,14 @@ export class ProgramManager {
     * @param {RecordPlaintext} fee_record
     * @param {string} url
     * @param {boolean} cache
+    * @param {object | undefined} imports
     * @param {ProvingKey | undefined} proving_key
     * @param {VerifyingKey | undefined} verifying_key
     * @param {ProvingKey | undefined} fee_proving_key
     * @param {VerifyingKey | undefined} fee_verifying_key
     * @returns {Promise<Transaction>}
     */
-    execute(private_key, program, _function, inputs, fee_credits, fee_record, url, cache, proving_key, verifying_key, fee_proving_key, fee_verifying_key) {
+    execute(private_key, program, _function, inputs, fee_credits, fee_record, url, cache, imports, proving_key, verifying_key, fee_proving_key, fee_verifying_key) {
         _assertClass(private_key, PrivateKey);
         var ptr0 = private_key.__destroy_into_raw();
         const ptr1 = passStringToWasm0(program, wasm.__wbindgen_malloc, wasm.__wbindgen_realloc);
@@ -1167,7 +1139,7 @@ export class ProgramManager {
             _assertClass(fee_verifying_key, VerifyingKey);
             ptr8 = fee_verifying_key.__destroy_into_raw();
         }
-        const ret = wasm.programmanager_execute(this.__wbg_ptr, ptr0, ptr1, len1, ptr2, len2, addHeapObject(inputs), fee_credits, ptr3, ptr4, len4, cache, ptr5, ptr6, ptr7, ptr8);
+        const ret = wasm.programmanager_execute(this.__wbg_ptr, ptr0, ptr1, len1, ptr2, len2, addHeapObject(inputs), fee_credits, ptr3, ptr4, len4, cache, isLikeNone(imports) ? 0 : addHeapObject(imports), ptr5, ptr6, ptr7, ptr8);
         return takeObject(ret);
     }
     /**
@@ -1175,12 +1147,17 @@ export class ProgramManager {
     * verifying keys will be stored in the ProgramManager's memory and used for subsequent
     * program executions.
     *
+    * Disclaimer: Fee estimation is experimental and may not represent a correct estimate on any current or future network
+    *
     * @param private_key The private key of the sender
     * @param program The source code of the program to estimate the execution fee for
     * @param function The name of the function to execute
     * @param inputs A javascript array of inputs to the function
     * @param url The url of the Aleo network node to send the transaction to
     * @param cache Cache the proving and verifying keys in the ProgramManager's memory.
+    * @param imports (optional) Provide a list of imports to use for the fee estimation in the
+    * form of a javascript object where the keys are a string of the program name and the values
+    * are a string representing the program source code { "hello.aleo": "hello.aleo source code" }
     * @param proving_key (optional) Provide a verifying key to use for the fee estimation
     * @param verifying_key (optional) Provide a verifying key to use for the fee estimation
     * @param {PrivateKey} private_key
@@ -1189,11 +1166,12 @@ export class ProgramManager {
     * @param {Array<any>} inputs
     * @param {string} url
     * @param {boolean} cache
+    * @param {object | undefined} imports
     * @param {ProvingKey | undefined} proving_key
     * @param {VerifyingKey | undefined} verifying_key
     * @returns {Promise<bigint>}
     */
-    estimateExecutionFee(private_key, program, _function, inputs, url, cache, proving_key, verifying_key) {
+    estimateExecutionFee(private_key, program, _function, inputs, url, cache, imports, proving_key, verifying_key) {
         _assertClass(private_key, PrivateKey);
         var ptr0 = private_key.__destroy_into_raw();
         const ptr1 = passStringToWasm0(program, wasm.__wbindgen_malloc, wasm.__wbindgen_realloc);
@@ -1212,13 +1190,15 @@ export class ProgramManager {
             _assertClass(verifying_key, VerifyingKey);
             ptr5 = verifying_key.__destroy_into_raw();
         }
-        const ret = wasm.programmanager_estimateExecutionFee(this.__wbg_ptr, ptr0, ptr1, len1, ptr2, len2, addHeapObject(inputs), ptr3, len3, cache, ptr4, ptr5);
+        const ret = wasm.programmanager_estimateExecutionFee(this.__wbg_ptr, ptr0, ptr1, len1, ptr2, len2, addHeapObject(inputs), ptr3, len3, cache, isLikeNone(imports) ? 0 : addHeapObject(imports), ptr4, ptr5);
         return takeObject(ret);
     }
     /**
     * Estimate the finalize fee component for executing a function. This fee is additional to the
     * size of the execution of the program in bytes. If the function does not have a finalize
     * step, then the finalize fee is 0.
+    *
+    * Disclaimer: Fee estimation is experimental and may not represent a correct estimate on any current or future network
     *
     * @param program The program containing the function to estimate the finalize fee for
     * @param function The function to estimate the finalize fee for
@@ -1241,234 +1221,6 @@ export class ProgramManager {
                 throw takeObject(r2);
             }
             return BigInt.asUintN(64, r0);
-        } finally {
-            wasm.__wbindgen_add_to_stack_pointer(16);
-        }
-    }
-    /**
-    * Deploy an Aleo program
-    *
-    * @param private_key The private key of the sender
-    * @param program The source code of the program being deployed
-    * @param imports A javascript object holding the source code of any imported programs in the
-    * form {"program_name1": "program_source_code", "program_name2": "program_source_code", ..}.
-    * Note that all imported programs must be deployed on chain before the main program in order
-    * for the deployment to succeed
-    * @param fee_credits The amount of credits to pay as a fee
-    * @param fee_record The record to spend the fee from
-    * @param url The url of the Aleo network node to send the transaction to
-    * @param cache Cache the synthesized keys for future use
-    * @param fee_proving_key (optional) Provide a proving key to use for the fee execution
-    * @param fee_verifying_key (optional) Provide a verifying key to use for the fee execution
-    * @param {PrivateKey} private_key
-    * @param {string} program
-    * @param {object | undefined} imports
-    * @param {number} fee_credits
-    * @param {RecordPlaintext} fee_record
-    * @param {string} url
-    * @param {boolean} cache
-    * @param {ProvingKey | undefined} fee_proving_key
-    * @param {VerifyingKey | undefined} fee_verifying_key
-    * @returns {Promise<Transaction>}
-    */
-    deploy(private_key, program, imports, fee_credits, fee_record, url, cache, fee_proving_key, fee_verifying_key) {
-        _assertClass(private_key, PrivateKey);
-        var ptr0 = private_key.__destroy_into_raw();
-        const ptr1 = passStringToWasm0(program, wasm.__wbindgen_malloc, wasm.__wbindgen_realloc);
-        const len1 = WASM_VECTOR_LEN;
-        _assertClass(fee_record, RecordPlaintext);
-        var ptr2 = fee_record.__destroy_into_raw();
-        const ptr3 = passStringToWasm0(url, wasm.__wbindgen_malloc, wasm.__wbindgen_realloc);
-        const len3 = WASM_VECTOR_LEN;
-        let ptr4 = 0;
-        if (!isLikeNone(fee_proving_key)) {
-            _assertClass(fee_proving_key, ProvingKey);
-            ptr4 = fee_proving_key.__destroy_into_raw();
-        }
-        let ptr5 = 0;
-        if (!isLikeNone(fee_verifying_key)) {
-            _assertClass(fee_verifying_key, VerifyingKey);
-            ptr5 = fee_verifying_key.__destroy_into_raw();
-        }
-        const ret = wasm.programmanager_deploy(this.__wbg_ptr, ptr0, ptr1, len1, isLikeNone(imports) ? 0 : addHeapObject(imports), fee_credits, ptr2, ptr3, len3, cache, ptr4, ptr5);
-        return takeObject(ret);
-    }
-    /**
-    * Estimate the fee for a program deployment
-    *
-    * @param program The source code of the program being deployed
-    * @param cache Cache the synthesized keys for future use
-    * @param {string} program
-    * @param {boolean} cache
-    * @returns {Promise<bigint>}
-    */
-    estimateDeploymentFee(program, cache) {
-        const ptr0 = passStringToWasm0(program, wasm.__wbindgen_malloc, wasm.__wbindgen_realloc);
-        const len0 = WASM_VECTOR_LEN;
-        const ret = wasm.programmanager_estimateDeploymentFee(this.__wbg_ptr, ptr0, len0, cache);
-        return takeObject(ret);
-    }
-    /**
-    * Estimate the component of the deployment cost which comes from the fee for the program name.
-    * Note that this cost does not represent the entire cost of deployment. It is additional to
-    * the cost of the size (in bytes) of the deployment.
-    *
-    * @param name The name of the program to be deployed
-    * @param {string} name
-    * @returns {bigint}
-    */
-    estimateProgramNameCost(name) {
-        try {
-            const retptr = wasm.__wbindgen_add_to_stack_pointer(-16);
-            const ptr0 = passStringToWasm0(name, wasm.__wbindgen_malloc, wasm.__wbindgen_realloc);
-            const len0 = WASM_VECTOR_LEN;
-            wasm.programmanager_estimateProgramNameCost(retptr, this.__wbg_ptr, ptr0, len0);
-            var r0 = getBigInt64Memory0()[retptr / 8 + 0];
-            var r2 = getInt32Memory0()[retptr / 4 + 2];
-            var r3 = getInt32Memory0()[retptr / 4 + 3];
-            if (r3) {
-                throw takeObject(r2);
-            }
-            return BigInt.asUintN(64, r0);
-        } finally {
-            wasm.__wbindgen_add_to_stack_pointer(16);
-        }
-    }
-    /**
-    */
-    constructor() {
-        const ret = wasm.programmanager_new();
-        return ProgramManager.__wrap(ret);
-    }
-    /**
-    * Cache the proving and verifying keys for a program function in WASM memory. This method
-    * will take a verifying and proving key and store them in the program manager's internal
-    * in-memory cache. This memory is allocated in WebAssembly, so it is important to be mindful
-    * of the amount of memory being used. This method will return an error if the keys are already
-    * cached in memory.
-    *
-    * @param program_id The name of the program containing the desired function
-    * @param function The name of the function to store the keys for
-    * @param proving_key The proving key of the function
-    * @param verifying_key The verifying key of the function
-    * @param {string} program
-    * @param {string} _function
-    * @param {ProvingKey} proving_key
-    * @param {VerifyingKey} verifying_key
-    */
-    cacheKeypairInWasmMemory(program, _function, proving_key, verifying_key) {
-        try {
-            const retptr = wasm.__wbindgen_add_to_stack_pointer(-16);
-            const ptr0 = passStringToWasm0(program, wasm.__wbindgen_malloc, wasm.__wbindgen_realloc);
-            const len0 = WASM_VECTOR_LEN;
-            const ptr1 = passStringToWasm0(_function, wasm.__wbindgen_malloc, wasm.__wbindgen_realloc);
-            const len1 = WASM_VECTOR_LEN;
-            _assertClass(proving_key, ProvingKey);
-            var ptr2 = proving_key.__destroy_into_raw();
-            _assertClass(verifying_key, VerifyingKey);
-            var ptr3 = verifying_key.__destroy_into_raw();
-            wasm.programmanager_cacheKeypairInWasmMemory(retptr, this.__wbg_ptr, ptr0, len0, ptr1, len1, ptr2, ptr3);
-            var r0 = getInt32Memory0()[retptr / 4 + 0];
-            var r1 = getInt32Memory0()[retptr / 4 + 1];
-            if (r1) {
-                throw takeObject(r0);
-            }
-        } finally {
-            wasm.__wbindgen_add_to_stack_pointer(16);
-        }
-    }
-    /**
-    * Get the proving & verifying keys cached in WASM memory for a specific function
-    *
-    * @param program_id The name of the program containing the desired function
-    * @param function_id The name of the function to retrieve the keys for
-    * @param {string} program_id
-    * @param {string} _function
-    * @returns {KeyPair}
-    */
-    getCachedKeypair(program_id, _function) {
-        try {
-            const retptr = wasm.__wbindgen_add_to_stack_pointer(-16);
-            const ptr0 = passStringToWasm0(program_id, wasm.__wbindgen_malloc, wasm.__wbindgen_realloc);
-            const len0 = WASM_VECTOR_LEN;
-            const ptr1 = passStringToWasm0(_function, wasm.__wbindgen_malloc, wasm.__wbindgen_realloc);
-            const len1 = WASM_VECTOR_LEN;
-            wasm.programmanager_getCachedKeypair(retptr, this.__wbg_ptr, ptr0, len0, ptr1, len1);
-            var r0 = getInt32Memory0()[retptr / 4 + 0];
-            var r1 = getInt32Memory0()[retptr / 4 + 1];
-            var r2 = getInt32Memory0()[retptr / 4 + 2];
-            if (r2) {
-                throw takeObject(r1);
-            }
-            return KeyPair.__wrap(r0);
-        } finally {
-            wasm.__wbindgen_add_to_stack_pointer(16);
-        }
-    }
-    /**
-    * Synthesize a proving and verifying key for a program function. This method should be used
-    * when there is a need to pre-synthesize keys (i.e. for caching purposes, etc.)
-    *
-    * @param program The source code of the program containing the desired function
-    * @param function The name of the function to synthesize the key for
-    * @param {string} program
-    * @param {string} _function
-    * @returns {KeyPair}
-    */
-    synthesizeKeypair(program, _function) {
-        try {
-            const retptr = wasm.__wbindgen_add_to_stack_pointer(-16);
-            const ptr0 = passStringToWasm0(program, wasm.__wbindgen_malloc, wasm.__wbindgen_realloc);
-            const len0 = WASM_VECTOR_LEN;
-            const ptr1 = passStringToWasm0(_function, wasm.__wbindgen_malloc, wasm.__wbindgen_realloc);
-            const len1 = WASM_VECTOR_LEN;
-            wasm.programmanager_synthesizeKeypair(retptr, this.__wbg_ptr, ptr0, len0, ptr1, len1);
-            var r0 = getInt32Memory0()[retptr / 4 + 0];
-            var r1 = getInt32Memory0()[retptr / 4 + 1];
-            var r2 = getInt32Memory0()[retptr / 4 + 2];
-            if (r2) {
-                throw takeObject(r1);
-            }
-            return KeyPair.__wrap(r0);
-        } finally {
-            wasm.__wbindgen_add_to_stack_pointer(16);
-        }
-    }
-    /**
-    * Clear key cache in wasm memory.
-    *
-    * This method will clear the key cache in wasm memory. It is important to note that this will
-    * not DE-allocate the memory assigned to wasm as wasm memory cannot be shrunk. The total
-    * memory allocated to wasm will remain constant but will be available for other usage after
-    * calling this method.
-    */
-    clearKeyCache() {
-        wasm.programmanager_clearKeyCache(this.__wbg_ptr);
-    }
-    /**
-    * Check if the cache contains a keypair for a specific function
-    *
-    * @param program_id The name of the program containing the desired function
-    * @param function_id The name of the function to retrieve the keys for
-    * @param {string} program_id
-    * @param {string} function_id
-    * @returns {boolean}
-    */
-    keyExists(program_id, function_id) {
-        try {
-            const retptr = wasm.__wbindgen_add_to_stack_pointer(-16);
-            const ptr0 = passStringToWasm0(program_id, wasm.__wbindgen_malloc, wasm.__wbindgen_realloc);
-            const len0 = WASM_VECTOR_LEN;
-            const ptr1 = passStringToWasm0(function_id, wasm.__wbindgen_malloc, wasm.__wbindgen_realloc);
-            const len1 = WASM_VECTOR_LEN;
-            wasm.programmanager_keyExists(retptr, this.__wbg_ptr, ptr0, len0, ptr1, len1);
-            var r0 = getInt32Memory0()[retptr / 4 + 0];
-            var r1 = getInt32Memory0()[retptr / 4 + 1];
-            var r2 = getInt32Memory0()[retptr / 4 + 2];
-            if (r2) {
-                throw takeObject(r1);
-            }
-            return r0 !== 0;
         } finally {
             wasm.__wbindgen_add_to_stack_pointer(16);
         }
@@ -1614,6 +1366,289 @@ export class ProgramManager {
         }
         const ret = wasm.programmanager_join(this.__wbg_ptr, ptr0, ptr1, ptr2, fee_credits, ptr3, ptr4, len4, cache, ptr5, ptr6, ptr7, ptr8);
         return takeObject(ret);
+    }
+    /**
+    */
+    constructor() {
+        const ret = wasm.programmanager_new();
+        return ProgramManager.__wrap(ret);
+    }
+    /**
+    * Cache the proving and verifying keys for a program function in WASM memory. This method
+    * will take a verifying and proving key and store them in the program manager's internal
+    * in-memory cache. This memory is allocated in WebAssembly, so it is important to be mindful
+    * of the amount of memory being used. This method will return an error if the keys are already
+    * cached in memory.
+    *
+    * @param program_id The name of the program containing the desired function
+    * @param function The name of the function to store the keys for
+    * @param proving_key The proving key of the function
+    * @param verifying_key The verifying key of the function
+    * @param {string} program
+    * @param {string} _function
+    * @param {ProvingKey} proving_key
+    * @param {VerifyingKey} verifying_key
+    */
+    cacheKeypairInWasmMemory(program, _function, proving_key, verifying_key) {
+        try {
+            const retptr = wasm.__wbindgen_add_to_stack_pointer(-16);
+            const ptr0 = passStringToWasm0(program, wasm.__wbindgen_malloc, wasm.__wbindgen_realloc);
+            const len0 = WASM_VECTOR_LEN;
+            const ptr1 = passStringToWasm0(_function, wasm.__wbindgen_malloc, wasm.__wbindgen_realloc);
+            const len1 = WASM_VECTOR_LEN;
+            _assertClass(proving_key, ProvingKey);
+            var ptr2 = proving_key.__destroy_into_raw();
+            _assertClass(verifying_key, VerifyingKey);
+            var ptr3 = verifying_key.__destroy_into_raw();
+            wasm.programmanager_cacheKeypairInWasmMemory(retptr, this.__wbg_ptr, ptr0, len0, ptr1, len1, ptr2, ptr3);
+            var r0 = getInt32Memory0()[retptr / 4 + 0];
+            var r1 = getInt32Memory0()[retptr / 4 + 1];
+            if (r1) {
+                throw takeObject(r0);
+            }
+        } finally {
+            wasm.__wbindgen_add_to_stack_pointer(16);
+        }
+    }
+    /**
+    * Get the proving & verifying keys cached in WASM memory for a specific function
+    *
+    * @param program_id The name of the program containing the desired function
+    * @param function_id The name of the function to retrieve the keys for
+    * @param {string} program_id
+    * @param {string} _function
+    * @returns {KeyPair}
+    */
+    getCachedKeypair(program_id, _function) {
+        try {
+            const retptr = wasm.__wbindgen_add_to_stack_pointer(-16);
+            const ptr0 = passStringToWasm0(program_id, wasm.__wbindgen_malloc, wasm.__wbindgen_realloc);
+            const len0 = WASM_VECTOR_LEN;
+            const ptr1 = passStringToWasm0(_function, wasm.__wbindgen_malloc, wasm.__wbindgen_realloc);
+            const len1 = WASM_VECTOR_LEN;
+            wasm.programmanager_getCachedKeypair(retptr, this.__wbg_ptr, ptr0, len0, ptr1, len1);
+            var r0 = getInt32Memory0()[retptr / 4 + 0];
+            var r1 = getInt32Memory0()[retptr / 4 + 1];
+            var r2 = getInt32Memory0()[retptr / 4 + 2];
+            if (r2) {
+                throw takeObject(r1);
+            }
+            return KeyPair.__wrap(r0);
+        } finally {
+            wasm.__wbindgen_add_to_stack_pointer(16);
+        }
+    }
+    /**
+    * Synthesize a proving and verifying key for a program function. This method should be used
+    * when there is a need to pre-synthesize keys (i.e. for caching purposes, etc.)
+    *
+    * @param program The source code of the program containing the desired function
+    * @param function The name of the function to synthesize the key for
+    * @param {string} program
+    * @param {string} _function
+    * @returns {KeyPair}
+    */
+    synthesizeKeypair(program, _function) {
+        try {
+            const retptr = wasm.__wbindgen_add_to_stack_pointer(-16);
+            const ptr0 = passStringToWasm0(program, wasm.__wbindgen_malloc, wasm.__wbindgen_realloc);
+            const len0 = WASM_VECTOR_LEN;
+            const ptr1 = passStringToWasm0(_function, wasm.__wbindgen_malloc, wasm.__wbindgen_realloc);
+            const len1 = WASM_VECTOR_LEN;
+            wasm.programmanager_synthesizeKeypair(retptr, this.__wbg_ptr, ptr0, len0, ptr1, len1);
+            var r0 = getInt32Memory0()[retptr / 4 + 0];
+            var r1 = getInt32Memory0()[retptr / 4 + 1];
+            var r2 = getInt32Memory0()[retptr / 4 + 2];
+            if (r2) {
+                throw takeObject(r1);
+            }
+            return KeyPair.__wrap(r0);
+        } finally {
+            wasm.__wbindgen_add_to_stack_pointer(16);
+        }
+    }
+    /**
+    * Clear key cache in wasm memory.
+    *
+    * This method will clear the key cache in wasm memory. It is important to note that this will
+    * not DE-allocate the memory assigned to wasm as wasm memory cannot be shrunk. The total
+    * memory allocated to wasm will remain constant but will be available for other usage after
+    * calling this method.
+    */
+    clearKeyCache() {
+        wasm.programmanager_clearKeyCache(this.__wbg_ptr);
+    }
+    /**
+    * Check if the cache contains a keypair for a specific function
+    *
+    * @param program_id The name of the program containing the desired function
+    * @param function_id The name of the function to retrieve the keys for
+    * @param {string} program_id
+    * @param {string} function_id
+    * @returns {boolean}
+    */
+    keyExists(program_id, function_id) {
+        try {
+            const retptr = wasm.__wbindgen_add_to_stack_pointer(-16);
+            const ptr0 = passStringToWasm0(program_id, wasm.__wbindgen_malloc, wasm.__wbindgen_realloc);
+            const len0 = WASM_VECTOR_LEN;
+            const ptr1 = passStringToWasm0(function_id, wasm.__wbindgen_malloc, wasm.__wbindgen_realloc);
+            const len1 = WASM_VECTOR_LEN;
+            wasm.programmanager_keyExists(retptr, this.__wbg_ptr, ptr0, len0, ptr1, len1);
+            var r0 = getInt32Memory0()[retptr / 4 + 0];
+            var r1 = getInt32Memory0()[retptr / 4 + 1];
+            var r2 = getInt32Memory0()[retptr / 4 + 2];
+            if (r2) {
+                throw takeObject(r1);
+            }
+            return r0 !== 0;
+        } finally {
+            wasm.__wbindgen_add_to_stack_pointer(16);
+        }
+    }
+    /**
+    * Split an Aleo credits record into two separate records. This function does not require a fee.
+    *
+    * @param private_key The private key of the sender
+    * @param split_amount The amount of the credit split. This amount will be subtracted from the
+    * value of the record and two new records will be created with the split amount and the remainder
+    * @param amount_record The record to split
+    * @param url The url of the Aleo network node to send the transaction to
+    * @param cache Cache the proving and verifying keys in the ProgramManager memory. If this is
+    * set to `true` the keys synthesized (or passed in as optional parameters via the
+    * `split_proving_key` and `split_verifying_key` arguments) will be stored in the
+    * ProgramManager's memory and used for subsequent transactions. If this is set to `false` the
+    * proving and verifying keys will be deallocated from memory after the transaction is executed
+    * @param split_proving_key (optional) Provide a proving key to use for the split function
+    * @param split_verifying_key (optional) Provide a verifying key to use for the split function
+    * @param {PrivateKey} private_key
+    * @param {number} split_amount
+    * @param {RecordPlaintext} amount_record
+    * @param {string} url
+    * @param {boolean} cache
+    * @param {ProvingKey | undefined} split_proving_key
+    * @param {VerifyingKey | undefined} split_verifying_key
+    * @returns {Promise<Transaction>}
+    */
+    split(private_key, split_amount, amount_record, url, cache, split_proving_key, split_verifying_key) {
+        _assertClass(private_key, PrivateKey);
+        var ptr0 = private_key.__destroy_into_raw();
+        _assertClass(amount_record, RecordPlaintext);
+        var ptr1 = amount_record.__destroy_into_raw();
+        const ptr2 = passStringToWasm0(url, wasm.__wbindgen_malloc, wasm.__wbindgen_realloc);
+        const len2 = WASM_VECTOR_LEN;
+        let ptr3 = 0;
+        if (!isLikeNone(split_proving_key)) {
+            _assertClass(split_proving_key, ProvingKey);
+            ptr3 = split_proving_key.__destroy_into_raw();
+        }
+        let ptr4 = 0;
+        if (!isLikeNone(split_verifying_key)) {
+            _assertClass(split_verifying_key, VerifyingKey);
+            ptr4 = split_verifying_key.__destroy_into_raw();
+        }
+        const ret = wasm.programmanager_split(this.__wbg_ptr, ptr0, split_amount, ptr1, ptr2, len2, cache, ptr3, ptr4);
+        return takeObject(ret);
+    }
+    /**
+    * Deploy an Aleo program
+    *
+    * @param private_key The private key of the sender
+    * @param program The source code of the program being deployed
+    * @param imports A javascript object holding the source code of any imported programs in the
+    * form {"program_name1": "program_source_code", "program_name2": "program_source_code", ..}.
+    * Note that all imported programs must be deployed on chain before the main program in order
+    * for the deployment to succeed
+    * @param fee_credits The amount of credits to pay as a fee
+    * @param fee_record The record to spend the fee from
+    * @param url The url of the Aleo network node to send the transaction to
+    * @param cache Cache the synthesized keys for future use
+    * @param imports (optional) Provide a list of imports to use for the program deployment in the
+    * form of a javascript object where the keys are a string of the program name and the values
+    * are a string representing the program source code { "hello.aleo": "hello.aleo source code" }
+    * @param fee_proving_key (optional) Provide a proving key to use for the fee execution
+    * @param fee_verifying_key (optional) Provide a verifying key to use for the fee execution
+    * @param {PrivateKey} private_key
+    * @param {string} program
+    * @param {number} fee_credits
+    * @param {RecordPlaintext} fee_record
+    * @param {string} url
+    * @param {boolean} cache
+    * @param {object | undefined} imports
+    * @param {ProvingKey | undefined} fee_proving_key
+    * @param {VerifyingKey | undefined} fee_verifying_key
+    * @returns {Promise<Transaction>}
+    */
+    deploy(private_key, program, fee_credits, fee_record, url, cache, imports, fee_proving_key, fee_verifying_key) {
+        _assertClass(private_key, PrivateKey);
+        var ptr0 = private_key.__destroy_into_raw();
+        const ptr1 = passStringToWasm0(program, wasm.__wbindgen_malloc, wasm.__wbindgen_realloc);
+        const len1 = WASM_VECTOR_LEN;
+        _assertClass(fee_record, RecordPlaintext);
+        var ptr2 = fee_record.__destroy_into_raw();
+        const ptr3 = passStringToWasm0(url, wasm.__wbindgen_malloc, wasm.__wbindgen_realloc);
+        const len3 = WASM_VECTOR_LEN;
+        let ptr4 = 0;
+        if (!isLikeNone(fee_proving_key)) {
+            _assertClass(fee_proving_key, ProvingKey);
+            ptr4 = fee_proving_key.__destroy_into_raw();
+        }
+        let ptr5 = 0;
+        if (!isLikeNone(fee_verifying_key)) {
+            _assertClass(fee_verifying_key, VerifyingKey);
+            ptr5 = fee_verifying_key.__destroy_into_raw();
+        }
+        const ret = wasm.programmanager_deploy(this.__wbg_ptr, ptr0, ptr1, len1, fee_credits, ptr2, ptr3, len3, cache, isLikeNone(imports) ? 0 : addHeapObject(imports), ptr4, ptr5);
+        return takeObject(ret);
+    }
+    /**
+    * Estimate the fee for a program deployment
+    *
+    * Disclaimer: Fee estimation is experimental and may not represent a correct estimate on any current or future network
+    *
+    * @param program The source code of the program being deployed
+    * @param cache Cache the synthesized keys for future use
+    * @param imports (optional) Provide a list of imports to use for the deployment fee estimation
+    * in the form of a javascript object where the keys are a string of the program name and the values
+    * are a string representing the program source code { "hello.aleo": "hello.aleo source code" }
+    * @param {string} program
+    * @param {boolean} cache
+    * @param {object | undefined} imports
+    * @returns {Promise<bigint>}
+    */
+    estimateDeploymentFee(program, cache, imports) {
+        const ptr0 = passStringToWasm0(program, wasm.__wbindgen_malloc, wasm.__wbindgen_realloc);
+        const len0 = WASM_VECTOR_LEN;
+        const ret = wasm.programmanager_estimateDeploymentFee(this.__wbg_ptr, ptr0, len0, cache, isLikeNone(imports) ? 0 : addHeapObject(imports));
+        return takeObject(ret);
+    }
+    /**
+    * Estimate the component of the deployment cost which comes from the fee for the program name.
+    * Note that this cost does not represent the entire cost of deployment. It is additional to
+    * the cost of the size (in bytes) of the deployment.
+    *
+    * Disclaimer: Fee estimation is experimental and may not represent a correct estimate on any current or future network
+    *
+    * @param name The name of the program to be deployed
+    * @param {string} name
+    * @returns {bigint}
+    */
+    estimateProgramNameCost(name) {
+        try {
+            const retptr = wasm.__wbindgen_add_to_stack_pointer(-16);
+            const ptr0 = passStringToWasm0(name, wasm.__wbindgen_malloc, wasm.__wbindgen_realloc);
+            const len0 = WASM_VECTOR_LEN;
+            wasm.programmanager_estimateProgramNameCost(retptr, this.__wbg_ptr, ptr0, len0);
+            var r0 = getBigInt64Memory0()[retptr / 8 + 0];
+            var r2 = getInt32Memory0()[retptr / 4 + 2];
+            var r3 = getInt32Memory0()[retptr / 4 + 3];
+            if (r3) {
+                throw takeObject(r2);
+            }
+            return BigInt.asUintN(64, r0);
+        } finally {
+            wasm.__wbindgen_add_to_stack_pointer(16);
+        }
     }
 }
 /**
@@ -2337,12 +2372,8 @@ function __wbg_get_imports() {
     imports.wbg.__wbindgen_object_drop_ref = function(arg0) {
         takeObject(arg0);
     };
-    imports.wbg.__wbg_log_b408f961d724c9a7 = function(arg0, arg1) {
+    imports.wbg.__wbg_log_9922ff46bfdd7ef5 = function(arg0, arg1) {
         console.log(getStringFromWasm0(arg0, arg1));
-    };
-    imports.wbg.__wbindgen_object_clone_ref = function(arg0) {
-        const ret = getObject(arg0);
-        return addHeapObject(ret);
     };
     imports.wbg.__wbindgen_string_get = function(arg0, arg1) {
         const obj = getObject(arg1);
@@ -2352,6 +2383,18 @@ function __wbg_get_imports() {
         getInt32Memory0()[arg0 / 4 + 1] = len1;
         getInt32Memory0()[arg0 / 4 + 0] = ptr1;
     };
+    imports.wbg.__wbg_transaction_new = function(arg0) {
+        const ret = Transaction.__wrap(arg0);
+        return addHeapObject(ret);
+    };
+    imports.wbg.__wbindgen_bigint_from_u64 = function(arg0) {
+        const ret = BigInt.asUintN(64, arg0);
+        return addHeapObject(ret);
+    };
+    imports.wbg.__wbindgen_object_clone_ref = function(arg0) {
+        const ret = getObject(arg0);
+        return addHeapObject(ret);
+    };
     imports.wbg.__wbindgen_cb_drop = function(arg0) {
         const obj = takeObject(arg0).original;
         if (obj.cnt-- == 1) {
@@ -2360,14 +2403,6 @@ function __wbg_get_imports() {
         }
         const ret = false;
         return ret;
-    };
-    imports.wbg.__wbg_transaction_new = function(arg0) {
-        const ret = Transaction.__wrap(arg0);
-        return addHeapObject(ret);
-    };
-    imports.wbg.__wbindgen_bigint_from_u64 = function(arg0) {
-        const ret = BigInt.asUintN(64, arg0);
-        return addHeapObject(ret);
     };
     imports.wbg.__wbg_new_abda76e883ba8a5f = function() {
         const ret = new Error();
@@ -2662,7 +2697,7 @@ function __wbg_get_imports() {
                 const a = state0.a;
                 state0.a = 0;
                 try {
-                    return __wbg_adapter_227(a, state0.b, arg0, arg1);
+                    return __wbg_adapter_228(a, state0.b, arg0, arg1);
                 } finally {
                     state0.a = a;
                 }
@@ -2753,12 +2788,12 @@ function __wbg_get_imports() {
         const ret = startWorkers(takeObject(arg0), takeObject(arg1), wbg_rayon_PoolBuilder.__wrap(arg2));
         return addHeapObject(ret);
     };
-    imports.wbg.__wbindgen_closure_wrapper7071 = function(arg0, arg1, arg2) {
-        const ret = makeMutClosure(arg0, arg1, 1181, __wbg_adapter_34);
+    imports.wbg.__wbindgen_closure_wrapper7395 = function(arg0, arg1, arg2) {
+        const ret = makeMutClosure(arg0, arg1, 1196, __wbg_adapter_34);
         return addHeapObject(ret);
     };
-    imports.wbg.__wbindgen_closure_wrapper7072 = function(arg0, arg1, arg2) {
-        const ret = makeMutClosure(arg0, arg1, 1181, __wbg_adapter_34);
+    imports.wbg.__wbindgen_closure_wrapper7396 = function(arg0, arg1, arg2) {
+        const ret = makeMutClosure(arg0, arg1, 1196, __wbg_adapter_34);
         return addHeapObject(ret);
     };
 
