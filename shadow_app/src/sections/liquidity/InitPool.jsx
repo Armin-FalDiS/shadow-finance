@@ -1,7 +1,7 @@
 import { useState, useEffect, useContext } from "react";
 import { Button, Card, Col, Form, Row, Result, Space } from "antd";
 import axios from "axios";
-import init from "@aleohq/wasm";
+import init, * as aleo from "@aleohq/wasm";
 import { AppContext } from "../../App";
 import { armin_token,armout_token, node_url,shadow_swap } from "../../app.json";
 
