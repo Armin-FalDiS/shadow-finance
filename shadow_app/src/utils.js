@@ -1,12 +1,11 @@
 import init, * as aleo from "@aleohq/wasm";
+import { node_url } from "./app.json";
 
 await init();
 
-const url = "http://localhost:3030"
-
 // Get program source code from the Aleo network
 async function getProgram(name) {
-    const response = await fetch(`${url}/testnet3/program/${name}`);
+    const response = await fetch(`${node_url}/testnet3/program/${name}`);
     if (response.ok) {
         return response.json();
     }

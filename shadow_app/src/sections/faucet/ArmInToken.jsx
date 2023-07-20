@@ -3,25 +3,20 @@ import {
     Button,
     Card,
     Col,
-    Divider,
     Form,
-    Input,
     Row,
     Result,
-    Spin,
-    Switch,
     Space,
 } from "antd";
-import { FormGenerator } from "../../components/InputForm";
 import axios from "axios";
-import init, * as aleo from "@aleohq/wasm";
+import init from "@aleohq/wasm";
 import { AppContext } from "../../App";
 import { armin_token, node_url } from "../../app.json";
 
 await init();
 
 export const ArmInToken = () => {
-    let { account, fee, setFee,setArmInToken } = useContext(AppContext);
+    let { account, fee, setFee, setArmInToken } = useContext(AppContext);
     const program = armin_token.program;
     const functionID = armin_token.mint_function;
     const feeAmount = armin_token.mint_fee;
@@ -53,16 +48,26 @@ export const ArmInToken = () => {
                             },
                         },
                     )
-                    .then((response) => {
+                    .then(async (res) => {
                         setProgramResponse(null);
                         setExecutionError(null);
-                        setTransactionID(response.data);
-                        let response = axios.get(url+"/testnet3/transaction/"+transactionID)
-                        let encyptedFeeRecord =response.data.fee.transition.outputs[0].value
-                        let encryptedArminRecord = response.data.execution.transitions[0].outputs[0].value
-                        setFee(account.to_view_key.decrypt(encyptedFeeRecord))
-                        setArmInToken(account.to_view_key.decrypt(encryptedArminRecord))
+                        setTransactionID(res.data);
 
+                        const response = await axios.get(
+                            `${url}/testnet3/transaction/${transactionID}`,
+                        );
+                        const tx = response.data;
+
+                        const encyptedFeeRecord =
+                            tx.fee.transition.outputs[0].value;
+                        setFee(account.to_view_key.decrypt(encyptedFeeRecord));
+
+                        const encryptedArminRecord =
+                            tx.execution.transitions[0].outputs[0].value;
+
+                        setArmInToken(
+                            account.to_view_key.decrypt(encryptedArminRecord),
+                        );
                     });
             } else if (ev.data.type == "ERROR") {
                 setProgramResponse(null);
