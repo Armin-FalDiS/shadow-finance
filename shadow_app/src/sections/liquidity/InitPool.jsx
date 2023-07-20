@@ -12,6 +12,8 @@ export const ArmInToken = () => {
     const program = shadow_swap.program
     const functionID = shadow_swap.init_function;
     const feeAmount = shadow_swap.init_fee;
+    const  [arminAmount,setArminAmount]= useState(0)
+    const  [armoutAmount,setArmoutAmount] = useState(0)
 
     const [programResponse, setProgramResponse] = useState(null);
     const [executionError, setExecutionError] = useState(null);
@@ -90,6 +92,12 @@ export const ArmInToken = () => {
             };
         }
     }, []);
+    const onArminChange = (event)=>{
+        pass
+    }
+    const onArmoutChange = (event)=>{
+        pass
+    }
 
     function postMessagePromise(worker, message) {
         return new Promise((resolve, reject) => {
