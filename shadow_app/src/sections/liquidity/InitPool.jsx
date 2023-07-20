@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import {
     Button,
     Card,
@@ -15,6 +15,9 @@ import {
 import { FormGenerator } from "../../components/InputForm";
 import axios from "axios";
 import init, * as aleo from "@aleohq/wasm";
+import { AppContext } from "../../App";
+
+
 
 await init();
 
@@ -26,7 +29,6 @@ export const InitPool = () => {
     const [inputs, setInputs] = useState(null);
     const [feeLoading, setFeeLoading] = useState(false);
     const [loading, setLoading] = useState(false);
-    const [privateKey, setPrivateKey] = useState(null);
     const [program, setProgram] = useState(null);
     const [programResponse, setProgramResponse] = useState(null);
     const [executionError, setExecutionError] = useState(null);
@@ -34,11 +36,18 @@ export const InitPool = () => {
     const [status, setStatus] = useState("");
     const [transactionID, setTransactionID] = useState(null);
     const [worker, setWorker] = useState(null);
-    const [executeOnline, setExecuteOnline] = useState(false);
+    const [executeOnline, setExecuteOnline] = useState(true);
     const [programInputs, setProgramInputs] = useState(null);
     const [tip, setTip] = useState("Executing Program...");
+    let { account } = useContext(AppContext)
+    const privateKey = () =>
+        account !== null ? account.to_string() : "";
+    const address = () =>
+        account !== null ? account.to_address().to_string() : "";
+    const program_string = "program armin_token.aleo;\n\nrecord ArminToken:\n    owner as address.private;\n    amount as u64.private;\n\nmapping supply_armin:\n    key left as u8.public;\n    value right as u64.public;\n\nmapping programs_armin:\n    key left as field.public;\n    value right as u64.public;\n\nfunction mint_armin:\n    input r0 as address.private;\n    input r1 as u64.private;\n    lte r1 100000u64 into r2;\n    assert.eq r2 true ;\n    cast r0 r1 into r3 as ArminToken.record;\n    output r3 as ArminToken.record;\n   finalize r1;\n\nfinalize mint_armin:\n    input r0 as u64.public;\n    get.or_use supply_armin[0u8] 0u64 into r1;\n    add r1 r0 into r2;\n    lte r2 100000000000u64 into r3;\n    assert.eq r3 true ;\n    set r2 into supply_armin[0u8];\n\nfunction transfer_armin:\n    input r0 as ArminToken.record;\n    input r1 as address.private;\n    input r2 as u64.private;\n    sub r0.amount r2 into r3;\n    cast r0.owner r3 into r4 as ArminToken.record;\n    cast r1 r2 into r5 as ArminToken.record;\n    output r4 as ArminToken.record;\n    output r5 as ArminToken.record;\n\nfunction transfer_armin_to_program:\n    input r0 as ArminToken.record;\n    input r1 as u64.private;\n    sub r0.amount r1 into r2;\n    cast r0.owner r2 into r3 as ArminToken.record;\n    output r3 as ArminToken.record;\n   finalize r1;\n\nfinalize transfer_armin_to_program:\n    input r0 as u64.public;\n    hash.bhp256 0u8 into r1 as field;\n    get.or_use programs_armin[r1] 0u64 into r2;\n    add r2 r0 into r3;\n    set r3 into programs_armin[r1];\n\nfunction transfer_armin_from_program:\n    input r0 as address.private;\n    input r1 as u64.private;\n    cast r0 r1 into r2 as ArminToken.record;\n    output r2 as ArminToken.record;\n   finalize r1;\n\nfinalize transfer_armin_from_program:\n    input r0 as u64.public;\n    hash.bhp256 0u8 into r1 as field;\n    get.or_use programs_armin[r1] 0u64 into r2;\n    sub r2 r0 into r3;\n    set r3 into programs_armin[r1];\n"
 
     const getProgramInputs = () => {
+
         const programManifest = [];
         if (program) {
             try {
@@ -70,15 +79,9 @@ export const InitPool = () => {
             { type: "module" },
         );
         worker.addEventListener("message", (ev) => {
-            if (ev.data.type == "OFFLINE_EXECUTION_COMPLETED") {
-                setFeeLoading(false);
-                setLoading(false);
-                setTransactionID(null);
-                setExecutionError(null);
-                setProgramResponse(ev.data.outputs);
-                setTip("Executing Program...");
-            } else if (ev.data.type == "EXECUTION_TRANSACTION_COMPLETED") {
+            if (ev.data.type == "EXECUTION_TRANSACTION_COMPLETED") {
                 let [transaction, url] = ev.data.executeTransaction;
+                console.log(transaction)
                 axios
                     .post(
                         url + "/testnet3/transaction/broadcast",
@@ -154,24 +157,12 @@ export const InitPool = () => {
         setExecutionError(null);
 
         const feeAmount = parseFloat(feeString());
-        if (isNaN(feeAmount)) {
-            setExecutionError("Fee is not a valid number");
-            setFeeLoading(false);
-            setLoading(false);
-            setTip("Executing Program...");
-            return;
-        } else if (feeAmount <= 0) {
-            setExecutionError("Fee must be greater than 0");
-            setFeeLoading(false);
-            setLoading(false);
-            setTip("Executing Program...");
-            return;
-        }
+
 
         let functionInputs = [];
         try {
             if (inputs) {
-                functionInputs = inputs.split(" ");
+                functionInputs = [address(), "Armin_token",]
             }
         } catch (e) {
             setExecutionError("Inputs are not valid");
@@ -184,201 +175,41 @@ export const InitPool = () => {
         if (executeOnline) {
             await postMessagePromise(worker, {
                 type: "ALEO_EXECUTE_PROGRAM_ON_CHAIN",
-                remoteProgram: programString(),
-                aleoFunction: functionIDString(),
+                remoteProgram: program_string,
+                aleoFunction: "mint_lp_init_shadow",
                 inputs: functionInputs,
-                privateKey: privateKeyString(),
-                fee: feeAmount,
-                feeRecord: feeRecordString(),
-                url: peerUrl(),
-            });
-        } else {
-            await postMessagePromise(worker, {
-                type: "ALEO_EXECUTE_PROGRAM_LOCAL",
-                localProgram: programString(),
-                aleoFunction: functionIDString(),
-                inputs: functionInputs,
-                privateKey: privateKeyString(),
+                privateKey: privateKey(),
+                fee: 1,
+                feeRecord: "{  owner: aleo1rhgdu77hgyqd3xjj8ucu3jj9r2krwz6mnzyd80gncr5fxcwlh5rsvzp9px.private,  microcredits: 93750000000000u64.private,  _nonce: 4584221379804783317330395146930760519734799446305091160163494666308250813255group.public}",
+                url: "http://localhost:3030",
             });
         }
     };
 
-    const estimate = async () => {
-        setFeeLoading(true);
-        setLoading(false);
-        setProgramResponse(null);
-        setTransactionID(null);
-        setExecutionError(null);
-        setTip("Estimating Execution Fee...");
-        let functionInputs = [];
-        try {
-            if (inputs) {
-                functionInputs = inputs.split(" ");
-            }
-        } catch (e) {
-            setExecutionError("Inputs are not valid");
-            setFeeLoading(false);
-            setLoading(false);
-            setTip("Executing Program...");
-            return;
-        }
 
-        if (executeOnline) {
-            await postMessagePromise(worker, {
-                type: "ALEO_ESTIMATE_EXECUTION_FEE",
-                privateKey: privateKeyString(),
-                remoteProgram: programString(),
-                aleoFunction: functionIDString(),
-                inputs: functionInputs,
-                url: peerUrl(),
-            });
-        }
-    };
 
-    const demo = async () => {
-        setLoading(false);
-        setProgramResponse(null);
-        setTransactionID(null);
-        setExecutionError(null);
-        setTip("Executing Program...");
-        setProgramID("hello_hello.aleo");
-        setProgram(
-            "program hello_hello.aleo;\n" +
-                "\n" +
-                "function hello:\n" +
-                "    input r0 as u32.public;\n" +
-                "    input r1 as u32.private;\n" +
-                "    add r0 r1 into r2;\n" +
-                "    output r2 as u32.private;\n",
-        );
-        setInputs("5u32 5u32");
-        setFunctionID("hello");
-    };
 
-    // Returns the program id if the user changes it or the "Demo" button is clicked.
-    const onChange = (event) => {
-        if (event.target.value !== null) {
-            setProgramID(event.target.value);
-        }
-        setTransactionID(null);
-        return programID;
-    };
 
-    // Returns the program id if the user changes it or the "Demo" button is clicked.
-    const onUrlChange = (event) => {
-        if (event.target.value !== null) {
-            setExecuteUrl(event.target.value);
-        }
-        return executeUrl;
-    };
 
-    const onFunctionChange = (event) => {
-        if (event.target.value !== null) {
-            setFunctionID(event.target.value);
-        }
-        setTransactionID(null);
-        setProgramResponse(null);
-        setExecutionError(null);
-        return functionID;
-    };
+    const onArminChange = (value)=>{
+        pass
+    }
+    const onArmoutChange = (value)=>{
+        pass
+    }
 
-    const onProgramChange = (event) => {
-        if (event.target.value !== null) {
-            setProgram(event.target.value);
-        }
-        setTransactionID(null);
-        setProgramResponse(null);
-        setExecutionError(null);
-        return program;
-    };
 
-    const onExecutionFeeChange = (event) => {
-        if (event.target.value !== null) {
-            setExecutionFee(event.target.value);
-        }
-        setTransactionID(null);
-        setProgramResponse(null);
-        setExecutionError(null);
-        return executionFee;
-    };
 
-    const onExecutionFeeRecordChange = (event) => {
-        if (event.target.value !== null) {
-            setExecutionFeeRecord(event.target.value);
-        }
-        setTransactionID(null);
-        setProgramResponse(null);
-        setExecutionError(null);
-        return executionFeeRecord;
-    };
-
-    const onInputsChange = (event) => {
-        if (event.target.value !== null) {
-            setInputs(event.target.value);
-        }
-        setTransactionID(null);
-        setProgramResponse(null);
-        setExecutionError(null);
-        return inputs;
-    };
-
-    const onPrivateKeyChange = (event) => {
-        if (event.target.value !== null) {
-            setPrivateKey(event.target.value);
-        }
-        setTransactionID(null);
-        setProgramResponse(null);
-        setExecutionError(null);
-        return privateKey;
-    };
 
     // Calls `tryRequest` when the search bar input is entered.
-    const onSearch = (value) => {
-        setFeeLoading(false);
-        setLoading(false);
-        setProgramResponse(null);
-        setTransactionID(null);
-        setExecutionError(null);
-        setTip("Executing Program...");
-        try {
-            tryRequest(value);
-        } catch (error) {
-            console.error(error);
-        }
-    };
+
 
     // Attempts to request the program bytecode with the given program id.
-    const tryRequest = (id) => {
-        setProgramID(id);
-        try {
-            if (id) {
-                axios
-                    .get(`${peerUrl()}/testnet3/program/${id}`)
-                    .then((response) => {
-                        setStatus("success");
-                        setProgram(response.data);
-                    })
-                    .catch((error) => {
-                        // Reset the program text to `null` if the program id does not exist.
-                        setProgram(null);
-                        setStatus("error");
-                        console.error(error);
-                    });
-            } else {
-                // Reset the program text if the user clears the search bar.
-                setProgram(null);
-                // If the search bar is empty reset the status to "".
-                setStatus("");
-            }
-        } catch (error) {
-            console.error(error);
-        }
-    };
+
 
     const layout = { labelCol: { span: 3 }, wrapperCol: { span: 21 } };
-    const functionIDString = () => (functionID !== null ? functionID : "");
     const inputsString = () => (inputs !== null ? inputs : "");
-    const privateKeyString = () => (privateKey !== null ? privateKey : "");
+
     const programString = () => (program !== null ? program : "");
     const programIDString = () => (programID !== null ? programID : "");
     const feeRecordString = () =>
@@ -391,186 +222,55 @@ export const InitPool = () => {
         programResponse !== null ? programResponse.toString() : "";
     const feeString = () => (executionFee !== null ? executionFee : "");
     const peerUrl = () => (executeUrl !== null ? executeUrl : "");
-
     return (
         <Card
-            title="Execute Program"
+            title={"Initalize Liquidity Pool"}
             style={{ width: "100%", borderRadius: "20px" }}
             bordered={false}
-            extra={
-                <Button
-                    type="primary"
-                    shape="round"
-                    size="middle"
-                    onClick={demo}
-                >
-                    Demo
-                </Button>
-            }
         >
+
             <Form {...layout}>
-                <Form.Item
-                    label="Program ID"
-                    colon={false}
-                    validateStatus={status}
-                >
-                    <Input.Search
-                        name="program_id"
-                        size="large"
-                        placeholder="Program ID"
-                        allowClear
-                        onSearch={onSearch}
-                        onChange={onChange}
-                        value={programIDString()}
-                        style={{ borderRadius: "20px" }}
-                    />
-                </Form.Item>
-            </Form>
-            <Form {...layout}>
-                <Divider />
-                <Form.Item label="Program" colon={false}>
-                    <Input.TextArea
-                        size="large"
-                        rows={10}
-                        placeholder="Program"
-                        style={{
-                            whiteSpace: "pre-wrap",
-                            overflowWrap: "break-word",
-                        }}
-                        value={programString()}
-                        onChange={onProgramChange}
-                    />
-                </Form.Item>
-                <Divider />
-                <Form.Item
-                    label="Execute On-Chain"
-                    colon={false}
-                    validateStatus={status}
-                >
-                    <Switch
-                        label="Execute Online"
-                        onChange={() => {
-                            executeOnline
-                                ? setExecuteOnline(false)
-                                : setExecuteOnline(true);
-                            setProgramResponse(null);
-                            setTransactionID(null);
-                            setExecutionError(null);
-                        }}
-                    />
-                </Form.Item>
-                <Form.Item
-                    label="Function"
-                    colon={false}
-                    validateStatus={status}
-                >
-                    <Input.TextArea
-                        name="function_id"
-                        size="large"
-                        placeholder="Function ID"
-                        allowClear
-                        onChange={onFunctionChange}
-                        value={functionIDString()}
-                    />
-                </Form.Item>
-                <Form.Item label="Inputs" colon={false} validateStatus={status}>
-                    <Input.TextArea
-                        name="inputs"
-                        size="middle"
-                        placeholder="Inputs"
-                        allowClear
-                        onChange={onInputsChange}
-                        value={inputsString()}
-                    />
-                </Form.Item>
-                {Array.isArray(programInputs) && (
-                    <Form.Item label="Input List">
-                        <FormGenerator formData={programInputs} />
-                    </Form.Item>
-                )}
-                <Form.Item
-                    label="Private Key"
-                    colon={false}
-                    validateStatus={status}
-                >
-                    <Input.TextArea
-                        name="private_key"
-                        size="small"
-                        placeholder="Private Key"
-                        allowClear
-                        onChange={onPrivateKeyChange}
-                        value={privateKeyString()}
-                    />
-                </Form.Item>
-                {executeOnline === true && (
-                    <Form.Item
-                        label="Peer Url"
-                        colon={false}
-                        validateStatus={status}
-                    >
-                        <Input.TextArea
-                            name="Peer URL"
-                            size="middle"
-                            placeholder="Aleo Network Node URL"
-                            allowClear
-                            onChange={onUrlChange}
-                            value={peerUrl()}
-                        />
-                    </Form.Item>
-                )}
-                {executeOnline === true && (
-                    <Form.Item
-                        label="Fee"
-                        colon={false}
-                        validateStatus={status}
-                    >
-                        <Input.TextArea
-                            name="Fee"
-                            size="small"
-                            placeholder="Fee"
-                            allowClear
-                            onChange={onExecutionFeeChange}
-                            value={feeString()}
-                        />
-                    </Form.Item>
-                )}
-                {executeOnline === true && (
-                    <Form.Item
-                        label="Fee Record"
-                        colon={false}
-                        validateStatus={status}
-                    >
-                        <Input.TextArea
-                            name="Fee Record"
-                            size="small"
-                            placeholder="Record used to pay execution fee"
-                            allowClear
-                            onChange={onExecutionFeeRecordChange}
-                            value={feeRecordString()}
-                        />
-                    </Form.Item>
-                )}
                 <Row justify="center">
                     <Col justify="center">
                         <Space>
+                            <Form.Item
+                                label="Armin amount"
+                                colon={false}
+                                validateStatus={status}
+                            >
+                                <Input.TextArea
+                                    name="Armin amount"
+                                    size="large"
+                                    placeholder={0}
+                                    allowClear
+                                    onChange={onArminChange}
+                                    value={11}
+                                    style={{ borderRadius: "20px" }}
+                                />
+                            </Form.Item>
+                            <Divider />
+                            <Form.Item
+                                label="Armout amount"
+                                colon={false}
+                                validateStatus={status}
+                            >
+                                <Input.TextArea
+                                    name="Armout amount"
+                                    size="large"
+                                    placeholder={0}
+                                    onChange={onArmoutChange}
+                                    value={11}
+                                    style={{ borderRadius: "20px" }}
+                                />
+                            </Form.Item>
                             <Button
                                 type="primary"
                                 shape="round"
                                 size="middle"
                                 onClick={execute}
                             >
-                                Execute
+                                Init Pool
                             </Button>
-                            {executeOnline && (
-                                <Button
-                                    type="primary"
-                                    shape="round"
-                                    size="middle"
-                                    onClick={estimate}
-                                >
-                                    Estimate Fee
-                                </Button>
-                            )}
                         </Space>
                     </Col>
                 </Row>
