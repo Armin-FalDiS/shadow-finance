@@ -38,32 +38,6 @@ export const InitPool = () => {
     const [programInputs, setProgramInputs] = useState(null);
     const [tip, setTip] = useState("Executing Program...");
 
-    const getProgramInputs = () => {
-        const programManifest = [];
-        if (program) {
-            try {
-                const aleoProgram = aleo.Program.fromString(program);
-                const functions = aleoProgram.getFunctions();
-                for (let i = 0; i < functions.length; i++) {
-                    const functionManifest = { functionID: functions[i] };
-                    try {
-                        const functionInputs = aleoProgram.getFunctionInputs(
-                            functions[i],
-                        );
-                        functionManifest["inputs"] = functionInputs;
-                        programManifest.push(functionManifest);
-                    } catch (e) {
-                        console.error(e);
-                    }
-                }
-                setProgramInputs(programManifest);
-                return programManifest;
-            } catch (e) {
-                console.error(e);
-            }
-        }
-    };
-
     function spawnWorker() {
         let worker = new Worker(
             new URL("../../workers/worker.js", import.meta.url),
