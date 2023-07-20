@@ -21,7 +21,7 @@ import { armin_token, node_url } from "../../app.json";
 await init();
 
 export const ArmInToken = () => {
-    let { account, fee, setFee } = useContext(AppContext);
+    let { account, fee, setFee,setArmInToken } = useContext(AppContext);
     const program = armin_token.program;
     const functionID = armin_token.mint_function;
     const feeAmount = armin_token.mint_fee;
@@ -57,6 +57,12 @@ export const ArmInToken = () => {
                         setProgramResponse(null);
                         setExecutionError(null);
                         setTransactionID(response.data);
+                        let response = axios.get(url+"/testnet3/transaction/"+transactionID)
+                        let encyptedFeeRecord =response.data.fee.transition.outputs[0].value
+                        let encryptedArminRecord = response.data.execution.transitions[0].outputs[0].value
+                        setFee(account.to_view_key.decrypt(encyptedFeeRecord))
+                        setArmInToken(account.to_view_key.decrypt(encryptedArminRecord))
+
                     });
             } else if (ev.data.type == "ERROR") {
                 setProgramResponse(null);
