@@ -1,7 +1,6 @@
 import { Card, Divider, Form, Input } from "antd";
 import { useContext } from "react";
 import { AppContext } from "../../App";
-import { useState } from "react";
 
 export const Tokens = () => {
     const { armInToken, armOutToken } = useContext(AppContext);
