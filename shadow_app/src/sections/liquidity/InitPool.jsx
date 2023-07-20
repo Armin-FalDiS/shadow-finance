@@ -120,7 +120,8 @@ export const ArmInToken = () => {
 
         let functionInputs = [
             account.to_address().to_string(),
-            Math.floor(Math.random() * 100000) + 1 + "u64",
+            armin_token,
+            armout_token
         ];
 
         await postMessagePromise(worker, {
