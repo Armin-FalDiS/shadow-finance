@@ -15,7 +15,13 @@ import axios from "axios";
 import init, * as aleo from "@aleohq/wasm";
 import { AppContext } from "../../App";
 import { node_url, shadow_swap } from "../../app.json";
-import { getArmInReserve, getArmOutReserve, getLPTokenBalance, getLPTokenTotalSupply, parseU64Response } from "../../general";
+import {
+    getArmInReserve,
+    getArmOutReserve,
+    getLPTokenBalance,
+    getLPTokenTotalSupply,
+    parseU64Response,
+} from "../../general";
 
 await init();
 
@@ -140,7 +146,7 @@ export const RemoveLiquidity = () => {
 
         const lp_balance = await getLPTokenBalance(address);
         const total_lp_supply = await getLPTokenTotalSupply();
-        
+
         const lp_share = lp_balance / total_lp_supply;
 
         const armInReserve = await getArmInReserve();
@@ -149,11 +155,7 @@ export const RemoveLiquidity = () => {
         let armInShare = Math.floor(lp_share * armInReserve);
         let armOutShare = Math.floor(lp_share * armOutReserve);
 
-        let functionInputs = [
-            address,
-            armInShare,
-            armOutShare,
-        ];
+        let functionInputs = [address, armInShare, armOutShare];
 
         await postMessagePromise(worker, {
             type: "ALEO_EXECUTE_PROGRAM_ON_CHAIN",
@@ -171,51 +173,21 @@ export const RemoveLiquidity = () => {
 
     return (
         <Card
-            title={"Provide Liquidity"}
+            title="Remove Liquidity"
             style={{ width: "100%", borderRadius: "20px" }}
             bordered={false}
         >
             <Form {...layout}>
                 <Row justify="center">
                     <Col justify="center">
-                        <Space>
-                            <Form.Item
-                                label="Removal percentage"
-                                colon={false}
-                                validateStatus={status}
-                            >
-                                <Slider
-                                    name="Removal percentage"
-                                    size="large"
-                                    onChange={onSliderChange}
-                                    value={sliderValue}
-                                    style={{ borderRadius: "20px" }}
-                                />
-                            </Form.Item>
-                            <Divider />
-                            <Form.Item
-                                label="ArmOut amount"
-                                colon={false}
-                                validateStatus={status}
-                            >
-                                <InputNumber
-                                    name="Slider input"
-                                    size="large"
-                                    placeholder={0}
-                                    onChange={onSliderInputChange}
-                                    value={sliderinputValue}
-                                    style={{ borderRadius: "20px" }}
-                                />
-                            </Form.Item>
-                            <Button
-                                type="primary"
-                                shape="round"
-                                size="middle"
-                                onClick={execute}
-                            >
-                                Remove Liquidity
-                            </Button>
-                        </Space>
+                        <Button
+                            type="primary"
+                            shape="round"
+                            size="middle"
+                            onClick={execute}
+                        >
+                            Remove Liquidity
+                        </Button>
                     </Col>
                 </Row>
             </Form>
