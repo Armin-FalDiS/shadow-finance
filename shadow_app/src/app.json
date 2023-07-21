@@ -15,7 +15,9 @@
         "init_function": "mint_lp_init_shadow",
         "init_fee":2,
         "provide_function":"mint_lp_shadow",
-        "provide_fee":2
+        "provide_fee":2,
+        "burn_function": "burn_lp_shadow",
+        "burn_fee":2
     }
     
 

@@ -10,8 +10,8 @@ await init();
 export const RemoveLiquidity = () => {
     let { account, fee, setFee, setArmInToken, setArmOutToken,armInToken,armOutToken } = useContext(AppContext);
     const program = shadow_swap.program
-    const functionID = shadow_swap.provide_function
-    const feeAmount = shadow_swap.provide_fee
+    const functionID = shadow_swap.burn_function
+    const feeAmount = shadow_swap.burn_fee
     const [armInAmount, setArmInAmount] = useState(0)
     const [armOutAmount, setArmOutAmount] = useState(0)
     const [sliderValue,setSliderValue]= useState(50)
@@ -95,12 +95,7 @@ export const RemoveLiquidity = () => {
             };
         }
     }, []);
-    const onArmInChange = (event) => {
-        setArmInAmount(event.target.value)
-        let ratio = getratio
-        // setArmOutAmount/ratio
 
-    }
 
     const onSliderChange = (value)=> {
         setSliderValue(value)
@@ -109,6 +104,12 @@ export const RemoveLiquidity = () => {
     const onSliderInputChange = (value )=> {
         setSliderinputValue(value)
         setSliderValue(value)
+    }
+    const  getAmountsFromRatio = (slidervalue) =>{
+        // axios.get(slidervalue)
+        //calc ratio 
+        // return [amount1,amount2]
+
     }
 
     function postMessagePromise(worker, message) {
@@ -140,13 +141,14 @@ export const RemoveLiquidity = () => {
         setProgramResponse(null);
         setTransactionID(null);
         setExecutionError(null);
+        [amount1,amount2] =getAmountsFromRatio(sliderValue)
+
 
         let functionInputs = [
             account.to_address().to_string(),
-            armInToken,
-            armInAmount,
-            armOutToken,
-            armOutAmount
+            amount1,
+            amount2
+ 
         ];
 
         await postMessagePromise(worker, {
