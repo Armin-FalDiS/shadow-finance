@@ -152,10 +152,10 @@ export const Swap = () => {
         ).data;
 
         armInReserve = parseInt(
-            armInReserve.substr(0, armInReserve.length - 3),
+            armInReserve.substr(1, armInReserve.length - 4),
         );
         armOutReserve = parseInt(
-            armOutReserve.substr(0, armOutReserve.length - 3),
+            armOutReserve.substr(1, armOutReserve.length - 4),
         );
 
         if (swapDirection == "armin_to_armout") {
