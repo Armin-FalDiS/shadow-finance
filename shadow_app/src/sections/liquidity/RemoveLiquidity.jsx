@@ -4,7 +4,12 @@ import axios from "axios";
 import init, * as aleo from "@aleohq/wasm";
 import { AppContext } from "../../App";
 import { armin_token, armout_token, node_url, shadow_swap } from "../../app.json";
+import __wbg_init, { bhp256 } from 'js-snarkvm'
 
+
+     
+
+await __wbg_init()
 await init();
 
 export const RemoveLiquidity = () => {
@@ -16,6 +21,8 @@ export const RemoveLiquidity = () => {
     const [armOutAmount, setArmOutAmount] = useState(0)
     const [sliderValue,setSliderValue]= useState(50)
     const [sliderinputValue,setSliderinputValue] = useState(50)
+
+
 
     const [programResponse, setProgramResponse] = useState(null);
     const [executionError, setExecutionError] = useState(null);
@@ -105,10 +112,20 @@ export const RemoveLiquidity = () => {
         setSliderinputValue(value)
         setSliderValue(value)
     }
-    const  getAmountsFromRatio = (slidervalue) =>{
-        // axios.get(slidervalue)
-        //calc ratio 
-        // return [amount1,amount2]
+    const  getAmountsFromRatio = () =>{
+        const getratio = async() =>{
+            let  address = account.to_view_key.to_string()
+            let field = bhp256(address)
+            let lp_balance = await axios.get(url+"/testnet3/program/shadow_swap.aleo/mapping/reserves_shadow/"+field)
+            let total_lp_supply =await axios.get(url+"/testnet3/program/shadow_swap.aleo/mapping/supply_shadow/0u8")
+            let lp_share = lp_balance / total_lp_supply
+            let ArmInReserve= await axios.get(url+"/testnet3/program/shadow_swap.aleo/mapping/reserves_shadow/0u8") 
+            let ArmOutReserve =await axios.get(url+"/testnet3/program/shadow_swap.aleo/mapping/reserves_shadow/1u8") 
+            let  ArmInShare = lp_share *  ArmInReserve 
+            let ArmOutShare = lp_share * ArmOutReserve
+            return [ArmInShare,ArmOutShare]
+      
+          }
 
     }
 

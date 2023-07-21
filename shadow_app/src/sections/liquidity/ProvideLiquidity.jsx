@@ -4,6 +4,7 @@ import axios from "axios";
 import init, * as aleo from "@aleohq/wasm";
 import { AppContext } from "../../App";
 import { armin_token, armout_token, node_url, shadow_swap } from "../../app.json";
+import { bhp256 } from "js-snarkvm";
 
 await init();
 
@@ -95,13 +96,21 @@ export const ProvideLiquidity = () => {
     }, []);
 
     const getratio = async() =>{
+      let  address = account.to_view_key.to_string()
+      let field = bhp256(address)
+      let lp_balance = await axios.get(url+"/testnet3/program/shadow_swap.aleo/mapping/reserves_shadow/"+field)
+      let total_lp_supply =await axios.get(url+"/testnet3/program/shadow_swap.aleo/mapping/supply_shadow/0u8")
+      let lp_share = lp_balance / total_lp_supply
       let ArmInReserve= await axios.get(url+"/testnet3/program/shadow_swap.aleo/mapping/reserves_shadow/0u8") 
       let ArmOutReserve =await axios.get(url+"/testnet3/program/shadow_swap.aleo/mapping/reserves_shadow/1u8") 
-      
+      let  ArmInShare = lp_share *  ArmInReserve 
+      let ArmOutShare = lp_share * ArmOutReserve
+      return [ArmInShare,ArmOutShare]
+
     }
     const onArmInChange = (event) => {
         setArmInAmount(event.target.value)
-        let ratio = getratio
+        let ratio = getratio()
         // setArmOutAmount/ratio
 
     }
