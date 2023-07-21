@@ -1,5 +1,5 @@
 import { useState, useEffect, useContext } from "react";
-import { Button, Card, Col, Form, Row, Result, Space, Input, Divider, InputNumber } from "antd";
+import { Button, Card, Col, Form, Row, Result, Space, Input, Divider, InputNumber,Slider } from "antd";
 import axios from "axios";
 import init, * as aleo from "@aleohq/wasm";
 import { AppContext } from "../../App";
@@ -7,13 +7,15 @@ import { armin_token, armout_token, node_url, shadow_swap } from "../../app.json
 
 await init();
 
-export const ProvideLiquidity = () => {
+export const RemoveLiquidity = () => {
     let { account, fee, setFee, setArmInToken, setArmOutToken,armInToken,armOutToken } = useContext(AppContext);
     const program = shadow_swap.program
     const functionID = shadow_swap.provide_function
     const feeAmount = shadow_swap.provide_fee
     const [armInAmount, setArmInAmount] = useState(0)
     const [armOutAmount, setArmOutAmount] = useState(0)
+    const [sliderValue,setSliderValue]= useState(50)
+    const [sliderinputValue,setSliderinputValue] = useState(50)
 
     const [programResponse, setProgramResponse] = useState(null);
     const [executionError, setExecutionError] = useState(null);
@@ -99,10 +101,14 @@ export const ProvideLiquidity = () => {
         // setArmOutAmount/ratio
 
     }
-    const onArmOutChange = (event) => {
-        setArmOutAmount(event.target.value)
-        let ratio = getratio
-        // setArmInAmount/ratio
+
+    const onSliderChange = (value)=> {
+        setSliderValue(value)
+        setSliderinputValue(value)
+    }
+    const onSliderInputChange = (value )=> {
+        setSliderinputValue(value)
+        setSliderValue(value)
     }
 
     function postMessagePromise(worker, message) {
@@ -169,17 +175,17 @@ export const ProvideLiquidity = () => {
                     <Col justify="center">
                         <Space>
                             <Form.Item
-                                label="ArmIn amount"
+                                label="Removal percentage"
                                 colon={false}
                                 validateStatus={status}
                             >
-                                <InputNumber
-                                    name="ArmIn amount"
+                                <Slider
+                                    name="Removal percentage"
                                     size="large"
-                                    placeholder={0}
-                                    allowClear
-                                    onChange={onArmInChange}
-                                    value={armInAmount}
+
+
+                                    onChange={onSliderChange}
+                                    value={sliderValue}
                                     style={{ borderRadius: "20px" }}
                                 />
                             </Form.Item>
@@ -191,11 +197,11 @@ export const ProvideLiquidity = () => {
                             >
 
                                 <InputNumber
-                                    name="ArmOut amount"
+                                    name="Slider input"
                                     size="large"
                                     placeholder={0}
-                                    onChange={onArmOutChange}
-                                    value={armOutAmount}
+                                    onChange={onSliderInputChange}
+                                    value={sliderinputValue}
                                     style={{ borderRadius: "20px" }}
                                 />
                             </Form.Item>
@@ -205,7 +211,7 @@ export const ProvideLiquidity = () => {
                                 size="middle"
                                 onClick={execute}
                             >
-                                Provide Liquidity
+                                Remove Liquidity
                             </Button>
                         </Space>
                     </Col>

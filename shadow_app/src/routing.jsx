@@ -7,7 +7,7 @@ import { ArmInToken } from "./sections/faucet/ArmInToken.jsx";
 import { ArmOutToken } from "./sections/faucet/ArmOutToken.jsx";
 import { InitPool } from "./sections/liquidity/InitPool.jsx";
 import { ProvideLiquidity } from "./sections/liquidity/ProvideLiquidity.jsx";
-import { BurnLiquidity } from "./sections/liquidity/BurnLiquidity.jsx";
+import { RemoveLiquidity} from "./sections/liquidity/RemoveLiquidity.jsx";
 import { Swap } from "./sections/swap/Swap.jsx";
 
 export const router = createBrowserRouter([
@@ -48,7 +48,7 @@ export const router = createBrowserRouter([
                         <br />
                         <ProvideLiquidity />
                         <br />
-                        <BurnLiquidity />
+                        <RemoveLiquidity />
                     </>
                 ),
             },
