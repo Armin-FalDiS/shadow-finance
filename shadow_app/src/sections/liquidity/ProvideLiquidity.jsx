@@ -93,6 +93,12 @@ export const ProvideLiquidity = () => {
             };
         }
     }, []);
+
+    const getratio = async() =>{
+      let ArmInReserve= await axios.get(url+"/testnet3/program/shadow_swap.aleo/mapping/reserves_shadow/0u8") 
+      let ArmOutReserve =await axios.get(url+"/testnet3/program/shadow_swap.aleo/mapping/reserves_shadow/1u8") 
+      
+    }
     const onArmInChange = (event) => {
         setArmInAmount(event.target.value)
         let ratio = getratio
@@ -101,7 +107,7 @@ export const ProvideLiquidity = () => {
     }
     const onArmOutChange = (event) => {
         setArmOutAmount(event.target.value)
-        let ratio = getratio
+        let ratio = getratio(ar)
         // setArmInAmount/ratio
     }
 
@@ -119,9 +125,7 @@ export const ProvideLiquidity = () => {
             worker.postMessage(message);
         });
     }
-    const getratio = () =>{
-        pass
-    }
+
 
     const transactionIDString = () =>
         transactionID !== null ? transactionID : "";
