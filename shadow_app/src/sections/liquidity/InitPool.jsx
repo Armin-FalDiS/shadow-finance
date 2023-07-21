@@ -170,7 +170,7 @@ export const InitPool = () => {
         });
     };
 
-    const layout = { labelCol: { span: 6 }, wrapperCol: { span: 21 } };
+    const layout = { labelCol: { span: 14 }, wrapperCol: { span: 21 } };
 
     return (
         <Card
@@ -179,25 +179,33 @@ export const InitPool = () => {
             bordered={false}
         >
             <Form {...layout}>
-                <Form.Item label="ArmIn amount" colon={false}>
-                    <InputNumber
-                        size="large"
-                        min={1}
-                        max={100000}
-                        onChange={onArmInChange}
-                        value={armInAmount}
-                    />
-                </Form.Item>
+                <Row justify="center">
+                    <Col justify="center">
+                        <Form.Item label="ArmIn amount" colon={false}>
+                            <InputNumber
+                                size="large"
+                                min={1}
+                                max={100000}
+                                onChange={onArmInChange}
+                                value={armInAmount}
+                            />
+                        </Form.Item>
+                    </Col>
+                </Row>
                 <br />
-                <Form.Item label="ArmOut amount" colon={false}>
-                    <InputNumber
-                        size="large"
-                        min={1}
-                        max={100000}
-                        onChange={onArmOutChange}
-                        value={armOutAmount}
-                    />
-                </Form.Item>
+                <Row justify="center">
+                    <Col justify="center">
+                        <Form.Item label="ArmOut amount" colon={false}>
+                            <InputNumber
+                                size="large"
+                                min={1}
+                                max={100000}
+                                onChange={onArmOutChange}
+                                value={armOutAmount}
+                            />
+                        </Form.Item>
+                    </Col>
+                </Row>
                 <br />
                 <Row justify="center">
                     <Col justify="center">
