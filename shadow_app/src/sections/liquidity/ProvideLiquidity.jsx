@@ -184,7 +184,7 @@ export const ProvideLiquidity = () => {
             style={{ width: "100%", borderRadius: "20px" }}
             bordered={false}
         >
-            <Form {...layout}>
+            <Form {...layout} disabled={!ratio}>
                 <Row justify="center">
                     <Col justify="center">
                             <Form.Item label="ArmIn amount" colon={false}>
@@ -193,7 +193,6 @@ export const ProvideLiquidity = () => {
                                     onChange={onArmInChange}
                                     value={armInAmount}
                                     style={{ marginLeft: "10px" }}
-                                    disabled={!ratio}
                                 />
                             </Form.Item>
                     </Col>
@@ -206,7 +205,6 @@ export const ProvideLiquidity = () => {
                                     onChange={onArmOutChange}
                                     value={armOutAmount}
                                     style={{ marginLeft: "10px" }}
-                                    disabled={!ratio}
                                 />
                             </Form.Item>
                     </Col>
@@ -219,7 +217,6 @@ export const ProvideLiquidity = () => {
                                 shape="round"
                                 size="middle"
                                 onClick={execute}
-                                disabled={!ratio}
                             >
                                 Add Liquidity
                             </Button>

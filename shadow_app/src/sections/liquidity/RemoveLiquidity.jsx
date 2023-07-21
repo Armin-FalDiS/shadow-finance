@@ -1,16 +1,5 @@
 import { useState, useEffect, useContext } from "react";
-import {
-    Button,
-    Card,
-    Col,
-    Form,
-    Row,
-    Result,
-    Space,
-    Divider,
-    InputNumber,
-    Slider,
-} from "antd";
+import { Button, Card, Col, Form, Row, Result, Input } from "antd";
 import axios from "axios";
 import init, * as aleo from "@aleohq/wasm";
 import { AppContext } from "../../App";
@@ -35,6 +24,8 @@ export const RemoveLiquidity = () => {
     const [executionError, setExecutionError] = useState(null);
     const [transactionID, setTransactionID] = useState(null);
     const [worker, setWorker] = useState(null);
+
+    const [lpBalance, setLpBalance] = useState(null);
 
     function spawnWorker() {
         let worker = new Worker(
@@ -93,6 +84,10 @@ export const RemoveLiquidity = () => {
                                         encryptedArmOutRecord,
                                     ),
                                 );
+
+                                getLPTokenBalance(
+                                    account.to_address().to_string(),
+                                ).then((lp) => setLpBalance(lp));
                             });
                     });
             } else if (ev.data.type == "ERROR") {
@@ -111,6 +106,12 @@ export const RemoveLiquidity = () => {
             return () => {
                 spawnedWorker.terminate();
             };
+        }
+
+        if (lpBalance == null) {
+            getLPTokenBalance(account.to_address().to_string()).then((lp) =>
+                setLpBalance(lp),
+            );
         }
     }, []);
 
@@ -143,16 +144,16 @@ export const RemoveLiquidity = () => {
 
         const address = account.to_address().to_string();
 
-        const lp_balance = await getLPTokenBalance(address);
-        const total_lp_supply = await getLPTokenTotalSupply();
+        setLpBalance(await getLPTokenBalance(address));
+        const totalLpSupply = await getLPTokenTotalSupply();
 
-        const lp_share = lp_balance / total_lp_supply;
+        const lpShare = lpBalance / totalLpSupply;
 
         const armInReserve = await getArmInReserve();
         const armOutReserve = await getArmOutReserve();
 
-        let armInShare = Math.floor(lp_share * armInReserve);
-        let armOutShare = Math.floor(lp_share * armOutReserve);
+        let armInShare = Math.floor(lpShare * armInReserve);
+        let armOutShare = Math.floor(lpShare * armOutReserve);
 
         let functionInputs = [address, armInShare, armOutShare];
 
@@ -172,13 +173,22 @@ export const RemoveLiquidity = () => {
 
     return (
         <Card
-            title="Remove Liquidity"
+            title="Liquidity Removal"
             style={{ width: "100%", borderRadius: "20px" }}
             bordered={false}
         >
-            <Form {...layout}>
+            <Form {...layout} disabled={!lpBalance}>
                 <Row justify="center">
-                    <Col justify="center">
+                    <Col>
+                        <Form.Item label="LP Balance" colon={false}>
+                            <Input
+                                readOnly={true}
+                                value={lpBalance}
+                                style={{ marginLeft: "10px" }}
+                            />
+                        </Form.Item>
+                    </Col>
+                    <Col>
                         <Button
                             type="primary"
                             shape="round"
@@ -196,8 +206,8 @@ export const RemoveLiquidity = () => {
                 style={{ marginTop: "48px" }}
             >
                 {/* {(loading === true || feeLoading == true) && (
-                    <Spin tip={tip} size="large" />
-                )} */}
+                        <Spin tip={tip} size="large" />
+                    )} */}
                 {transactionID !== null && (
                     <Result
                         status="success"

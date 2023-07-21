@@ -4,6 +4,7 @@ import axios from "axios";
 import init from "@aleohq/wasm";
 import { AppContext } from "../../App";
 import { node_url, shadow_swap } from "../../app.json";
+import { getLPTokenTotalSupply } from "../../general";
 
 await init();
 
@@ -27,6 +28,8 @@ export const InitPool = () => {
     const [executionError, setExecutionError] = useState(null);
     const [transactionID, setTransactionID] = useState(null);
     const [worker, setWorker] = useState(null);
+
+    const [totalSupply, setTotalSupply] = useState(null);
 
     function spawnWorker() {
         let worker = new Worker(
@@ -85,6 +88,12 @@ export const InitPool = () => {
                                         encryptedArmOutRecord,
                                     ),
                                 );
+
+                                getLPTokenTotalSupply(
+                                    account.to_address().to_string(),
+                                ).then((totalSupply) =>
+                                    setTotalSupply(totalSupply),
+                                );
                             });
                     });
             } else if (ev.data.type == "ERROR") {
@@ -104,7 +113,14 @@ export const InitPool = () => {
                 spawnedWorker.terminate();
             };
         }
+
+        if (totalSupply == null) {
+            getLPTokenTotalSupply(account.to_address().to_string()).then(
+                (totalSupply) => setTotalSupply(totalSupply),
+            );
+        }
     }, []);
+
     const onArmInChange = (event) => {
         setArmInAmount(event.target.value);
     };
@@ -167,7 +183,7 @@ export const InitPool = () => {
             style={{ width: "100%", borderRadius: "20px" }}
             bordered={false}
         >
-            <Form {...layout}>
+            <Form {...layout} disabled={!totalSupply}>
                 <Row justify="center">
                     <Col justify="center">
                         <Form.Item label="ArmIn amount" colon={false}>
