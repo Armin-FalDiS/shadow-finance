@@ -1,16 +1,5 @@
 import { useState, useEffect, useContext } from "react";
-import {
-    Button,
-    Card,
-    Col,
-    Form,
-    Row,
-    Result,
-    Space,
-    Input,
-    Divider,
-    InputNumber,
-} from "antd";
+import { Button, Card, Col, Form, Row, Result, Space, InputNumber } from "antd";
 import axios from "axios";
 import init from "@aleohq/wasm";
 import { AppContext } from "../../App";
