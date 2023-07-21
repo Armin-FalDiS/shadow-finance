@@ -161,7 +161,7 @@ export const ArmInToken = () => {
                 gutter={[16, 32]}
                 style={{ marginTop: "48px" }}
             >
-                {loading && <Spin tip={tip} size="large" />}
+                {/* {loading && <Spin tip={tip} size="large" />} */}
                 {transactionID !== null && (
                     <Result
                         status="success"
