@@ -15,6 +15,7 @@ import axios from "axios";
 import init from "@aleohq/wasm";
 import { AppContext } from "../../App";
 import { shadow_swap, node_url } from "../../app.json";
+import { getArmInReserve, getArmOutReserve, parseU64Response } from "../../general";
 
 await init();
 
@@ -140,23 +141,8 @@ export const Swap = () => {
      * Calculates the amount of recieved tokens
      */
     const calculateOutput = async () => {
-        let armInReserve = (
-            await axios.get(
-                `${url}/testnet3/program/${shadow_swap.id}/mapping/reserves_shadow/0u8`,
-            )
-        ).data;
-        let armOutReserve = (
-            await axios.get(
-                `${url}/testnet3/program/${shadow_swap.id}/mapping/reserves_shadow/1u8`,
-            )
-        ).data;
-
-        armInReserve = parseInt(
-            armInReserve.substr(1, armInReserve.length - 4),
-        );
-        armOutReserve = parseInt(
-            armOutReserve.substr(1, armOutReserve.length - 4),
-        );
+        const armInReserve = await getArmInReserve();
+        const armOutReserve = await getArmOutReserve();
 
         if (swapDirection == "armin_to_armout") {
             setArmOutAmount(
@@ -183,9 +169,7 @@ export const Swap = () => {
 
         await calculateOutput();
 
-        let functionInputs = [
-            account.to_address().to_string(),
-        ];
+        let functionInputs = [account.to_address().to_string()];
 
         let functionID = swapToArmInFunction;
         let feeAmount = swapToArmInFeeAmount;

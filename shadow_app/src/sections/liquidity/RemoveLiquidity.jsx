@@ -1,28 +1,30 @@
 import { useState, useEffect, useContext } from "react";
-import { Button, Card, Col, Form, Row, Result, Space, Input, Divider, InputNumber,Slider } from "antd";
+import {
+    Button,
+    Card,
+    Col,
+    Form,
+    Row,
+    Result,
+    Space,
+    Divider,
+    InputNumber,
+    Slider,
+} from "antd";
 import axios from "axios";
 import init, * as aleo from "@aleohq/wasm";
 import { AppContext } from "../../App";
-import { armin_token, armout_token, node_url, shadow_swap } from "../../app.json";
-import __wbg_init, { bhp256 } from 'js-snarkvm'
+import { node_url, shadow_swap } from "../../app.json";
+import { getArmInReserve, getArmOutReserve, getLPTokenBalance, getLPTokenTotalSupply, parseU64Response } from "../../general";
 
-
-     
-
-await __wbg_init()
 await init();
 
 export const RemoveLiquidity = () => {
-    let { account, fee, setFee, setArmInToken, setArmOutToken,armInToken,armOutToken } = useContext(AppContext);
-    const program = shadow_swap.program
-    const functionID = shadow_swap.burn_function
-    const feeAmount = shadow_swap.burn_fee
-    const [armInAmount, setArmInAmount] = useState(0)
-    const [armOutAmount, setArmOutAmount] = useState(0)
-    const [sliderValue,setSliderValue]= useState(50)
-    const [sliderinputValue,setSliderinputValue] = useState(50)
-
-
+    let { account, fee, setFee, setArmInToken, setArmOutToken } =
+        useContext(AppContext);
+    const program = shadow_swap.program;
+    const functionID = shadow_swap.burn_function;
+    const feeAmount = shadow_swap.burn_fee;
 
     const [programResponse, setProgramResponse] = useState(null);
     const [executionError, setExecutionError] = useState(null);
@@ -81,7 +83,11 @@ export const RemoveLiquidity = () => {
                                         encryptedArmInRecord,
                                     ),
                                 );
-                                setArmOutToken(account.to_view_key.decrypt(encryptedArmOutRecord))
+                                setArmOutToken(
+                                    account.to_view_key.decrypt(
+                                        encryptedArmOutRecord,
+                                    ),
+                                );
                             });
                     });
             } else if (ev.data.type == "ERROR") {
@@ -103,32 +109,6 @@ export const RemoveLiquidity = () => {
         }
     }, []);
 
-
-    const onSliderChange = (value)=> {
-        setSliderValue(value)
-        setSliderinputValue(value)
-    }
-    const onSliderInputChange = (value )=> {
-        setSliderinputValue(value)
-        setSliderValue(value)
-    }
-    const  getAmountsFromRatio = () =>{
-        const getratio = async() =>{
-            let  address = account.to_view_key.to_string()
-            let field = bhp256(address)
-            let lp_balance = await axios.get(url+"/testnet3/program/shadow_swap.aleo/mapping/reserves_shadow/"+field)
-            let total_lp_supply =await axios.get(url+"/testnet3/program/shadow_swap.aleo/mapping/supply_shadow/0u8")
-            let lp_share = lp_balance / total_lp_supply
-            let ArmInReserve= await axios.get(url+"/testnet3/program/shadow_swap.aleo/mapping/reserves_shadow/0u8") 
-            let ArmOutReserve =await axios.get(url+"/testnet3/program/shadow_swap.aleo/mapping/reserves_shadow/1u8") 
-            let  ArmInShare = lp_share *  ArmInReserve 
-            let ArmOutShare = lp_share * ArmOutReserve
-            return [ArmInShare,ArmOutShare]
-      
-          }
-
-    }
-
     function postMessagePromise(worker, message) {
         return new Promise((resolve, reject) => {
             worker.onmessage = (event) => {
@@ -143,9 +123,6 @@ export const RemoveLiquidity = () => {
             worker.postMessage(message);
         });
     }
-    const getratio = () =>{
-        pass
-    }
 
     const transactionIDString = () =>
         transactionID !== null ? transactionID : "";
@@ -158,14 +135,24 @@ export const RemoveLiquidity = () => {
         setProgramResponse(null);
         setTransactionID(null);
         setExecutionError(null);
-        [amount1,amount2] =getAmountsFromRatio(sliderValue)
 
+        const address = account.to_address().to_string();
+
+        const lp_balance = await getLPTokenBalance(address);
+        const total_lp_supply = await getLPTokenTotalSupply();
+        
+        const lp_share = lp_balance / total_lp_supply;
+
+        const armInReserve = await getArmInReserve();
+        const armOutReserve = await getArmOutReserve();
+
+        let armInShare = Math.floor(lp_share * armInReserve);
+        let armOutShare = Math.floor(lp_share * armOutReserve);
 
         let functionInputs = [
-            account.to_address().to_string(),
-            amount1,
-            amount2
- 
+            address,
+            armInShare,
+            armOutShare,
         ];
 
         await postMessagePromise(worker, {
@@ -188,7 +175,6 @@ export const RemoveLiquidity = () => {
             style={{ width: "100%", borderRadius: "20px" }}
             bordered={false}
         >
-
             <Form {...layout}>
                 <Row justify="center">
                     <Col justify="center">
@@ -201,8 +187,6 @@ export const RemoveLiquidity = () => {
                                 <Slider
                                     name="Removal percentage"
                                     size="large"
-
-
                                     onChange={onSliderChange}
                                     value={sliderValue}
                                     style={{ borderRadius: "20px" }}
@@ -214,7 +198,6 @@ export const RemoveLiquidity = () => {
                                 colon={false}
                                 validateStatus={status}
                             >
-
                                 <InputNumber
                                     name="Slider input"
                                     size="large"
@@ -269,4 +252,3 @@ export const RemoveLiquidity = () => {
         </Card>
     );
 };
-
