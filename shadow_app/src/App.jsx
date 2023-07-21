@@ -1,5 +1,5 @@
 import "./App.css";
-import { createContext, useContext, useEffect, useState } from "react";
+import { createContext, useEffect, useState, Context } from "react";
 import { ConfigProvider, Layout, Menu, theme } from "antd";
 import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import {
@@ -11,6 +11,21 @@ import {
 
 const { Content, Sider } = Layout;
 
+/**
+ * @typedef {Object} ShadowSwapContext
+ * @property {any} account
+ * @property {function} setAccount
+ * @property {any} fee
+ * @property {function} setFee
+ * @property {any} armInToken
+ * @property {function} setArmInToken
+ * @property {any} armOutToken
+ * @property {function} setArmOutToken
+ */
+
+/**
+ * @type {Context<ShadowSwapContext>}
+ */
 export const AppContext = createContext();
 
 function App() {
