@@ -176,7 +176,7 @@ export const ProvideLiquidity = () => {
         });
     };
 
-    const layout = { labelCol: { span: 3 }, wrapperCol: { span: 21 } };
+    const layout = { labelCol: { span: 14 }, wrapperCol: { span: 21 } };
 
     return (
         <Card

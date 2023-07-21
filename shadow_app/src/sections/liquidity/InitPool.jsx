@@ -183,7 +183,7 @@ export const InitPool = () => {
             style={{ width: "100%", borderRadius: "20px" }}
             bordered={false}
         >
-            <Form {...layout} disabled={!totalSupply}>
+            <Form {...layout} disabled={totalSupply}>
                 <Row justify="center">
                     <Col justify="center">
                         <Form.Item label="ArmIn amount" colon={false}>

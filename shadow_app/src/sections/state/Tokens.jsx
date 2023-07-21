@@ -18,7 +18,7 @@ export const Tokens = () => {
                     <Input
                         name="armInToken"
                         size="large"
-                        disabled
+                        readOnly
                         value={armInToken}
                     />
                 </Form.Item>
@@ -27,7 +27,7 @@ export const Tokens = () => {
                     <Input
                         name="armOutToken"
                         size="large"
-                        disabled
+                        readOnly
                         value={armOutToken}
                     />
                 </Form.Item>

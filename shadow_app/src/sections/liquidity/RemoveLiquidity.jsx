@@ -1,5 +1,5 @@
 import { useState, useEffect, useContext } from "react";
-import { Button, Card, Col, Form, Row, Result, Input } from "antd";
+import { Button, Card, Col, Form, Row, Result, Input, Divider } from "antd";
 import axios from "axios";
 import init, * as aleo from "@aleohq/wasm";
 import { AppContext } from "../../App";
@@ -169,7 +169,7 @@ export const RemoveLiquidity = () => {
         });
     };
 
-    const layout = { labelCol: { span: 3 }, wrapperCol: { span: 21 } };
+    const layout = { labelCol: { span: 14 }, wrapperCol: { span: 21 } };
 
     return (
         <Card
@@ -188,12 +188,14 @@ export const RemoveLiquidity = () => {
                             />
                         </Form.Item>
                     </Col>
+                    <Divider />
                     <Col>
                         <Button
                             type="primary"
                             shape="round"
                             size="middle"
                             onClick={execute}
+                            style={{ marginLeft: "20px" }}
                         >
                             Remove Liquidity
                         </Button>
