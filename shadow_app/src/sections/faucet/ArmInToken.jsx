@@ -1,7 +1,7 @@
 import { useState, useEffect, useContext } from "react";
 import { Button, Card, Col, Form, Row, Result, Space } from "antd";
 import axios from "axios";
-import init from "@aleohq/wasm";
+import init, * as aleo from "@aleohq/wasm";
 import { AppContext } from "../../App";
 import { armin_token, node_url } from "../../app.json";
 
@@ -161,7 +161,7 @@ export const ArmInToken = () => {
                 gutter={[16, 32]}
                 style={{ marginTop: "48px" }}
             >
-                {/* {loading && <Spin tip="Executing..." size="large" />} */}
+                {/* {loading && <Spin tip={tip} size="large" />} */}
                 {transactionID !== null && (
                     <Result
                         status="success"
