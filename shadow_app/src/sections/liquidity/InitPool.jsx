@@ -1,19 +1,19 @@
 import { useState, useEffect, useContext } from "react";
-import { Button, Card, Col, Form, Row, Result, Space,Input,Divider } from "antd";
+import { Button, Card, Col, Form, Row, Result, Space, Input, Divider } from "antd";
 import axios from "axios";
 import init, * as aleo from "@aleohq/wasm";
 import { AppContext } from "../../App";
-import { armin_token,armout_token, node_url,shadow_swap } from "../../app.json";
+import { armin_token, armout_token, node_url, shadow_swap } from "../../app.json";
 
 await init();
 
 export const InitPool = () => {
-    let { account, fee, setFee, setArmInToken } = useContext(AppContext);
+    let { account, fee, setFee, setArmInToken, setArmOutToken,armInToken,armOutToken } = useContext(AppContext);
     const program = shadow_swap.program
     const functionID = shadow_swap.init_function;
     const feeAmount = shadow_swap.init_fee;
-    const  [arminAmount,setArminAmount]= useState(0)
-    const  [armoutAmount,setArmoutAmount] = useState(0)
+    const [armInAmount, setArmInAmount] = useState(0)
+    const [armOutAmount, setArmOutAmount] = useState(0)
 
     const [programResponse, setProgramResponse] = useState(null);
     const [executionError, setExecutionError] = useState(null);
@@ -64,14 +64,15 @@ export const InitPool = () => {
                                     tx.execution.transitions[0].outputs[0]
                                         .value;
                                 const encryptedArmOutRecord =
-                                        tx.execution.transitions[0].outputs[1]
-                                            .value;
+                                    tx.execution.transitions[0].outputs[1]
+                                        .value;
 
                                 setArmInToken(
                                     account.to_view_key.decrypt(
                                         encryptedArmInRecord,
                                     ),
                                 );
+                                setArmOutToken(account.to_view_key.decrypt(encryptedArmOutRecord))
                             });
                     });
             } else if (ev.data.type == "ERROR") {
@@ -92,11 +93,11 @@ export const InitPool = () => {
             };
         }
     }, []);
-    const onArminChange = (event)=>{
-        pass
+    const onArmInChange = (event) => {
+        setArmInAmount(event.target.value)
     }
-    const onArmoutChange = (event)=>{
-        pass
+    const onArmOutChange = (event) => {
+        setArmOutAmount(event.target.value)
     }
 
     function postMessagePromise(worker, message) {
@@ -128,8 +129,10 @@ export const InitPool = () => {
 
         let functionInputs = [
             account.to_address().to_string(),
-            armin_token,
-            armout_token
+            armInToken,
+            armInAmount,
+            armInToken,
+            armOutAmount
         ];
 
         await postMessagePromise(worker, {
@@ -167,8 +170,8 @@ export const InitPool = () => {
                                     size="large"
                                     placeholder={0}
                                     allowClear
-                                    onChange={onArminChange}
-                                    value={arminAmount}
+                                    onChange={onArmInChange}
+                                    value={armInAmount}
                                     style={{ borderRadius: "20px" }}
                                 />
                             </Form.Item>
@@ -182,8 +185,8 @@ export const InitPool = () => {
                                     name="Armout amount"
                                     size="large"
                                     placeholder={0}
-                                    onChange={onArmoutChange}
-                                    value={armoutAmount}
+                                    onChange={onArmOutChange}
+                                    value={armOutAmount}
                                     style={{ borderRadius: "20px" }}
                                 />
                             </Form.Item>
@@ -204,9 +207,9 @@ export const InitPool = () => {
                 gutter={[16, 32]}
                 style={{ marginTop: "48px" }}
             >
-                {(loading === true || feeLoading == true) && (
+                {/* {(loading === true || feeLoading == true) && (
                     <Spin tip={tip} size="large" />
-                )}
+                )} */}
                 {transactionID !== null && (
                     <Result
                         status="success"
