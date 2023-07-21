@@ -1,19 +1,27 @@
 import { useState, useEffect, useContext } from "react";
-import { Button, Card, Col, Form, Row, Result, Space, Input, Divider } from "antd";
+import { Button, Card, Col, Form, Row, Result, Space, InputNumber } from "antd";
 import axios from "axios";
-import init, * as aleo from "@aleohq/wasm";
+import init from "@aleohq/wasm";
 import { AppContext } from "../../App";
-import { armin_token, armout_token, node_url, shadow_swap } from "../../app.json";
+import { node_url, shadow_swap } from "../../app.json";
 
 await init();
 
 export const InitPool = () => {
-    let { account, fee, setFee, setArmInToken, setArmOutToken,armInToken,armOutToken } = useContext(AppContext);
-    const program = shadow_swap.program
+    let {
+        account,
+        fee,
+        setFee,
+        setArmInToken,
+        setArmOutToken,
+        armInToken,
+        armOutToken,
+    } = useContext(AppContext);
+    const program = shadow_swap.program;
     const functionID = shadow_swap.init_function;
     const feeAmount = shadow_swap.init_fee;
-    const [armInAmount, setArmInAmount] = useState(0)
-    const [armOutAmount, setArmOutAmount] = useState(0)
+    const [armInAmount, setArmInAmount] = useState(null);
+    const [armOutAmount, setArmOutAmount] = useState(null);
 
     const [programResponse, setProgramResponse] = useState(null);
     const [executionError, setExecutionError] = useState(null);
@@ -72,7 +80,11 @@ export const InitPool = () => {
                                         encryptedArmInRecord,
                                     ),
                                 );
-                                setArmOutToken(account.to_view_key.decrypt(encryptedArmOutRecord))
+                                setArmOutToken(
+                                    account.to_view_key.decrypt(
+                                        encryptedArmOutRecord,
+                                    ),
+                                );
                             });
                     });
             } else if (ev.data.type == "ERROR") {
@@ -94,11 +106,11 @@ export const InitPool = () => {
         }
     }, []);
     const onArmInChange = (event) => {
-        setArmInAmount(event.target.value)
-    }
+        setArmInAmount(event.target.value);
+    };
     const onArmOutChange = (event) => {
-        setArmOutAmount(event.target.value)
-    }
+        setArmOutAmount(event.target.value);
+    };
 
     function postMessagePromise(worker, message) {
         return new Promise((resolve, reject) => {
@@ -132,7 +144,7 @@ export const InitPool = () => {
             armInToken,
             armInAmount,
             armOutToken,
-            armOutAmount
+            armOutAmount,
         ];
 
         await postMessagePromise(worker, {
@@ -147,7 +159,7 @@ export const InitPool = () => {
         });
     };
 
-    const layout = { labelCol: { span: 3 }, wrapperCol: { span: 21 } };
+    const layout = { labelCol: { span: 14 }, wrapperCol: { span: 21 } };
 
     return (
         <Card
@@ -155,53 +167,51 @@ export const InitPool = () => {
             style={{ width: "100%", borderRadius: "20px" }}
             bordered={false}
         >
-
             <Form {...layout}>
                 <Row justify="center">
                     <Col justify="center">
+                        <Form.Item label="ArmIn amount" colon={false}>
+                            <InputNumber
+                                size="large"
+                                min={1}
+                                max={100000}
+                                onChange={onArmInChange}
+                                value={armInAmount}
+                            />
+                        </Form.Item>
+                    </Col>
+                </Row>
+                <br />
+                <Row justify="center">
+                    <Col justify="center">
+                        <Form.Item label="ArmOut amount" colon={false}>
+                            <InputNumber
+                                size="large"
+                                min={1}
+                                max={100000}
+                                onChange={onArmOutChange}
+                                value={armOutAmount}
+                            />
+                        </Form.Item>
+                    </Col>
+                </Row>
+                <br />
+                <Row justify="center">
+                    <Col justify="center">
                         <Space>
-                            <Form.Item
-                                label="Armin amount"
-                                colon={false}
-                                validateStatus={status}
-                            >
-                                <Input.TextArea
-                                    name="Armin amount"
-                                    size="large"
-                                    placeholder={0}
-                                    allowClear
-                                    onChange={onArmInChange}
-                                    value={armInAmount}
-                                    style={{ borderRadius: "20px" }}
-                                />
-                            </Form.Item>
-                            <Divider />
-                            <Form.Item
-                                label="Armout amount"
-                                colon={false}
-                                validateStatus={status}
-                            >
-                                <Input.TextArea
-                                    name="Armout amount"
-                                    size="large"
-                                    placeholder={0}
-                                    onChange={onArmOutChange}
-                                    value={armOutAmount}
-                                    style={{ borderRadius: "20px" }}
-                                />
-                            </Form.Item>
                             <Button
                                 type="primary"
                                 shape="round"
                                 size="middle"
                                 onClick={execute}
                             >
-                                Init Pool
+                                Initialize Liquidity Pool
                             </Button>
                         </Space>
                     </Col>
                 </Row>
             </Form>
+            <br />
             <Row
                 justify="center"
                 gutter={[16, 32]}
