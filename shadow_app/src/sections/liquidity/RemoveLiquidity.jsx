@@ -1,35 +1,31 @@
 import { useState, useEffect, useContext } from "react";
-import { Button, Card, Col, Form, Row, Result, Space, InputNumber } from "antd";
+import { Button, Card, Col, Form, Row, Result, Input, Divider } from "antd";
 import axios from "axios";
-import init from "@aleohq/wasm";
+import init, * as aleo from "@aleohq/wasm";
 import { AppContext } from "../../App";
 import { node_url, shadow_swap } from "../../app.json";
-import { getLPTokenTotalSupply } from "../../general";
+import {
+    getArmInReserve,
+    getArmOutReserve,
+    getLPTokenBalance,
+    getLPTokenTotalSupply,
+} from "../../general";
 
 await init();
 
-export const InitPool = () => {
-    let {
-        account,
-        fee,
-        setFee,
-        setArmInToken,
-        setArmOutToken,
-        armInToken,
-        armOutToken,
-    } = useContext(AppContext);
+export const RemoveLiquidity = () => {
+    let { account, fee, setFee, setArmInToken, setArmOutToken } =
+        useContext(AppContext);
     const program = shadow_swap.program;
-    const functionID = shadow_swap.init_function;
-    const feeAmount = shadow_swap.init_fee;
-    const [armInAmount, setArmInAmount] = useState(null);
-    const [armOutAmount, setArmOutAmount] = useState(null);
+    const functionID = shadow_swap.burn_function;
+    const feeAmount = shadow_swap.burn_fee;
 
     const [programResponse, setProgramResponse] = useState(null);
     const [executionError, setExecutionError] = useState(null);
     const [transactionID, setTransactionID] = useState(null);
     const [worker, setWorker] = useState(null);
 
-    const [totalSupply, setTotalSupply] = useState(null);
+    const [lpBalance, setLpBalance] = useState(null);
 
     function spawnWorker() {
         let worker = new Worker(
@@ -89,11 +85,9 @@ export const InitPool = () => {
                                     ),
                                 );
 
-                                getLPTokenTotalSupply(
+                                getLPTokenBalance(
                                     account.to_address().to_string(),
-                                ).then((totalSupply) =>
-                                    setTotalSupply(totalSupply),
-                                );
+                                ).then((lp) => setLpBalance(lp));
                             });
                     });
             } else if (ev.data.type == "ERROR") {
@@ -114,19 +108,12 @@ export const InitPool = () => {
             };
         }
 
-        if (totalSupply == null) {
-            getLPTokenTotalSupply(account.to_address().to_string()).then(
-                (totalSupply) => setTotalSupply(totalSupply),
+        if (lpBalance == null) {
+            getLPTokenBalance(account.to_address().to_string()).then((lp) =>
+                setLpBalance(lp),
             );
         }
     }, []);
-
-    const onArmInChange = (event) => {
-        setArmInAmount(event.target.value);
-    };
-    const onArmOutChange = (event) => {
-        setArmOutAmount(event.target.value);
-    };
 
     function postMessagePromise(worker, message) {
         return new Promise((resolve, reject) => {
@@ -155,13 +142,20 @@ export const InitPool = () => {
         setTransactionID(null);
         setExecutionError(null);
 
-        let functionInputs = [
-            account.to_address().to_string(),
-            armInToken,
-            armInAmount,
-            armOutToken,
-            armOutAmount,
-        ];
+        const address = account.to_address().to_string();
+
+        setLpBalance(await getLPTokenBalance(address));
+        const totalLpSupply = await getLPTokenTotalSupply();
+
+        const lpShare = lpBalance / totalLpSupply;
+
+        const armInReserve = await getArmInReserve();
+        const armOutReserve = await getArmOutReserve();
+
+        let armInShare = Math.floor(lpShare * armInReserve);
+        let armOutShare = Math.floor(lpShare * armOutReserve);
+
+        let functionInputs = [address, armInShare, armOutShare];
 
         await postMessagePromise(worker, {
             type: "ALEO_EXECUTE_PROGRAM_ON_CHAIN",
@@ -179,63 +173,43 @@ export const InitPool = () => {
 
     return (
         <Card
-            title={"Initalize Liquidity Pool"}
+            title="Liquidity Removal"
             style={{ width: "100%", borderRadius: "20px" }}
             bordered={false}
         >
-            <Form {...layout} disabled={totalSupply}>
+            <Form {...layout} disabled={!lpBalance}>
                 <Row justify="center">
-                    <Col justify="center">
-                        <Form.Item label="ArmIn amount" colon={false}>
-                            <InputNumber
-                                size="large"
-                                min={1}
-                                max={100000}
-                                onChange={onArmInChange}
-                                value={armInAmount}
+                    <Col>
+                        <Form.Item label="LP Balance" colon={false}>
+                            <Input
+                                readOnly={true}
+                                value={lpBalance}
+                                style={{ marginLeft: "10px" }}
                             />
                         </Form.Item>
                     </Col>
-                </Row>
-                <br />
-                <Row justify="center">
-                    <Col justify="center">
-                        <Form.Item label="ArmOut amount" colon={false}>
-                            <InputNumber
-                                size="large"
-                                min={1}
-                                max={100000}
-                                onChange={onArmOutChange}
-                                value={armOutAmount}
-                            />
-                        </Form.Item>
-                    </Col>
-                </Row>
-                <br />
-                <Row justify="center">
-                    <Col justify="center">
-                        <Space>
-                            <Button
-                                type="primary"
-                                shape="round"
-                                size="middle"
-                                onClick={execute}
-                            >
-                                Initialize Liquidity Pool
-                            </Button>
-                        </Space>
+                    <Divider />
+                    <Col>
+                        <Button
+                            type="primary"
+                            shape="round"
+                            size="middle"
+                            onClick={execute}
+                            style={{ marginLeft: "20px" }}
+                        >
+                            Remove Liquidity
+                        </Button>
                     </Col>
                 </Row>
             </Form>
-            <br />
             <Row
                 justify="center"
                 gutter={[16, 32]}
                 style={{ marginTop: "48px" }}
             >
                 {/* {(loading === true || feeLoading == true) && (
-                    <Spin tip={tip} size="large" />
-                )} */}
+                        <Spin tip={tip} size="large" />
+                    )} */}
                 {transactionID !== null && (
                     <Result
                         status="success"
