@@ -86,10 +86,18 @@ export const Swap = () => {
                                 const encryptedArmInRecord =
                                     tx.execution.transitions[0].outputs[0]
                                         .value;
+                                const encryptedArmOutRecord =
+                                    tx.execution.transitions[0].outputs[1]
+                                        .value;
 
                                 setArmInToken(
                                     account.to_view_key.decrypt(
                                         encryptedArmInRecord,
+                                    ),
+                                );
+                                setArmOutToken(
+                                    account.to_view_key.decrypt(
+                                        encryptedArmOutRecord,
                                     ),
                                 );
                             });
