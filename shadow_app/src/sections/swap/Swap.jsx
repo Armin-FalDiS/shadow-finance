@@ -128,6 +128,39 @@ export const Swap = () => {
         });
     }
 
+    /**
+     * Calculates the amount of recieved tokens
+     */
+    const calculateOutput = async () => {
+        let armInReserve = (
+            await axios.get(
+                `${url}/testnet3/program/${shadow_swap.id}/mapping/reserves_shadow/0u8`,
+            )
+        ).data;
+        let armOutReserve = (
+            await axios.get(
+                `${url}/testnet3/program/${shadow_swap.id}/mapping/reserves_shadow/1u8`,
+            )
+        ).data;
+
+        armInReserve = parseInt(
+            armInReserve.substr(0, armInReserve.length - 3),
+        );
+        armOutReserve = parseInt(
+            armOutReserve.substr(0, armOutReserve.length - 3),
+        );
+
+        if (swapDirection == "armin_to_armout") {
+            setArmOutAmount(
+                (armOutReserve * armInAmount) / (armInReserve - armInAmount),
+            );
+        } else {
+            setArmInAmount(
+                (armInReserve * armOutAmount) / (armOutReserve + armOutAmount),
+            );
+        }
+    };
+
     const transactionIDString = () =>
         transactionID !== null ? transactionID : "";
     const executionErrorString = () =>
@@ -140,13 +173,22 @@ export const Swap = () => {
         setTransactionID(null);
         setExecutionError(null);
 
-        // CALCULATE Conversion
+        await calculateOutput();
 
         let functionInputs = [
             account.to_address().to_string(),
-            armInToken,
-            armInAmount,
         ];
+
+        let functionID = swapToArmInFunction;
+        let feeAmount = swapToArmInFeeAmount;
+
+        if (swapDirection == "armin_to_armout") {
+            functionID = swapToArmOutFunction;
+            feeAmount = swapToArmOutFeeAmount;
+            functionInputs.push([armInToken, armInAmount, armOutAmount]);
+        } else {
+            functionInputs.push([armOutToken, armOutAmount, armInAmount]);
+        }
 
         await postMessagePromise(worker, {
             type: "ALEO_EXECUTE_PROGRAM_ON_CHAIN",
@@ -203,7 +245,7 @@ export const Swap = () => {
                 <br />
                 <br />
                 <Row justify="center">
-                    <Col style={{marginRight: "10px"}}>
+                    <Col style={{ marginRight: "10px" }}>
                         <Space>
                             <InputNumber
                                 size="large"
@@ -215,7 +257,7 @@ export const Swap = () => {
                             />
                         </Space>
                     </Col>
-                    <Col style={{marginLeft: "10px"}}>
+                    <Col style={{ marginLeft: "10px" }}>
                         <Space>
                             <InputNumber
                                 size="large"
