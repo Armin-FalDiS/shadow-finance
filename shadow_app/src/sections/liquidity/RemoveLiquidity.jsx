@@ -20,7 +20,6 @@ import {
     getArmOutReserve,
     getLPTokenBalance,
     getLPTokenTotalSupply,
-    parseU64Response,
 } from "../../general";
 
 await init();

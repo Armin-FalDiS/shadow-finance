@@ -1,25 +1,35 @@
 import { useState, useEffect, useContext } from "react";
-import { Button, Card, Col, Form, Row, Result, Space, Input, Divider, InputNumber } from "antd";
+import { Button, Card, Col, Form, Row, Result, Space, InputNumber } from "antd";
 import axios from "axios";
-import init, * as aleo from "@aleohq/wasm";
+import init from "@aleohq/wasm";
 import { AppContext } from "../../App";
-import { armin_token, armout_token, node_url, shadow_swap } from "../../app.json";
-import { bhp256 } from "js-snarkvm";
+import { node_url, shadow_swap } from "../../app.json";
+import { getArmInReserve, getArmOutReserve } from "../../general";
 
 await init();
 
 export const ProvideLiquidity = () => {
-    let { account, fee, setFee, setArmInToken, setArmOutToken,armInToken,armOutToken } = useContext(AppContext);
-    const program = shadow_swap.program
-    const functionID = shadow_swap.provide_function
-    const feeAmount = shadow_swap.provide_fee
-    const [armInAmount, setArmInAmount] = useState(0)
-    const [armOutAmount, setArmOutAmount] = useState(0)
+    let {
+        account,
+        fee,
+        setFee,
+        setArmInToken,
+        setArmOutToken,
+        armInToken,
+        armOutToken,
+    } = useContext(AppContext);
+    const program = shadow_swap.program;
+    const functionID = shadow_swap.provide_function;
+    const feeAmount = shadow_swap.provide_fee;
+    const [armInAmount, setArmInAmount] = useState(0);
+    const [armOutAmount, setArmOutAmount] = useState(0);
 
     const [programResponse, setProgramResponse] = useState(null);
     const [executionError, setExecutionError] = useState(null);
     const [transactionID, setTransactionID] = useState(null);
     const [worker, setWorker] = useState(null);
+
+    const [ratio, setRatio] = useState(null);
 
     function spawnWorker() {
         let worker = new Worker(
@@ -73,7 +83,11 @@ export const ProvideLiquidity = () => {
                                         encryptedArmInRecord,
                                     ),
                                 );
-                                setArmOutToken(account.to_view_key.decrypt(encryptedArmOutRecord))
+                                setArmOutToken(
+                                    account.to_view_key.decrypt(
+                                        encryptedArmOutRecord,
+                                    ),
+                                );
                             });
                     });
             } else if (ev.data.type == "ERROR") {
@@ -85,6 +99,13 @@ export const ProvideLiquidity = () => {
         return worker;
     }
 
+    const updateRatio = async () => {
+        const armInReserve = await getArmInReserve();
+        const armOutReserve = await getArmOutReserve();
+
+        setRatio(armInReserve / armOutReserve);
+    };
+
     useEffect(() => {
         if (worker === null) {
             const spawnedWorker = spawnWorker();
@@ -93,32 +114,20 @@ export const ProvideLiquidity = () => {
                 spawnedWorker.terminate();
             };
         }
+
+        if (ratio == null) {
+            updateRatio();
+        }
     }, []);
 
-    const getratio = async() =>{
-      let  address = account.to_view_key.to_string()
-      let field = bhp256(address)
-      let lp_balance = await axios.get(url+"/testnet3/program/shadow_swap.aleo/mapping/reserves_shadow/"+field)
-      let total_lp_supply =await axios.get(url+"/testnet3/program/shadow_swap.aleo/mapping/supply_shadow/0u8")
-      let lp_share = lp_balance / total_lp_supply
-      let ArmInReserve= await axios.get(url+"/testnet3/program/shadow_swap.aleo/mapping/reserves_shadow/0u8") 
-      let ArmOutReserve =await axios.get(url+"/testnet3/program/shadow_swap.aleo/mapping/reserves_shadow/1u8") 
-      let  ArmInShare = lp_share *  ArmInReserve 
-      let ArmOutShare = lp_share * ArmOutReserve
-      return [ArmInShare,ArmOutShare]
-
-    }
     const onArmInChange = (event) => {
-        setArmInAmount(event.target.value)
-        let ratio = getratio()
-        // setArmOutAmount/ratio
-
-    }
+        setArmInAmount(event.target.value);
+        setArmOutAmount(armInAmount * (1 / ratio));
+    };
     const onArmOutChange = (event) => {
-        setArmOutAmount(event.target.value)
-        let ratio = getratio(ar)
-        // setArmInAmount/ratio
-    }
+        setArmOutAmount(event.target.value);
+        setArmInAmount(armOutAmount * ratio);
+    };
 
     function postMessagePromise(worker, message) {
         return new Promise((resolve, reject) => {
@@ -134,7 +143,6 @@ export const ProvideLiquidity = () => {
             worker.postMessage(message);
         });
     }
-
 
     const transactionIDString = () =>
         transactionID !== null ? transactionID : "";
@@ -153,7 +161,7 @@ export const ProvideLiquidity = () => {
             armInToken,
             armInAmount,
             armOutToken,
-            armOutAmount
+            armOutAmount,
         ];
 
         await postMessagePromise(worker, {
@@ -172,53 +180,48 @@ export const ProvideLiquidity = () => {
 
     return (
         <Card
-            title={"Provide Liquidity"}
+            title="Provide Liquidity"
             style={{ width: "100%", borderRadius: "20px" }}
             bordered={false}
         >
-
             <Form {...layout}>
                 <Row justify="center">
                     <Col justify="center">
-                        <Space>
-                            <Form.Item
-                                label="ArmIn amount"
-                                colon={false}
-                                validateStatus={status}
-                            >
+                            <Form.Item label="ArmIn amount" colon={false}>
                                 <InputNumber
-                                    name="ArmIn amount"
                                     size="large"
-                                    placeholder={0}
-                                    allowClear
                                     onChange={onArmInChange}
                                     value={armInAmount}
-                                    style={{ borderRadius: "20px" }}
+                                    style={{ marginLeft: "10px" }}
+                                    disabled={!ratio}
                                 />
                             </Form.Item>
-                            <Divider />
-                            <Form.Item
-                                label="ArmOut amount"
-                                colon={false}
-                                validateStatus={status}
-                            >
-
+                    </Col>
+                </Row>
+                <Row justify="center">
+                    <Col justify="center">
+                            <Form.Item label="ArmOut amount" colon={false}>
                                 <InputNumber
-                                    name="ArmOut amount"
                                     size="large"
-                                    placeholder={0}
                                     onChange={onArmOutChange}
                                     value={armOutAmount}
-                                    style={{ borderRadius: "20px" }}
+                                    style={{ marginLeft: "10px" }}
+                                    disabled={!ratio}
                                 />
                             </Form.Item>
+                    </Col>
+                </Row>
+                <Row justify="center">
+                    <Col justify="center">
+                        <Space>
                             <Button
                                 type="primary"
                                 shape="round"
                                 size="middle"
                                 onClick={execute}
+                                disabled={!ratio}
                             >
-                                Provide Liquidity
+                                Add Liquidity
                             </Button>
                         </Space>
                     </Col>
@@ -257,4 +260,3 @@ export const ProvideLiquidity = () => {
         </Card>
     );
 };
-
