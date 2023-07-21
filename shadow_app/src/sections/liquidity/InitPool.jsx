@@ -131,7 +131,7 @@ export const InitPool = () => {
             account.to_address().to_string(),
             armInToken,
             armInAmount,
-            armInToken,
+            armOutToken,
             armOutAmount
         ];
 
