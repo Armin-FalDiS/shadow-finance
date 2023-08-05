@@ -19,7 +19,7 @@ function tryParseJSON(input) {
   }
 }
 
-const Execute  = () => {
+const MintArmOut  = () => {
   const { wallet, publicKey } = useWallet();
   const [size, setSize] = useState('large');
 
@@ -88,7 +88,7 @@ const Execute  = () => {
                 fee === undefined
               }
               onClick={handleSubmit}>
-            {!publicKey ? 'Connect Your Wallet' : 'Mint ArmIn'}
+            {!publicKey ? 'Connect Your Wallet' : 'Mint ArmOut'}
         </Button>
 
 
@@ -106,7 +106,9 @@ const Execute  = () => {
 };
 
 
-export default Execute;
+export default MintArmOut;
+
+
 
 
 
