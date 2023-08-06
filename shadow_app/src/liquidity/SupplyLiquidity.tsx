@@ -32,11 +32,8 @@ export const SupplyLiquidity = ({ setShowMe }: any) => {
     const [lowerBalanace, setLowerBalance] = useState(0);
     const [armInReserve, setArmInReserve] = useState(0);
     const [armOutReserve, setArmOutReserve] = useState(0);
-    const [ratio, setRatio] = useState(0);
-    const [LPBalance, setLPBalance] = useState<number>(0);
-    const [totalLPSupply, setTotalLPSupply] = useState<number>(0);
-    const [LPShare, setLPShare] = useState<number>(0);
-    const [transactionId, setTransactionId] = useState<string>();
+    const [ratio, setRatio] = useState<number | string>(0);
+
 
     const tokens: Token[] = [
         {
@@ -51,23 +48,33 @@ export const SupplyLiquidity = ({ setShowMe }: any) => {
 
     const fetchTokenAmounts = async () => {
         if (publicKey) {
-            // const LPBalance = await getLPTokenBalance(publicKey);
-            // setLPBalance(LPBalance);
-            // const totalLPSupply = await getLPTokenTotalSupply();
-            // settotalLPSupply(totalLPSupply);
-            // const lpShare = LPBalance / totalLPSupply;
-            // setLPShare(lpShare);
             const armInReserve = await getArmInReserve();
             setArmInReserve(armInReserve);
             const armOutReserve = await getArmOutReserve();
             setArmOutReserve(armOutReserve);
+        }
+    };
+    const setExchangeRate = () => {
+        if (
+            upperToken?.[0] === Tokens.ArmInToken &&
+            lowerToken?.[0] === Tokens.ArmOutToken
+        ) {
             setRatio(armInReserve / armOutReserve);
+        } else if (
+            upperToken?.[0] === Tokens.ArmOutToken &&
+            lowerToken?.[0] === Tokens.ArmInToken
+        ) {
+            setRatio(armOutReserve / armInReserve);
+        } else if (upperToken?.[0] || lowerToken?.[0]) {
+            setRatio("?");
         }
     };
 
+
     useEffect(() => {
+        setExchangeRate();
         fetchTokenAmounts();
-    }, []);
+    },[upperToken, lowerToken]);
 
     enum Tokens {
         ArmInToken = "ArmIn Token",
@@ -131,28 +138,50 @@ export const SupplyLiquidity = ({ setShowMe }: any) => {
 
     const onChangeUpper = (value: any) => {
         if (value != null) setUpperToken(value);
+        setUpperBalance(0);
+        setUpperSpendable(0);
+        setUpperTokenAmount(0);
     };
 
     const onChangeUpperAmount = (value: number | null) => {
-        if (value != null) setUpperTokenAmount(value);
-        if (upperToken === Tokens.ArmInToken) {
-            setLowerTokenAmount(upperTokenAmount * (1 / ratio));
-        } else {
-            setLowerTokenAmount(upperTokenAmount * ratio);
+        if (value != null) {
+            setUpperTokenAmount(value);
+            if (
+                lowerToken?.[0] === Tokens.ArmInToken &&
+                upperToken?.[0] === Tokens.ArmOutToken
+            ) {
+                setLowerTokenAmount(value * (armOutReserve / armInReserve));
+            } else if (
+                lowerToken?.[0] === Tokens.ArmOutToken &&
+                upperToken?.[0] === Tokens.ArmInToken
+            ) {
+                setLowerTokenAmount(value * (armInReserve / armOutReserve));
+            }
         }
     };
 
     const onChangeLowerAmount = (value: number | null) => {
-        if (value != null) setLowerTokenAmount(value);
-        if (lowerToken === Tokens.ArmInToken) {
-            setUpperTokenAmount(lowerTokenAmount * (1 / ratio));
-        } else {
-            setUpperTokenAmount(lowerTokenAmount * ratio);
+        if (value != null) {
+            setLowerTokenAmount(value);
+            if (
+                lowerToken?.[0] === Tokens.ArmInToken &&
+                upperToken?.[0] === Tokens.ArmOutToken
+            ) {
+                setUpperTokenAmount(value * (armOutReserve / armInReserve));
+            } else if (
+                lowerToken?.[0] === Tokens.ArmOutToken &&
+                upperToken?.[0] === Tokens.ArmInToken
+            ) {
+                setUpperTokenAmount(value * (armInReserve / armOutReserve));
+            }
         }
     };
 
     const onChangeLower = (value: any) => {
         setLowerToken(value);
+        setLowerBalance(0);
+        setLowerSpendable(0);
+        setLowerTokenAmount(0);
     };
 
     const tryParseJSON = (input: string) => {
@@ -189,21 +218,27 @@ export const SupplyLiquidity = ({ setShowMe }: any) => {
             });
             const arminSpendableIndex = getIndexOfHighestRecord(armInRecords);
             const armOutSpendableIndex = getIndexOfHighestRecord(armOutRecords);
-            if (upperToken === Tokens.ArmInToken) {
+            if (
+                upperToken[0] === Tokens.ArmInToken &&
+                lowerToken[0] === Tokens.ArmOutToken
+            ) {
                 inputsArray = [
                     publicKey,
                     armInRecords[arminSpendableIndex],
-                    upperTokenAmount + "u64",
+                    upperTokenAmount.toFixed() + "u64",
                     armOutRecords[armOutSpendableIndex],
-                    lowerTokenAmount,
+                    lowerTokenAmount.toFixed() + "u64",
                 ];
-            } else if (upperToken === Tokens.ArmOutToken) {
+            } else if (
+                upperToken[0] === Tokens.ArmOutToken &&
+                lowerToken[0] === Tokens.ArmInToken
+            ) {
                 inputsArray = [
                     publicKey,
                     armInRecords[arminSpendableIndex],
-                    lowerTokenAmount + "u64",
+                    lowerTokenAmount.toFixed() + "u64",
                     armOutRecords[armOutSpendableIndex],
-                    upperTokenAmount,
+                    upperTokenAmount.toFixed() + "u64",
                 ];
             }
 
@@ -220,9 +255,9 @@ export const SupplyLiquidity = ({ setShowMe }: any) => {
                 fee
             );
 
-            const txId = await requestTransaction(aleoTransaction);
+           await requestTransaction(aleoTransaction);
 
-            setTransactionId(txId);
+ 
         }
     };
 
@@ -383,11 +418,21 @@ export const SupplyLiquidity = ({ setShowMe }: any) => {
                 <Col span={12} className="label-value">
                     <label>
                         {((upperTokenAmount * lowerTokenAmount) /
-                            armInReserve) *
-                            armOutReserve || 0}
-                        %
+                            ((armInReserve * armOutReserve) +
+                            (upperTokenAmount * lowerTokenAmount))*100).toFixed(2) + " %" || 0}
+                        
                     </label>
                 </Col>
+            </Row>
+            <Row>
+
+                <Col span={12} className="label-key">
+                    <label>Exhange Rate</label>
+                </Col>
+                <Col span={12} className="label-value">
+                    <label>{ratio?.toString()?.substring(0, 4) || 0}</label>
+                </Col>
+
             </Row>
 
             <br />

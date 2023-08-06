@@ -130,13 +130,13 @@ const Swap = () => {
     };
     useEffect(() => {
         setExchangeRate();
-    }, [upperToken,lowerToken]);
+    }, [upperToken, lowerToken]);
 
     const onChangeUpper = (value: any) => {
         if (value != null) setUpperToken(value);
-        setUpperBalance(0)
-        setUpperSpendable(0)
-        setUpperTokenAmount(0)
+        setUpperBalance(0);
+        setUpperSpendable(0);
+        setUpperTokenAmount(0);
     };
     const onChangeUpperAmount = (value: number | null) => {
         if (value != null) {
@@ -172,9 +172,9 @@ const Swap = () => {
     };
     const onChangeLower = (value: any) => {
         setLowerToken(value);
-        setLowerBalance(0)
-        setLowerSpendable(0)
-        setLowerTokenAmount(0)
+        setLowerBalance(0);
+        setLowerSpendable(0);
+        setLowerTokenAmount(0);
     };
     function tryParseJSON(input: string) {
         try {
@@ -241,9 +241,7 @@ const Swap = () => {
                 fee
             );
 
-       await requestTransaction(aleoTransaction);
-
-
+            await requestTransaction(aleoTransaction);
         }
     };
 
