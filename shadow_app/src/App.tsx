@@ -1,19 +1,15 @@
-import React, { FC, useMemo } from "react";
+import { useMemo } from "react";
 import { WalletProvider } from "@demox-labs/aleo-wallet-adapter-react";
 import { WalletModalProvider, WalletMultiButton } from "@demox-labs/aleo-wallet-adapter-reactui";
-import {MintArmIn} from "./MintArmIn";
-import {MintArmOut} from "./MintArmOut";
+import { MintArmIn } from "./MintArmIn";
 import { LeoWalletAdapter } from "@demox-labs/aleo-wallet-adapter-leo";
 import {
   DecryptPermission,
   WalletAdapterNetwork,
 } from "@demox-labs/aleo-wallet-adapter-base";
-import {Swap}  from "./Swap";
-import {Liquidity} from "./liquidity/liquidity"
+import { Swap } from "./Swap";
 
-
-// Default styles that can be overridden by your app
-require("@demox-labs/aleo-wallet-adapter-reactui/styles.css");
+import "@demox-labs/aleo-wallet-adapter-reactui/styles.css";
 
 export const App = () => {
   const wallets = useMemo(
@@ -29,17 +25,15 @@ export const App = () => {
     <WalletProvider
       wallets={wallets}
       decryptPermission={DecryptPermission.UponRequest}
-      network={WalletAdapterNetwork.Localnet}
+      network={WalletAdapterNetwork.Testnet}
       autoConnect
     >
       <WalletModalProvider>
-        <WalletMultiButton></WalletMultiButton>
-        <MintArmIn/>
-        <MintArmOut/>
-        <Swap/>
-        
 
-        <Swap/>
+        <WalletMultiButton></WalletMultiButton>
+        <MintArmIn />
+        <Swap />
+
       </WalletModalProvider>
     </WalletProvider>
   );

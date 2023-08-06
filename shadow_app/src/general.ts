@@ -1,12 +1,13 @@
 import __wbg_init, { bhp256 } from "js-snarkvm";
 import app from "./app.json";
+import axios from "axios";
 
 const programID = app.shadow_swap.id;
 const node_url = app.node_url;
 
 await __wbg_init();
 
-export const parseU64Response = (res) =>
+export const parseU64Response = (res: any) =>
     parseInt(res.data.substr(1, res.length - 4));
 
 export const getArmInReserve = async () => {
@@ -25,7 +26,7 @@ export const getArmOutReserve = async () => {
     );
 };
 
-export const getLPTokenBalance = async (address) => {
+export const getLPTokenBalance = async (address: string) => {
     const hashed_address = bhp256(address);
 
     return parseU64Response(
@@ -38,7 +39,7 @@ export const getLPTokenBalance = async (address) => {
 export const getLPTokenTotalSupply = async () => {
     return parseU64Response(
         await axios.get(
-            `${url}/testnet3/program/${programID}/mapping/supply_shadow/0u8`,
+            `${node_url}/testnet3/program/${programID}/mapping/supply_shadow/0u8`,
         ),
     );
 };

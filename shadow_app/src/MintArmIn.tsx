@@ -1,10 +1,8 @@
-import { useState, useEffect, ChangeEvent, FC } from 'react';
-
-
+import React, { useState, useEffect, ChangeEvent, FC, ReactEventHandler, MouseEventHandler } from 'react';
 import { useWallet } from '@demox-labs/aleo-wallet-adapter-react';
 import { LeoWalletAdapter } from '@demox-labs/aleo-wallet-adapter-leo';
-import { Button, Form} from "antd"
-import {SketchOutlined }from '@ant-design/icons';
+import { Button, Form } from "antd"
+import { SketchOutlined } from '@ant-design/icons';
 import {
   Transaction,
   WalletAdapterNetwork,
@@ -12,7 +10,7 @@ import {
 } from '@demox-labs/aleo-wallet-adapter-base';
 import app from "./app.json"
 
-function tryParseJSON(input) {
+function tryParseJSON(input: string) {
   try {
     return JSON.parse(input);
   } catch (error) {
@@ -20,23 +18,22 @@ function tryParseJSON(input) {
   }
 }
 
-export const MintArmIn  = () => {
-  const { wallet, publicKey } = useWallet();
-  const [size, setSize] = useState('large');
+export const MintArmIn = () => {
+  const { wallet, publicKey, requestTransaction, transactionStatus } = useWallet();
 
   let [programId, setProgramId] = useState(app.armin_token.id);
   let [functionName, setFunctionName] = useState(app.armin_token.mint_function);
   let [inputs, setInputs] = useState("change this");  //this needs to change
   let [fee, setFee] = useState(app.armin_token.mint_fee);
-  let [transactionId, setTransactionId] = useState();
-  let [status, setStatus] = useState();
+  let [transactionId, setTransactionId] = useState<string>();
+  let [status, setStatus] = useState<string>();
 
   useEffect(() => {
-    let intervalId;
+    let intervalId: any;
 
-    if (transactionId) {
+    if (transactionId != undefined) {
       intervalId = setInterval(() => {
-        getTransactionStatus(transactionId);
+        transactionId && getTransactionStatus(transactionId);
       }, 1000);
     }
 
@@ -47,9 +44,12 @@ export const MintArmIn  = () => {
     };
   }, [transactionId]);
 
-  const handleSubmit = async (event) => {
+  const handleSubmit = async (event: React.MouseEvent<HTMLElement>) => {
+    if (!wallet || !publicKey || !requestTransaction) {
+      throw new WalletNotConnectedError()
+    }
+
     event.preventDefault();
-    if (!publicKey) throw new WalletNotConnectedError();
 
     const inputsArray = inputs.split('\n');
     const parsedInputs = inputsArray.map((input) => tryParseJSON(input));
@@ -63,38 +63,37 @@ export const MintArmIn  = () => {
       fee
     );
 
-    const txId =
-      (await (wallet?.adapter).requestTransaction(
-        aleoTransaction
-      )) || '';
+    const txId = await requestTransaction(aleoTransaction);
+
     setTransactionId(txId);
   };
 
-  const getTransactionStatus = async (txId) => {
-    const status = await (
-      wallet?.adapter
-    ).transactionStatus(txId);
-    setStatus(status);
+  const getTransactionStatus = async (txId: string) => {
+    if (!transactionStatus) {
+      throw new WalletNotConnectedError();
+    }
+
+    setStatus(await transactionStatus(txId));
   };
 
   return (
     <div>
 
       <div>
-         <Button icon={<SketchOutlined />} type="primary Submit" shape="round" size={size} disabled={
-                !publicKey ||
-                !programId ||
-                !functionName ||
-                !inputs ||
-                fee === undefined
-              }
-              onClick={handleSubmit}>
-            {!publicKey ? 'Connect Your Wallet' : 'Mint ArmIn'}
+        <Button icon={<SketchOutlined />} type="primary" shape="round" size="large" disabled={
+          !publicKey ||
+          !programId ||
+          !functionName ||
+          !inputs ||
+          fee === undefined
+        }
+          onClick={handleSubmit}>
+          {!publicKey ? 'Connect Your Wallet' : 'Mint ArmIn'}
         </Button>
 
 
 
-          
+
 
         {transactionId && (
           <div>
