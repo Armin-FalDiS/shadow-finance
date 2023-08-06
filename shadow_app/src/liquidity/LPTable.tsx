@@ -39,8 +39,9 @@ export const LPTable = () => {
     const getTokenAmounts = async () => {
         const armInReserve = await getArmInReserve();
         const armOutReserve = await getArmOutReserve();
-        const armInShare = Math.floor(LPShare / armInReserve);
-        const armOutShare = Math.floor(LPShare / armOutReserve);
+        const armInShare = Math.floor((LPShare) *armInReserve);
+        const armOutShare = Math.floor((LPShare)* armOutReserve);
+
         return [armInShare, armOutShare];
     };
 
