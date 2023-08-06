@@ -1,13 +1,15 @@
 import React, { FC, useMemo } from "react";
 import { WalletProvider } from "@demox-labs/aleo-wallet-adapter-react";
 import { WalletModalProvider, WalletMultiButton } from "@demox-labs/aleo-wallet-adapter-reactui";
-import MintArmin from "./MintArmIn";
-import MintArmOut from "./MintArmOut";
+import {MintArmIn} from "./MintArmIn";
+import {MintArmOut} from "./MintArmOut";
 import { LeoWalletAdapter } from "@demox-labs/aleo-wallet-adapter-leo";
 import {
   DecryptPermission,
   WalletAdapterNetwork,
 } from "@demox-labs/aleo-wallet-adapter-base";
+import {Swap}  from "./Swap";
+import {Liquidity} from "./liquidity/liquidity"
 
 
 // Default styles that can be overridden by your app
@@ -32,10 +34,12 @@ export const App = () => {
     >
       <WalletModalProvider>
         <WalletMultiButton></WalletMultiButton>
-        <MintArmin />
+        <MintArmIn/>
         <MintArmOut/>
+        <Swap/>
+        
 
-
+        <Swap/>
       </WalletModalProvider>
     </WalletProvider>
   );

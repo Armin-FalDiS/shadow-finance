@@ -1,0 +1,26 @@
+{
+    "node_url": "https://vm.aleo.org/api",
+    "armin_token": {
+        "id": "armin_token.aleo",
+        "mint_function": "mint_armin",
+        "mint_fee": 2.0
+    },
+    "armout_token": {
+        "id": "armout_token.aleo",
+        "mint_function": "mint_armout",
+        "mint_fee": 2.0
+    },
+    "shadow_swap": {
+        "id": "shadow_swap.aleo",
+        "init_function": "mint_lp_init_shadow",
+        "init_fee": 3.0,
+        "provide_function": "mint_lp_shadow",
+        "provide_fee": 3.0,
+        "burn_function": "burn_lp_shadow",
+        "burn_fee": 3.0,
+        "swap_to_0_function": "swap_to_0_shadow",
+        "swap_to_0_fee": 3.0,
+        "swap_to_1_function": "swap_to_1_shadow",
+        "swap_to_1_fee": 3.0
+    }
+}

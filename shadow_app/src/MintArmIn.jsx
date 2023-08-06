@@ -10,6 +10,7 @@ import {
   WalletAdapterNetwork,
   WalletNotConnectedError,
 } from '@demox-labs/aleo-wallet-adapter-base';
+import app from "./app.json"
 
 function tryParseJSON(input) {
   try {
@@ -19,14 +20,14 @@ function tryParseJSON(input) {
   }
 }
 
-const MintArmIn  = () => {
+export const MintArmIn  = () => {
   const { wallet, publicKey } = useWallet();
   const [size, setSize] = useState('large');
 
-  let [programId, setProgramId] = useState('armin_token.aleo');
-  let [functionName, setFunctionName] = useState('mint_armin');
+  let [programId, setProgramId] = useState(app.armin_token.id);
+  let [functionName, setFunctionName] = useState(app.armin_token.mint_function);
   let [inputs, setInputs] = useState("change this");  //this needs to change
-  let [fee, setFee] = useState(100000);
+  let [fee, setFee] = useState(app.armin_token.mint_fee);
   let [transactionId, setTransactionId] = useState();
   let [status, setStatus] = useState();
 
@@ -106,7 +107,6 @@ const MintArmIn  = () => {
 };
 
 
-export default MintArmIn;
 
 
 
