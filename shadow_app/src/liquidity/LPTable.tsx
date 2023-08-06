@@ -91,8 +91,8 @@ export const LPTable = () => {
                 <>
                     <label>LP: {LPBalance + " " || "?? "}</label>
                     <label>
-                        Pool Share:
-                        {(LPShare ? (LPShare * 100).toFixed(2) : "??") + "%"}
+                        Pool Share: 
+                        {(LPShare ? ( " " +(LPShare * 100).toFixed(2)) : "??") + "%"}
                     </label>
                 </>
             ),

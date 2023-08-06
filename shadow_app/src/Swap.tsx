@@ -48,7 +48,8 @@ const Swap = () => {
     const [lowerBalanace, setLowerBalance] = useState(0);
     const [armInReserve, setArmInReserve] = useState(0);
     const [armOutReserve, setArmOutReserve] = useState(0);
-    const [transactionId, setTransactionId] = useState<string>();
+    const [ratio, setRatio] = useState<number | string>(0);
+
     useEffect(() => {
         const setData = async () => {
             const armInReserve = await getArmInReserve();
@@ -112,35 +113,58 @@ const Swap = () => {
             setLowerSpendable(Math.max(...amounts));
         }
     };
+    const setExchangeRate = () => {
+        if (
+            upperToken?.[0] === Tokens.ArmInToken &&
+            lowerToken?.[0] === Tokens.ArmOutToken
+        ) {
+            setRatio(armInReserve / armOutReserve);
+        } else if (
+            upperToken?.[0] === Tokens.ArmOutToken &&
+            lowerToken?.[0] === Tokens.ArmInToken
+        ) {
+            setRatio(armOutReserve / armInReserve);
+        } else if (upperToken?.[0] || lowerToken?.[0]) {
+            setRatio("?");
+        }
+    };
+    useEffect(() => {
+        setExchangeRate();
+    }, [upperToken,lowerToken]);
+
     const onChangeUpper = (value: any) => {
         if (value != null) setUpperToken(value);
     };
     const onChangeUpperAmount = (value: number | null) => {
-        if (value != null) setUpperTokenAmount(value);
-        if (upperToken === Tokens.ArmInToken) {
-            setLowerTokenAmount(
-                (armOutReserve * upperTokenAmount) /
-                    (armInReserve - upperTokenAmount)
-            );
-        } else {
-            setLowerTokenAmount(
-                (armInReserve * upperTokenAmount) /
-                    (armOutReserve + upperTokenAmount)
-            );
+        if (value != null) {
+            setUpperTokenAmount(value);
+            if (
+                lowerToken?.[0] === Tokens.ArmInToken &&
+                upperToken?.[0] === Tokens.ArmOutToken
+            ) {
+                setLowerTokenAmount(value * (armOutReserve / armInReserve));
+            } else if (
+                lowerToken?.[0] === Tokens.ArmOutToken &&
+                upperToken?.[0] === Tokens.ArmInToken
+            ) {
+                setLowerTokenAmount(value * (armInReserve / armOutReserve));
+            }
         }
     };
     const onChangeLowerAmount = (value: number | null) => {
-        if (value != null) setLowerTokenAmount(value);
-        if (lowerToken === Tokens.ArmInToken) {
-            setUpperTokenAmount(
-                (armOutReserve * lowerTokenAmount) /
-                    (armInReserve - lowerTokenAmount)
-            );
-        } else {
-            setUpperTokenAmount(
-                (armInReserve * lowerTokenAmount) /
-                    (armOutReserve + lowerTokenAmount)
-            );
+        if (value != null) {
+            setLowerTokenAmount(value);
+            if (
+                lowerToken?.[0] === Tokens.ArmInToken &&
+                upperToken?.[0] === Tokens.ArmOutToken
+            ) {
+                setUpperTokenAmount(value * (armOutReserve / armInReserve));
+            } else if (
+                lowerToken?.[0] === Tokens.ArmOutToken &&
+                upperToken?.[0] === Tokens.ArmInToken
+            ) {
+                setUpperTokenAmount(value * (armInReserve / armOutReserve));
+            }
         }
     };
     const onChangeLower = (value: any) => {
@@ -180,21 +204,21 @@ const Swap = () => {
             const arminSpendableIndex = getIndexOfHighestRecord(armInRecords);
             const armOutSpendableIndex = getIndexOfHighestRecord(armOutRecords);
 
-            if (upperToken == Tokens.ArmInToken) {
+            if (upperToken[0] == Tokens.ArmInToken) {
                 setFunctionName(app.shadow_swap.swap_to_1_function);
                 inputsArray = [
                     publicKey,
                     armInRecords[arminSpendableIndex],
-                    upperTokenAmount + "u64",
-                    lowerTokenAmount + "u64",
+                    upperTokenAmount.toFixed() + "u64",
+                    lowerTokenAmount.toFixed() + "u64",
                 ];
-            } else if (upperToken == Tokens.ArmInToken) {
+            } else if (upperToken[0] == Tokens.ArmOutToken) {
                 setFunctionName(app.shadow_swap.swap_to_0_function);
                 inputsArray = [
                     publicKey,
                     armOutRecords[armOutSpendableIndex],
-                    upperTokenAmount + "u64",
-                    lowerTokenAmount + "u64",
+                    upperTokenAmount.toFixed() + "u64",
+                    lowerTokenAmount.toFixed() + "u64",
                 ];
             }
 
@@ -211,9 +235,9 @@ const Swap = () => {
                 fee
             );
 
-            const txId = await requestTransaction(aleoTransaction);
+       await requestTransaction(aleoTransaction);
 
-            setTransactionId(txId);
+
         }
     };
 
@@ -364,10 +388,7 @@ const Swap = () => {
                     <label>Exhange Rate</label>
                 </Col>
                 <Col span={12} className="label-value">
-                    <label>
-                        {" "}
-                        {(armInReserve / armOutReserve).toFixed(2) || 0}
-                    </label>
+                    <label>{ratio?.toString()?.substring(0, 4) || 0}</label>
                 </Col>
             </Row>
 
