@@ -417,9 +417,9 @@ export const SupplyLiquidity = ({ setShowMe }: any) => {
                 </Col>
                 <Col span={12} className="label-value">
                     <label>
-                        {((upperTokenAmount * lowerTokenAmount) /
+                        {(((upperTokenAmount * lowerTokenAmount) /
                             ((armInReserve * armOutReserve) +
-                            (upperTokenAmount * lowerTokenAmount))*100).toFixed(2) + " %" || 0}
+                            (upperTokenAmount * lowerTokenAmount))*100).toFixed(2)) || 0}{" %"}
                         
                     </label>
                 </Col>
