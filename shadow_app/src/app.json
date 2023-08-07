@@ -3,12 +3,12 @@
     "armin_token": {
         "id": "armin_token.aleo",
         "mint_function": "mint_armin",
-        "mint_fee": 2.0
+        "mint_fee": 2000000
     },
     "armout_token": {
         "id": "armout_token.aleo",
         "mint_function": "mint_armout",
-        "mint_fee": 2.0
+        "mint_fee": 2000000
     },
     "shadow_swap": {
         "id": "shadow_swap.aleo",

@@ -1,7 +1,7 @@
-import React, { useState, useEffect, ChangeEvent, FC, ReactEventHandler, MouseEventHandler } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useWallet } from '@demox-labs/aleo-wallet-adapter-react';
-import { LeoWalletAdapter } from '@demox-labs/aleo-wallet-adapter-leo';
-import { Button, Form } from "antd"
+
+import { Button } from "antd"
 import { SketchOutlined } from '@ant-design/icons';
 import {
   Transaction,
@@ -21,8 +21,8 @@ function tryParseJSON(input: string) {
 export const MintArmIn = () => {
   const { wallet, publicKey, requestTransaction, transactionStatus } = useWallet();
 
-  let [programId, setProgramId] = useState(app.armin_token.id);
-  let [functionName, setFunctionName] = useState(app.armin_token.mint_function);
+  let [programId] = useState(app.armin_token.id);
+  let [functionName] = useState(app.armin_token.mint_function);
   let [inputs, setInputs] = useState("change this");  //this needs to change
   let [fee, setFee] = useState(app.armin_token.mint_fee);
   let [transactionId, setTransactionId] = useState<string>();

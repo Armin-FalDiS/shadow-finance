@@ -7,8 +7,8 @@ import {
   DecryptPermission,
   WalletAdapterNetwork,
 } from "@demox-labs/aleo-wallet-adapter-base";
-import { Swap } from "./Swap";
-
+import { MintArmOut } from "./MintArmOut";
+import Swap from "./Swap";
 import "@demox-labs/aleo-wallet-adapter-reactui/styles.css";
 
 export const App = () => {
@@ -30,9 +30,11 @@ export const App = () => {
     >
       <WalletModalProvider>
 
-        <WalletMultiButton></WalletMultiButton>
+        <WalletMultiButton/>
         <MintArmIn />
-        <Swap />
+         <MintArmOut/>
+         <Swap/>
+
 
       </WalletModalProvider>
     </WalletProvider>
