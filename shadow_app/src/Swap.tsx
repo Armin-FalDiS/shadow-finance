@@ -142,15 +142,25 @@ const Swap = () => {
         if (value != null) {
             setUpperTokenAmount(value);
             if (
-                lowerToken?.[0] === Tokens.ArmInToken &&
-                upperToken?.[0] === Tokens.ArmOutToken
-            ) {
-                setLowerTokenAmount(value * (armOutReserve / armInReserve));
-            } else if (
                 lowerToken?.[0] === Tokens.ArmOutToken &&
                 upperToken?.[0] === Tokens.ArmInToken
             ) {
-                setLowerTokenAmount(value * (armInReserve / armOutReserve));
+                setLowerTokenAmount(
+                    (armOutReserve -
+                        (armInReserve * armOutReserve) /
+                            (armInReserve + value)) *
+                        0.98
+                );
+            } else if (
+                lowerToken?.[0] === Tokens.ArmInToken &&
+                upperToken?.[0] === Tokens.ArmOutToken
+            ) {
+                setLowerTokenAmount(
+                    (armInReserve -
+                        (armInReserve * armOutReserve) /
+                            (armOutReserve + value)) *
+                        0.98
+                );
             }
         }
     };
@@ -158,15 +168,23 @@ const Swap = () => {
         if (value != null) {
             setLowerTokenAmount(value);
             if (
-                lowerToken?.[0] === Tokens.ArmInToken &&
-                upperToken?.[0] === Tokens.ArmOutToken
-            ) {
-                setUpperTokenAmount(value * (armOutReserve / armInReserve));
-            } else if (
                 lowerToken?.[0] === Tokens.ArmOutToken &&
                 upperToken?.[0] === Tokens.ArmInToken
             ) {
-                setUpperTokenAmount(value * (armInReserve / armOutReserve));
+                setUpperTokenAmount(
+                    ((armInReserve * armOutReserve) / (armOutReserve - value) -
+                        armInReserve) *
+                        1.01
+                );
+            } else if (
+                lowerToken?.[0] === Tokens.ArmInToken &&
+                upperToken?.[0] === Tokens.ArmOutToken
+            ) {
+                setUpperTokenAmount(
+                    ((armInReserve * armOutReserve) / (armInReserve - value) -
+                        armOutReserve) *
+                        1.01
+                );
             }
         }
     };

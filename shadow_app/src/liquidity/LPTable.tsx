@@ -8,7 +8,7 @@ import {
 import { useEffect, useState } from "react";
 import { getLPTokenTotalSupply } from "../general";
 
-import app from "../app.json";
+import app from "../../app.json";
 import {
     getArmInReserve,
     getArmOutReserve,

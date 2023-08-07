@@ -3,7 +3,7 @@ import { Button, Cascader, InputNumber, Form, Col, Row } from "antd";
 import { useWallet } from "@demox-labs/aleo-wallet-adapter-react";
 import { getArmInReserve, getArmOutReserve } from "../general";
 
-import app from "../app.json";
+import app from "../../app.json";
 import {
     WalletAdapterNetwork,
     WalletNotConnectedError,
