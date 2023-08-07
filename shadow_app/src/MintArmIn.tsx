@@ -23,8 +23,8 @@ export const MintArmIn = () => {
 
   let [programId] = useState(app.armin_token.id);
   let [functionName] = useState(app.armin_token.mint_function);
-  let [inputs, setInputs] = useState("change this");  //this needs to change
-  let [fee, setFee] = useState(app.armin_token.mint_fee);
+
+  let [fee] = useState(app.armin_token.mint_fee);
   let [transactionId, setTransactionId] = useState<string>();
   let [status, setStatus] = useState<string>();
 
@@ -51,7 +51,7 @@ export const MintArmIn = () => {
 
     event.preventDefault();
 
-    const inputsArray = inputs.split('\n');
+    const inputsArray = [publicKey,"100000u64"]
     const parsedInputs = inputsArray.map((input) => tryParseJSON(input));
 
     const aleoTransaction = Transaction.createTransaction(
@@ -84,7 +84,6 @@ export const MintArmIn = () => {
           !publicKey ||
           !programId ||
           !functionName ||
-          !inputs ||
           fee === undefined
         }
           onClick={handleSubmit}>
