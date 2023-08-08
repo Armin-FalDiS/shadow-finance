@@ -10,6 +10,8 @@ import {
 import { MintArmOut } from "./MintArmOut";
 import Swap from "./Swap";
 import "@demox-labs/aleo-wallet-adapter-reactui/styles.css";
+import { Init } from "./Init";
+import { Liquidity } from "./liquidity/Liquidity";
 
 export const App = () => {
   const wallets = useMemo(
@@ -31,9 +33,9 @@ export const App = () => {
       <WalletModalProvider>
 
         <WalletMultiButton/>
-        <MintArmIn />
-         <MintArmOut/>
-         <Swap/>
+         <Init/>
+
+
 
 
       </WalletModalProvider>

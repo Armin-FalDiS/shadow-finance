@@ -40,6 +40,8 @@ const Swap = () => {
     const [upperTokenAmount, setUpperTokenAmount] = useState(0)
     const [lowerTokenAmount, setLowerTokenAmount] = useState(0)
     const [upperBalance, setUpperBalance] = useState(0)
+    const [lowerSpendable,setLowerSpendable] = useState(0)
+    const [upperSpendable,setUpperSpendable] = useState(0)
     const [lowerBalanace, setLowerBalance] = useState(0)
     const [transactionId, setTransactionId] = useState<string>();
 
@@ -60,6 +62,7 @@ const Swap = () => {
                 sum += num
             })
             setUpperBalance(sum)
+            setUpperSpendable(Math.max(...amounts))
         }
 
 
@@ -81,6 +84,7 @@ const Swap = () => {
                 sum += num
             })
             setLowerBalance(sum)
+            setLowerSpendable(Math.max(...amounts))
         }
 
     }
@@ -150,7 +154,7 @@ const Swap = () => {
 
             }}>Update Balance</Button >
             <br />
-            <>Balanace {upperBalance}</>
+            <>Balanace/spendable {upperBalance}/{upperSpendable}</>
             <br />
             <Cascader options={options} placeholder={"Please select a token"} onChange={(value) => {
                 onChangeLower(value)
@@ -164,7 +168,7 @@ const Swap = () => {
                 await updateLowerBalance()
             }}>Update Balance</Button>
             <br />
-            <>Balanace {lowerBalanace}</>
+            <>Balanace/spenadble {lowerBalanace}/{lowerSpendable}</>
             <br />
             <>Slippage</>
             <br />

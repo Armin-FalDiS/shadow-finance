@@ -3,7 +3,7 @@
     "armin_token": {
         "id": "armin_token.aleo",
         "mint_function": "mint_armin",
-        "mint_fee": 2000000
+        "mint_fee": 3000000
     },
     "armout_token": {
         "id": "armout_token.aleo",
@@ -11,16 +11,16 @@
         "mint_fee": 2000000
     },
     "shadow_swap": {
-        "id": "shadow_swap.aleo",
+        "id": "shadow_swap_test1.aleo",
         "init_function": "mint_lp_init_shadow",
-        "init_fee": 3.0,
+        "init_fee": 3000000,
         "provide_function": "mint_lp_shadow",
-        "provide_fee": 3.0,
+        "provide_fee": 3000000,
         "burn_function": "burn_lp_shadow",
-        "burn_fee": 3.0,
+        "burn_fee": 3000000,
         "swap_to_0_function": "swap_to_0_shadow",
-        "swap_to_0_fee": 3.0,
+        "swap_to_0_fee": 3000000,
         "swap_to_1_function": "swap_to_1_shadow",
-        "swap_to_1_fee": 3.0
+        "swap_to_1_fee": 3000000
     }
 }
