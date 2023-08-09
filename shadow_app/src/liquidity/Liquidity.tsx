@@ -8,13 +8,17 @@ import {
     WalletNotConnectedError,
     Transaction
 } from "@demox-labs/aleo-wallet-adapter-base";
-
-
+import { EmptyLP } from './EmptyLP';
 interface Option {
     value: string;
     label: string;
 }
-
+export const enum LiquidiyTab{
+    Empty = 1,
+    Supply,
+    UserState,
+    Burn,
+  }
 
 export const Liquidity = () => {
 
@@ -31,6 +35,7 @@ export const Liquidity = () => {
         },
     ];
 
+
     const [programId] = useState(app.shadow_swap.id);
     const [functionName, setFunctionName] = useState(app.shadow_swap.provide_function);
     const [inputs, setInputs] = useState("change this");  //this needs to change
@@ -40,10 +45,15 @@ export const Liquidity = () => {
     const [upperTokenAmount, setUpperTokenAmount] = useState(0)
     const [lowerTokenAmount, setLowerTokenAmount] = useState(0)
     const [upperBalance, setUpperBalance] = useState(0)
-    const [lowerSpendable,setLowerSpendable] = useState(0)
-    const [upperSpendable,setUpperSpendable] = useState(0)
+    const [lowerSpendable, setLowerSpendable] = useState(0)
+    const [upperSpendable, setUpperSpendable] = useState(0)
     const [lowerBalanace, setLowerBalance] = useState(0)
+    const [liquidityTabState, setLiquidityTabState] = useState(LiquidiyTab.Empty)
     const [transactionId, setTransactionId] = useState<string>();
+
+   
+
+
 
     const updateUpperBalance = async () => {
         let program = ""
@@ -139,62 +149,67 @@ export const Liquidity = () => {
         setTransactionId(txId);
     };
 
-    return (
-        <div>
-            <Cascader options={options}
-                placeholder={"Please select a token"}
-                onChange={(value) => {
-                    onChangeUpper(value)
+    if (liquidityTabState===LiquidiyTab.Empty) {
+return <EmptyLP liquidityTabState={liquidityTabState} setLiquidityTabState={setLiquidityTabState}/>
+    }
+    else if (liquidityTabState === LiquidiyTab.Supply)  {
+        return (
+            <div>
+                <Cascader options={options}
+                    placeholder={"Please select a token"}
+                    onChange={(value) => {
+                        onChangeUpper(value)
 
-                }} value={upperToken} />
-            <InputNumber onChange={onChangeUpperAmount} value={upperTokenAmount} />
-            <br />
-            <Button disabled={upperToken==undefined} onClick={async () => {
-                await updateUpperBalance()
+                    }} value={upperToken} />
+                <InputNumber onChange={onChangeUpperAmount} value={upperTokenAmount} />
+                <br />
+                <Button disabled={upperToken == undefined} onClick={async () => {
+                    await updateUpperBalance()
 
-            }}>Update Balance</Button >
-            <br />
-            <>Balanace/spendable {upperBalance}/{upperSpendable}</>
-            <br />
-            <Cascader options={options} placeholder={"Please select a token"} onChange={(value) => {
-                onChangeLower(value)
+                }}>Update Balance</Button >
+                <br />
+                <>Balanace/spendable {upperBalance}/{upperSpendable}</>
+                <br />
+                <Cascader options={options} placeholder={"Please select a token"} onChange={(value) => {
+                    onChangeLower(value)
 
-            }
+                }
 
-            } value={lowerToken} />
-            <InputNumber onChange={onChangeLowerAmount} value={lowerTokenAmount} />
-            <br />
-            <Button disabled={lowerToken==undefined} onClick={async () => {
-                await updateLowerBalance()
-            }}>Update Balance</Button>
-            <br />
-            <>Balanace/spenadble {lowerBalanace}/{lowerSpendable}</>
-            <br />
-            <>Slippage</>
-            <br />
-            <>Transaction Fees</>
-            <br />
-            <>Exhange Rate</>
-            <br />
-            <>Estimated Amount</>
-            <br />
-            <>Price Impact</>
-            <br />
-            <Button disabled={
-                !publicKey ||
-                !functionName ||
-                !inputs ||
-                fee === undefined ||
-                lowerToken === undefined ||
-                upperToken === undefined ||
-                upperToken === lowerToken
-            }
-                onClick={handleSubmit}>Supply </Button>
+                } value={lowerToken} />
+                <InputNumber onChange={onChangeLowerAmount} value={lowerTokenAmount} />
+                <br />
+                <Button disabled={lowerToken == undefined} onClick={async () => {
+                    await updateLowerBalance()
+                }}>Update Balance</Button>
+                <br />
+                <>Balanace/spenadble {lowerBalanace}/{lowerSpendable}</>
+                <br />
+                <>Slippage</>
+                <br />
+                <>Transaction Fees</>
+                <br />
+                <>Exhange Rate</>
+                <br />
+                <>Estimated Amount</>
+                <br />
+                <>Price Impact</>
+                <br />
+                <Button disabled={
+                    !publicKey ||
+                    !functionName ||
+                    !inputs ||
+                    fee === undefined ||
+                    lowerToken === undefined ||
+                    upperToken === undefined ||
+                    upperToken === lowerToken
+                }
+                    onClick={handleSubmit}>Supply </Button>
 
 
-        </div>)
+            </div>)
 
-};
+    };
+}
 
 
 
