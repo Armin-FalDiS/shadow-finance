@@ -39,6 +39,7 @@ export const App = () => {
     };
 
     return (
+        <div className="wrapper">
         <WalletProvider
             wallets={wallets}
             decryptPermission={DecryptPermission.UponRequest}
@@ -110,5 +111,6 @@ export const App = () => {
                 </main>
             </WalletModalProvider>
         </WalletProvider>
+        </div>
     );
 };
