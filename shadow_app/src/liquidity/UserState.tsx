@@ -14,7 +14,7 @@ export const UserState = ({ setLiquidityTabState }: any) => {
 
 
     }}
-    >Burn </Button></div>
+    >Remove </Button></div>
 
 
 }

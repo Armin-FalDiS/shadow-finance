@@ -1,4 +1,4 @@
-import { useMemo } from "react";
+import { useEffect, useMemo } from "react";
 import { WalletProvider } from "@demox-labs/aleo-wallet-adapter-react";
 import { WalletModalProvider, WalletMultiButton } from "@demox-labs/aleo-wallet-adapter-reactui";
 import { MintArmIn } from "./MintArmIn";
@@ -12,7 +12,7 @@ import Swap from "./Swap";
 import "@demox-labs/aleo-wallet-adapter-reactui/styles.css";
 import { Init } from "./Init";
 import { Liquidity } from "./liquidity/Liquidity";
-import { Transfer } from "./Transfer";
+
 
 export const App = () => {
   const wallets = useMemo(
@@ -23,7 +23,6 @@ export const App = () => {
     ],
     []
   );
-
   return (
     <WalletProvider
       wallets={wallets}
@@ -34,7 +33,7 @@ export const App = () => {
       <WalletModalProvider>
 
         <WalletMultiButton/>
-        <Liquidity/>
+        <Swap/>
 
 
 

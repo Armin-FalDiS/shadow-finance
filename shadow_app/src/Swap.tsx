@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { Button, Cascader, InputNumber } from 'antd';
 import { useWallet } from '@demox-labs/aleo-wallet-adapter-react';
-import { getArmInReserve, getArmOutReserve, parseU64Response } from "./general"
+import { getArmInReserve, getArmOutReserve } from "./general"
 import app from "./app.json"
 import {
     WalletAdapterNetwork,
@@ -30,18 +30,22 @@ const Swap = () => {
             label: 'ArmOut Token',
         },
     ];
+    enum Tokens {
+        ArmInToken = 'ArmIn Token',
+        ArmOutToken = 'ArmOut Token'
+    }
+
 
     const [programId] = useState(app.shadow_swap.id);
     const [functionName, setFunctionName] = useState(app.shadow_swap.swap_to_0_function);
-    const [inputs, setInputs] = useState("change this");  //this needs to change
-    const [fee, setFee] = useState(app.shadow_swap.swap_to_0_fee);
+    const [fee,] = useState(app.shadow_swap.swap_to_0_fee);
     const [upperToken, setUpperToken] = useState<any>()
     const [lowerToken, setLowerToken] = useState<any>()
     const [upperTokenAmount, setUpperTokenAmount] = useState(0)
     const [lowerTokenAmount, setLowerTokenAmount] = useState(0)
     const [upperBalance, setUpperBalance] = useState(0)
-    const [lowerSpendable,setLowerSpendable] = useState(0)
-    const [upperSpendable,setUpperSpendable] = useState(0)
+    const [lowerSpendable, setLowerSpendable] = useState(0)
+    const [upperSpendable, setUpperSpendable] = useState(0)
     const [lowerBalanace, setLowerBalance] = useState(0)
     const [transactionId, setTransactionId] = useState<string>();
 
@@ -52,7 +56,11 @@ const Swap = () => {
 
         if (!publicKey) throw new WalletNotConnectedError();
         if (requestRecords) {
-            const records = await requestRecords(program);
+
+            let records = await requestRecords(program);
+            records = records.filter((record) => {
+                return record.spent === false
+            })
             const amounts = records.map((record) => {
                 return parseInt(record.data.amount.substr(0, record.data.amount.length - 11))
 
@@ -74,11 +82,15 @@ const Swap = () => {
 
         if (!publicKey) throw new WalletNotConnectedError();
         if (requestRecords) {
-            const records = await requestRecords(program);
+            let records = await requestRecords(program);
+            records = records.filter((record) => {
+                return record.spent === false
+            })
             const amounts = records.map((record) => {
                 return parseInt(record.data.amount.substr(0, record.data.amount.length - 11))
 
             })
+
             let sum = 0
             amounts.forEach((num) => {
                 sum += num
@@ -115,28 +127,63 @@ const Swap = () => {
             return input;
         }
     }
+    const getIndexOfHighestRecord = (records: any[]) => {
+        const amounts = records.map((record) => {
+            return parseInt(record.data.amount.substr(0, record.data.amount.length - 11))
+
+        })
+        return amounts.indexOf(Math.max.apply(Math, amounts))
+
+
+    }
 
     const handleSubmit = async (event: React.MouseEvent<HTMLElement>) => {
         event.preventDefault();
         if (!wallet || !publicKey || !requestTransaction) {
             throw new WalletNotConnectedError()
         }
+        let inputsArray: any[] = []
+        if (requestRecords) {
+            let armInRecords = await requestRecords(app.armin_token.id)
+            let armOutRecords = await requestRecords(app.armout_token.id)
+            armInRecords = armInRecords.filter((record) => {
+                return record.spent === false
+            })
+            armOutRecords = armOutRecords.filter((record) => {
+                return record.spent === false
+            })
+            const arminSpendableIndex = getIndexOfHighestRecord(armInRecords)
+            const armOutSpendableIndex = getIndexOfHighestRecord(armOutRecords)
 
-        const inputsArray = inputs.split('\n');
-        const parsedInputs = inputsArray.map((input) => tryParseJSON(input));
+            if (upperToken == Tokens.ArmInToken) {
+                setFunctionName(app.shadow_swap.swap_to_1_function)
+                inputsArray = [publicKey, armInRecords[arminSpendableIndex], upperTokenAmount + "u64", lowerTokenAmount + "u64"]
+            }
+            else if (upperToken == Tokens.ArmInToken) {
+                setFunctionName(app.shadow_swap.swap_to_0_function)
+                inputsArray = [publicKey, armOutRecords[armOutSpendableIndex], upperTokenAmount + "u64", lowerTokenAmount + "u64"]
+            }
 
-        const aleoTransaction = Transaction.createTransaction(
-            publicKey,
-            WalletAdapterNetwork.Testnet,
-            programId,
-            functionName,
-            parsedInputs,
-            fee
-        );
 
-        const txId = await requestTransaction(aleoTransaction);
 
-        setTransactionId(txId);
+
+            const parsedInputs = inputsArray.map((input) => tryParseJSON(input));
+
+            const aleoTransaction = Transaction.createTransaction(
+                publicKey,
+                WalletAdapterNetwork.Testnet,
+                programId,
+                functionName,
+                parsedInputs,
+                fee
+            );
+            console.log(parsedInputs)
+            console.log(aleoTransaction)
+
+            const txId = await requestTransaction(aleoTransaction);
+
+            setTransactionId(txId);
+        }
     };
 
     return (
@@ -149,7 +196,7 @@ const Swap = () => {
                 }} value={upperToken} />
             <InputNumber onChange={onChangeUpperAmount} value={upperTokenAmount} />
             <br />
-            <Button disabled={upperToken==undefined} onClick={async () => {
+            <Button disabled={upperToken == undefined} onClick={async () => {
                 await updateUpperBalance()
 
             }}>Update Balance</Button >
@@ -164,7 +211,7 @@ const Swap = () => {
             } value={lowerToken} />
             <InputNumber onChange={onChangeLowerAmount} value={lowerTokenAmount} />
             <br />
-            <Button disabled={lowerToken==undefined} onClick={async () => {
+            <Button disabled={lowerToken == undefined} onClick={async () => {
                 await updateLowerBalance()
             }}>Update Balance</Button>
             <br />
@@ -180,14 +227,16 @@ const Swap = () => {
             <br />
             <>Price Impact</>
             <br />
+
             <Button disabled={
                 !publicKey ||
                 !functionName ||
-                !inputs ||
                 fee === undefined ||
                 lowerToken === undefined ||
                 upperToken === undefined ||
-                upperToken === lowerToken
+                upperToken.toString() === lowerToken.toString() ||
+                upperTokenAmount === 0 ||
+                lowerTokenAmount === 0
             }
                 onClick={handleSubmit}>Swap </Button>
 
