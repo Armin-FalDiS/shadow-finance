@@ -3,12 +3,14 @@ import { Button, Cascader, InputNumber } from 'antd';
 import { useWallet } from '@demox-labs/aleo-wallet-adapter-react';
 import { getArmInReserve, getArmOutReserve, parseU64Response } from "../general"
 import app from "../app.json"
+import { UserState } from './UserState';
 import {
     WalletAdapterNetwork,
     WalletNotConnectedError,
     Transaction
 } from "@demox-labs/aleo-wallet-adapter-base";
 import { EmptyLP } from './EmptyLP';
+import { Burn } from './Burn';
 interface Option {
     value: string;
     label: string;
@@ -48,7 +50,7 @@ export const Liquidity = () => {
     const [lowerSpendable, setLowerSpendable] = useState(0)
     const [upperSpendable, setUpperSpendable] = useState(0)
     const [lowerBalanace, setLowerBalance] = useState(0)
-    const [liquidityTabState, setLiquidityTabState] = useState(LiquidiyTab.Empty)
+    const [liquidityTabState, setLiquidityTabState] = useState(LiquidiyTab.UserState)
     const [transactionId, setTransactionId] = useState<string>();
 
    
@@ -151,6 +153,12 @@ export const Liquidity = () => {
 
     if (liquidityTabState===LiquidiyTab.Empty) {
 return <EmptyLP liquidityTabState={liquidityTabState} setLiquidityTabState={setLiquidityTabState}/>
+    }
+    else if(liquidityTabState===LiquidiyTab.UserState){
+     return <UserState setLiquidityTabState={setLiquidityTabState} />
+    }
+    else if(liquidityTabState===LiquidiyTab.Burn){
+        return <Burn/>
     }
     else if (liquidityTabState === LiquidiyTab.Supply)  {
         return (
