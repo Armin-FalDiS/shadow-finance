@@ -14,6 +14,8 @@ import { Init } from "./Init";
 import { Liquidity } from "./liquidity/Liquidity";
 import { Col, Radio, RadioChangeEvent, Row } from "antd";
 
+import './App.css';
+
 enum NavTab {
   'Swap',
   'Liquidity'
@@ -33,7 +35,6 @@ export const App = () => {
 
   const handleNavigationTabChange = (event: RadioChangeEvent) => {
     setTab(event.target.value);
-    alert(tab);
   };
 
   return (
@@ -44,7 +45,7 @@ export const App = () => {
       autoConnect
     >
       <WalletModalProvider>
-        <header>
+        <header style={{ margin: '3%' }}>
           <Row align='middle'>
             <Col span={8} style={{ display: 'flex', justifyContent: 'start' }}>
               <div style={{ color: 'red' }}>ShadowFi</div>
@@ -52,7 +53,7 @@ export const App = () => {
 
             <Col span={8} style={{ display: 'flex', justifyContent: 'center' }}>
               <nav>
-                <Radio.Group size="large" onChange={handleNavigationTabChange} value={tab}>
+                <Radio.Group optionType="button" size="large" onChange={handleNavigationTabChange} value={tab}>
                   <Radio.Button value={NavTab.Swap}>Swap</Radio.Button>
                   <Radio.Button value={NavTab.Liquidity}>Liquidity</Radio.Button>
                 </Radio.Group>
