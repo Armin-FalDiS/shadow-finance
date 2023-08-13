@@ -1,26 +1,26 @@
-import { Button } from "antd"
-import { useWallet } from '@demox-labs/aleo-wallet-adapter-react';
+import { Button } from "antd";
+import { useWallet } from "@demox-labs/aleo-wallet-adapter-react";
 import {
     WalletAdapterNetwork,
     WalletNotConnectedError,
-    Transaction
+    Transaction,
 } from "@demox-labs/aleo-wallet-adapter-base";
 import { useState } from "react";
-import { LiquidiyTab } from "./Liquidity"
-import app from "../app.json"
+import { LiquidiyTab } from "./Liquidity";
+import app from "../app.json";
 export const Remove = ({ setLiquidityTabState }: any) => {
-    const getTokenAmounts=async()=>{
-        return [1000,1000]
-    }
+    const getTokenAmounts = async () => {
+        return [1000, 1000];
+    };
 
     const { wallet, publicKey, requestTransaction } = useWallet();
     const [_, setTransactionId] = useState<string>();
     const handleSubmit = async (event: React.MouseEvent<HTMLElement>) => {
         event.preventDefault();
         if (!wallet || !publicKey || !requestTransaction) {
-            throw new WalletNotConnectedError()
+            throw new WalletNotConnectedError();
         }
-        let inputsArray: any[] = []
+        let inputsArray: any[] = [];
         function tryParseJSON(input: string) {
             try {
                 return JSON.parse(input);
@@ -29,17 +29,13 @@ export const Remove = ({ setLiquidityTabState }: any) => {
             }
         }
 
-         
-       const [armInTokenAmount,armOutTokenAmount] = await getTokenAmounts()
+        const [armInTokenAmount, armOutTokenAmount] = await getTokenAmounts();
 
-
-
-
-        inputsArray = [publicKey, armInTokenAmount + "u64", armOutTokenAmount + "u64"]
-
-
-
-
+        inputsArray = [
+            publicKey,
+            armInTokenAmount + "u64",
+            armOutTokenAmount + "u64",
+        ];
 
         const parsedInputs = inputsArray.map((input) => tryParseJSON(input));
 
@@ -51,22 +47,26 @@ export const Remove = ({ setLiquidityTabState }: any) => {
             parsedInputs,
             app.shadow_swap.burn_fee
         );
-        console.log(parsedInputs)
-        console.log(aleoTransaction)
+        console.log(parsedInputs);
+        console.log(aleoTransaction);
 
         const txId = await requestTransaction(aleoTransaction);
 
         setTransactionId(txId);
-    }
-        ;
-    return <div><Button onClick={(event) => {
-        event.preventDefault()
-        setLiquidityTabState(LiquidiyTab.UserState)
-    }}>Back</Button>
+    };
+    return (
         <div>
-            <Button onClick={handleSubmit}>
-                Remove
+            <Button
+                onClick={(event) => {
+                    event.preventDefault();
+                    setLiquidityTabState(LiquidiyTab.UserState);
+                }}
+            >
+                Back
             </Button>
-            </div></div>
-
-}
+            <div>
+                <Button onClick={handleSubmit}>Remove</Button>
+            </div>
+        </div>
+    );
+};

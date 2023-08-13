@@ -13,16 +13,16 @@ export const parseU64Response = (res: any) =>
 export const getArmInReserve = async () => {
     return parseU64Response(
         await axios.get(
-            `${node_url}/testnet3/program/${programID}/mapping/reserves_shadow/0u8`,
-        ),
+            `${node_url}/testnet3/program/${programID}/mapping/reserves_shadow/0u8`
+        )
     );
 };
 
 export const getArmOutReserve = async () => {
     return parseU64Response(
         await axios.get(
-            `${node_url}/testnet3/program/${programID}/mapping/reserves_shadow/1u8`,
-        ),
+            `${node_url}/testnet3/program/${programID}/mapping/reserves_shadow/1u8`
+        )
     );
 };
 
@@ -39,7 +39,7 @@ export const getArmOutReserve = async () => {
 export const getLPTokenTotalSupply = async () => {
     return parseU64Response(
         await axios.get(
-            `${node_url}/testnet3/program/${programID}/mapping/supply_shadow/0u8`,
-        ),
+            `${node_url}/testnet3/program/${programID}/mapping/supply_shadow/0u8`
+        )
     );
 };

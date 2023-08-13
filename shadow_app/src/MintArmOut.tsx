@@ -1,16 +1,13 @@
-import { useState, useEffect} from 'react';
-
-
-import { useWallet } from '@demox-labs/aleo-wallet-adapter-react';
-import { Button } from "antd"
-import { PlusCircleOutlined, SketchOutlined } from '@ant-design/icons';
+import { useState, useEffect } from "react";
+import { useWallet } from "@demox-labs/aleo-wallet-adapter-react";
+import { Button } from "antd";
+import { PlusCircleOutlined, SketchOutlined } from "@ant-design/icons";
 import {
     Transaction,
     WalletAdapterNetwork,
     WalletNotConnectedError,
-} from '@demox-labs/aleo-wallet-adapter-base';
-import app from "./app.json"
-
+} from "@demox-labs/aleo-wallet-adapter-base";
+import app from "./app.json";
 
 function tryParseJSON(input: string) {
     try {
@@ -21,13 +18,14 @@ function tryParseJSON(input: string) {
 }
 
 export const MintArmOut = () => {
-    const { wallet, publicKey, transactionStatus, requestTransaction } = useWallet();
+    const { wallet, publicKey, transactionStatus, requestTransaction } =
+        useWallet();
 
-    let [programId] = useState(app.armout_token.id);
-    let [functionName] = useState(app.armout_token.mint_function);
-    let [fee] = useState(app.armout_token.mint_fee);
-    let [transactionId, setTransactionId] = useState<string>();
-    let [status, setStatus] = useState<string>();
+    const [programId] = useState(app.armout_token.id);
+    const [functionName] = useState(app.armout_token.mint_function);
+    const [fee] = useState(app.armout_token.mint_fee);
+    const [transactionId, setTransactionId] = useState<string>();
+    const [status, setStatus] = useState<string>();
 
     useEffect(() => {
         let intervalId: any;
@@ -37,7 +35,6 @@ export const MintArmOut = () => {
                 transactionId && getTransactionStatus(transactionId);
             }, 1000);
         }
-
 
         return () => {
             if (intervalId) {
@@ -50,11 +47,11 @@ export const MintArmOut = () => {
         event.preventDefault();
 
         if (!wallet || !publicKey || !requestTransaction) {
-            throw new WalletNotConnectedError()
+            throw new WalletNotConnectedError();
         }
 
-        const inputsArray = [publicKey,"100000u64"]
-        console.log(inputsArray)
+        const inputsArray = [publicKey, "100000u64"];
+        console.log(inputsArray);
         const parsedInputs = inputsArray.map((input) => tryParseJSON(input));
 
         const aleoTransaction = Transaction.createTransaction(
@@ -81,11 +78,18 @@ export const MintArmOut = () => {
 
     return (
         <div>
-
             <div>
-            <Button icon={<PlusCircleOutlined />} type="primary" shape="round" size="large" disabled={!publicKey} onClick={handleSubmit} style={{ color: 'white' }}>
-          ArmOut Token
-        </Button>
+                <Button
+                    icon={<PlusCircleOutlined />}
+                    type="primary"
+                    shape="round"
+                    size="large"
+                    disabled={!publicKey}
+                    onClick={handleSubmit}
+                    style={{ color: "white" }}
+                >
+                    ArmOut Token
+                </Button>
 
                 {transactionId && (
                     <div>
@@ -96,12 +100,3 @@ export const MintArmOut = () => {
         </div>
     );
 };
-
-
-
-
-
-
-
-
-

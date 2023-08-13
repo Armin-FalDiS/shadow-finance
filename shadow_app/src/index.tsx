@@ -1,5 +1,5 @@
-import "@ant-design/icons"
-import "antd"
+import "@ant-design/icons";
+import "antd";
 import { App } from "./App";
 import React from "react";
 import { createRoot } from "react-dom/client";
@@ -11,6 +11,6 @@ if (container) {
     root.render(
         <React.StrictMode>
             <App />
-        </React.StrictMode>,
+        </React.StrictMode>
     );
 }
