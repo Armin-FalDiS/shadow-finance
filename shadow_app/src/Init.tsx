@@ -58,12 +58,12 @@ export const Init = () => {
         return amounts.indexOf(Math.max.apply(Math, amounts));
     };
     const handleSubmit = async (event: React.MouseEvent<HTMLElement>) => {
-        if (!wallet || !publicKey || !requestTransaction) {
+        if (wallet == null || !publicKey || requestTransaction == null) {
             throw new WalletNotConnectedError();
         }
         const programs = ["armin_token.aleo", "armout_token.aleo"];
         event.preventDefault();
-        if (requestRecords) {
+        if (requestRecords != null) {
             const armInRecords = await requestRecords(programs[0]);
             const armOutRecords = await requestRecords(programs[1]);
             const arminSpendableIndex = getIndexOfHighestRecord(armInRecords);
@@ -95,7 +95,7 @@ export const Init = () => {
     };
 
     const getTransactionStatus = async (txId: string) => {
-        if (!transactionStatus) {
+        if (transactionStatus == null) {
             throw new WalletNotConnectedError();
         }
 

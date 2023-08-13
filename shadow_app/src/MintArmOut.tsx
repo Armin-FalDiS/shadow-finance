@@ -46,7 +46,7 @@ export const MintArmOut = () => {
     const handleSubmit = async (event: React.MouseEvent<HTMLElement>) => {
         event.preventDefault();
 
-        if (!wallet || !publicKey || !requestTransaction) {
+        if (wallet == null || !publicKey || requestTransaction == null) {
             throw new WalletNotConnectedError();
         }
 
@@ -69,7 +69,7 @@ export const MintArmOut = () => {
     };
 
     const getTransactionStatus = async (txId: string) => {
-        if (!transactionStatus) {
+        if (transactionStatus == null) {
             throw new WalletNotConnectedError();
         }
 

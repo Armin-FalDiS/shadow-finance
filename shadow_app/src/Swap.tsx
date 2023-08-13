@@ -56,7 +56,7 @@ const Swap = () => {
             : (program = app.armout_token.id);
 
         if (!publicKey) throw new WalletNotConnectedError();
-        if (requestRecords) {
+        if (requestRecords != null) {
             let records = await requestRecords(program);
             records = records.filter((record) => {
                 return record.spent === false;
@@ -82,7 +82,7 @@ const Swap = () => {
             : (program = app.armout_token.id);
 
         if (!publicKey) throw new WalletNotConnectedError();
-        if (requestRecords) {
+        if (requestRecords != null) {
             let records = await requestRecords(program);
             records = records.filter((record) => {
                 return record.spent === false;
@@ -131,11 +131,11 @@ const Swap = () => {
 
     const handleSubmit = async (event: React.MouseEvent<HTMLElement>) => {
         event.preventDefault();
-        if (!wallet || !publicKey || !requestTransaction) {
+        if (wallet == null || !publicKey || requestTransaction == null) {
             throw new WalletNotConnectedError();
         }
         let inputsArray: any[] = [];
-        if (requestRecords) {
+        if (requestRecords != null) {
             let armInRecords = await requestRecords(app.armin_token.id);
             let armOutRecords = await requestRecords(app.armout_token.id);
             armInRecords = armInRecords.filter((record) => {

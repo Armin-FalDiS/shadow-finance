@@ -17,7 +17,7 @@ export const Remove = ({ setLiquidityTabState }: any) => {
     const [_, setTransactionId] = useState<string>();
     const handleSubmit = async (event: React.MouseEvent<HTMLElement>) => {
         event.preventDefault();
-        if (!wallet || !publicKey || !requestTransaction) {
+        if (wallet == null || !publicKey || requestTransaction == null) {
             throw new WalletNotConnectedError();
         }
         let inputsArray: any[] = [];

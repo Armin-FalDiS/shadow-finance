@@ -3,7 +3,7 @@ import app from "./app.json";
 import axios from "axios";
 
 const programID = app.shadow_swap.id;
-const node_url = app.node_url;
+const nodeUrl = app.node_url;
 
 // await __wbg_init();
 
@@ -13,7 +13,7 @@ export const parseU64Response = (res: any) =>
 export const getArmInReserve = async () => {
     return parseU64Response(
         await axios.get(
-            `${node_url}/testnet3/program/${programID}/mapping/reserves_shadow/0u8`
+            `${nodeUrl}/testnet3/program/${programID}/mapping/reserves_shadow/0u8`
         )
     );
 };
@@ -21,7 +21,7 @@ export const getArmInReserve = async () => {
 export const getArmOutReserve = async () => {
     return parseU64Response(
         await axios.get(
-            `${node_url}/testnet3/program/${programID}/mapping/reserves_shadow/1u8`
+            `${nodeUrl}/testnet3/program/${programID}/mapping/reserves_shadow/1u8`
         )
     );
 };
@@ -31,7 +31,7 @@ export const getArmOutReserve = async () => {
 
 //     return parseU64Response(
 //         await axios.get(
-//             `${node_url}/testnet3/program/${programID}/mapping/lp_tokens_shadow/${hashed_address}`,
+//             `${nodeUrl}/testnet3/program/${programID}/mapping/lp_tokens_shadow/${hashed_address}`,
 //         ),
 //     );
 // };
@@ -39,7 +39,7 @@ export const getArmOutReserve = async () => {
 export const getLPTokenTotalSupply = async () => {
     return parseU64Response(
         await axios.get(
-            `${node_url}/testnet3/program/${programID}/mapping/supply_shadow/0u8`
+            `${nodeUrl}/testnet3/program/${programID}/mapping/supply_shadow/0u8`
         )
     );
 };
