@@ -3,7 +3,7 @@ import { useState, useEffect} from 'react';
 
 import { useWallet } from '@demox-labs/aleo-wallet-adapter-react';
 import { Button } from "antd"
-import { SketchOutlined } from '@ant-design/icons';
+import { PlusCircleOutlined, SketchOutlined } from '@ant-design/icons';
 import {
     Transaction,
     WalletAdapterNetwork,
@@ -83,19 +83,9 @@ export const MintArmOut = () => {
         <div>
 
             <div>
-                <Button icon={<SketchOutlined />} type="primary" shape="round" size="large" disabled={
-                    !publicKey ||
-                    !programId ||
-                    !functionName ||
-                    fee === undefined
-                }
-                    onClick={handleSubmit}>
-                    {!publicKey ? 'Connect Your Wallet' : 'Mint ArmOut'}
-                </Button>
-
-
-
-
+            <Button icon={<PlusCircleOutlined />} type="primary" shape="round" size="large" disabled={!publicKey} onClick={handleSubmit} style={{ color: 'white' }}>
+          ArmOut Token
+        </Button>
 
                 {transactionId && (
                     <div>

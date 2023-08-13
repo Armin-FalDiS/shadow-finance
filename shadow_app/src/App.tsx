@@ -67,13 +67,24 @@ export const App = () => {
         </header>
 
         <aside>
-          <MintArmIn />
-          <MintArmOut />
+          <Row>
+            <Col>
+              <MintArmIn />
+            </Col>
+          </Row>
+
+          <br />
+
+          <Row>
+            <Col>
+              <MintArmOut />
+            </Col>
+          </Row>
         </aside>
 
         <main>
-          {tab == NavTab.Swap && <Swap /> }
-          {tab == NavTab.Liquidity && <Liquidity /> }
+          {tab == NavTab.Swap && <Swap />}
+          {tab == NavTab.Liquidity && <Liquidity />}
         </main>
       </WalletModalProvider>
     </WalletProvider>

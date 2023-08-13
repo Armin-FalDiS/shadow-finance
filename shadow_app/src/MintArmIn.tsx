@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useWallet } from '@demox-labs/aleo-wallet-adapter-react';
 
 import { Button } from "antd"
-import { SketchOutlined } from '@ant-design/icons';
+import { PlusCircleOutlined } from '@ant-design/icons';
 import {
   Transaction,
   WalletAdapterNetwork,
@@ -51,7 +51,7 @@ export const MintArmIn = () => {
 
     event.preventDefault();
 
-    const inputsArray = [publicKey,"100000u64"]
+    const inputsArray = [publicKey, "100000u64"]
     const parsedInputs = inputsArray.map((input) => tryParseJSON(input));
 
     const aleoTransaction = Transaction.createTransaction(
@@ -80,19 +80,9 @@ export const MintArmIn = () => {
     <div>
 
       <div>
-        <Button icon={<SketchOutlined />} type="primary" shape="round" size="large" disabled={
-          !publicKey ||
-          !programId ||
-          !functionName ||
-          fee === undefined
-        }
-          onClick={handleSubmit}>
-          {!publicKey ? 'Connect Your Wallet' : 'Mint ArmIn'}
+        <Button icon={<PlusCircleOutlined />} type="primary" shape="round" size="large" disabled={!publicKey} onClick={handleSubmit} style={{ color: 'white' }}>
+          ArmIn Token
         </Button>
-
-
-
-
 
         {transactionId && (
           <div>
