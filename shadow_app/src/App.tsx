@@ -65,6 +65,16 @@ export const App = () => {
             </Col>
           </Row>
         </header>
+
+        <aside>
+          <MintArmIn />
+          <MintArmOut />
+        </aside>
+
+        <main>
+          {tab == NavTab.Swap && <Swap /> }
+          {tab == NavTab.Liquidity && <Liquidity /> }
+        </main>
       </WalletModalProvider>
     </WalletProvider>
   );
