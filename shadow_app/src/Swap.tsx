@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Button, Cascader, InputNumber } from "antd";
+import { Button, Cascader, InputNumber, Form, Row, Col } from "antd";
 import { useWallet } from "@demox-labs/aleo-wallet-adapter-react";
 import { getArmInReserve, getArmOutReserve } from "./general";
 import app from "./app.json";
@@ -187,86 +187,95 @@ const Swap = () => {
     };
 
     return (
-        <div>
-            <Cascader
-                options={options}
-                placeholder={"Please select a token"}
-                onChange={(value) => {
-                    onChangeUpper(value);
-                }}
-                value={upperToken}
-            />
-            <InputNumber
-                onChange={onChangeUpperAmount}
-                value={upperTokenAmount}
-            />
-            <br />
-            <Button
-                disabled={upperToken == undefined}
-                onClick={async () => {
-                    await updateUpperBalance();
-                }}
-            >
-                Update Balance
-            </Button>
-            <br />
-            <>
-                Balanace/spendable {upperBalance}/{upperSpendable}
-            </>
-            <br />
-            <Cascader
-                options={options}
-                placeholder={"Please select a token"}
-                onChange={(value) => {
-                    onChangeLower(value);
-                }}
-                value={lowerToken}
-            />
-            <InputNumber
-                onChange={onChangeLowerAmount}
-                value={lowerTokenAmount}
-            />
-            <br />
-            <Button
-                disabled={lowerToken == undefined}
-                onClick={async () => {
-                    await updateLowerBalance();
-                }}
-            >
-                Update Balance
-            </Button>
-            <br />
-            <>
-                Balanace/spenadble {lowerBalanace}/{lowerSpendable}
-            </>
-            <br />
-            <>Slippage</>
-            <br />
-            <>Transaction Fees</>
-            <br />
-            <>Exhange Rate</>
-            <br />
-            <>Estimated Amount</>
-            <br />
-            <>Price Impact</>
-            <br />
 
-            <Button
-                disabled={
-                    !publicKey ||
-                    !functionName ||
-                    fee === undefined ||
-                    lowerToken === undefined ||
-                    upperToken === undefined ||
-                    upperToken.toString() === lowerToken.toString() ||
-                    upperTokenAmount === 0 ||
-                    lowerTokenAmount === 0
-                }
-                onClick={handleSubmit}
-            >
-                Swap{" "}
-            </Button>
-        </div>
+        <>
+            <Row>
+                <Col>
+                    <Form>
+                        <Form.Item>
+                            <Cascader
+                                options={options}
+                                placeholder={"Please select a token"}
+                                onChange={(value) => {
+                                    onChangeUpper(value);
+                                }}
+                                value={upperToken}
+                            />
+                            <InputNumber
+                                onChange={onChangeUpperAmount}
+                                value={upperTokenAmount}
+                            />
+                        </Form.Item>
+                        <Button
+                            disabled={upperToken == undefined}
+                            onClick={async () => {
+                                await updateUpperBalance();
+                            }}
+                        >
+                            Update Balance
+                        </Button>
+
+                        <Col>
+                            Balanace/spendable {upperBalance}/{upperSpendable}
+                        </Col>
+
+                        <Form.Item>
+                            <Cascader
+                                options={options}
+                                placeholder={"Please select a token"}
+                                onChange={(value) => {
+                                    onChangeLower(value);
+                                }}
+                                value={lowerToken}
+                            />
+                            <InputNumber
+                                onChange={onChangeLowerAmount}
+                                value={lowerTokenAmount}
+                            />
+                        </Form.Item>
+                        <Button
+                            disabled={lowerToken == undefined}
+                            onClick={async () => {
+                                await updateLowerBalance();
+                            }}
+                        >
+                            Update Balance
+                        </Button>
+
+                        <Col>
+                            Balanace/spenadble {lowerBalanace}/{lowerSpendable}
+                        </Col>
+
+                        <Col>Slippage</Col>
+
+                        <Col>Transaction Fees</Col>
+
+                        <Col>Exhange Rate</Col>
+
+                        <Col>Estimated Amount</Col>
+
+                        <Col>Price Impact</Col>
+
+
+                        <Button
+                            disabled={
+                                !publicKey ||
+                                !functionName ||
+                                fee === undefined ||
+                                lowerToken === undefined ||
+                                upperToken === undefined ||
+                                upperToken.toString() === lowerToken.toString() ||
+                                upperTokenAmount === 0 ||
+                                lowerTokenAmount === 0
+                            }
+                            onClick={handleSubmit}
+                        >
+                            Swap{" "}
+                        </Button>
+                    </Form>
+                </Col>
+            </Row>
+        </>
     );
 };
 

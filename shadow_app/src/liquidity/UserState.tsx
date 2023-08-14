@@ -15,8 +15,8 @@ export const UserState = ({ setLiquidityTabState }: any) => {
     };
     const data = [
         {
-            title: 'ArmInToken/ArmOutToken',
-        }
+            title: "ArmInToken/ArmOutToken",
+        },
     ];
 
     const { wallet, publicKey, requestTransaction } = useWallet();
@@ -58,45 +58,46 @@ export const UserState = ({ setLiquidityTabState }: any) => {
         setTransactionId(txId);
     };
     return (
-        <div style={{
-            height: 400,
-            overflow: 'auto',
-            padding: '0 16px',
-            border: '1px solid rgba(140, 140, 140, 0.35)',
-        }}>
+        <div
+            style={{
+                height: 400,
+                overflow: "auto",
+                padding: "0 16px",
+                border: "1px solid rgba(140, 140, 140, 0.35)",
+            }}
+        >
             <Row>
                 <Col>
-
                     <List size="large">
-                        <List.Item >
-
-                            <List.Item.Meta
-                                title={<a>{data[0].title}</a>}
-                            />
-                            <div><Button
-                                onClick={async (event) => {
-                                    event.preventDefault();
-                                    await handleRemove(event)
-                                }}
-                            >
-                                Remove{" "}
-                            </Button></div>
+                        <List.Item>
+                            <List.Item.Meta title={<a>{data[0].title}</a>} />
+                            <div>
+                                <Button
+                                    onClick={async (event) => {
+                                        event.preventDefault();
+                                        await handleRemove(event);
+                                    }}
+                                >
+                                    Remove{" "}
+                                </Button>
+                            </div>
                         </List.Item>
-
                     </List>
-
-
-
-
                 </Col>
             </Row>
             <Row>
-                <Col> <Button
-                    onClick={(event) => {
-                        event.preventDefault
-                        setLiquidityTabState(LiquidiyTab.Supply)
-                    }}>Add Liquidity</Button></Col></Row></div>
-
-
+                <Col>
+                    {" "}
+                    <Button
+                        onClick={(event) => {
+                            event.preventDefault;
+                            setLiquidityTabState(LiquidiyTab.Supply);
+                        }}
+                    >
+                        Add Liquidity
+                    </Button>
+                </Col>
+            </Row>
+        </div>
     );
 };
