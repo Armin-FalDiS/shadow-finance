@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { Button, Cascader, InputNumber, Form, Col, Row } from "antd";
 import { useWallet } from "@demox-labs/aleo-wallet-adapter-react";
 

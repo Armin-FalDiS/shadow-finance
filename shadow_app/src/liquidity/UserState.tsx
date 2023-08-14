@@ -1,4 +1,4 @@
-import { Button, Col, List, Row, Skeleton } from "antd";
+import { Button, Col, List, Row } from "antd";
 import { useWallet } from "@demox-labs/aleo-wallet-adapter-react";
 import {
     WalletAdapterNetwork,

@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { Button, Cascader, InputNumber, Form, Row, Col } from "antd";
 import { useWallet } from "@demox-labs/aleo-wallet-adapter-react";
-import { getArmInReserve, getArmOutReserve } from "./general";
 import app from "./app.json";
 import {
     WalletAdapterNetwork,
@@ -46,7 +45,7 @@ const Swap = () => {
     const [lowerSpendable, setLowerSpendable] = useState(0);
     const [upperSpendable, setUpperSpendable] = useState(0);
     const [lowerBalanace, setLowerBalance] = useState(0);
-    const [transactionId, setTransactionId] = useState<string>();
+    const [_, setTransactionId] = useState<string>();
 
     const updateUpperBalance = async () => {
         let program = "";

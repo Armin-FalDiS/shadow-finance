@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useWallet } from "@demox-labs/aleo-wallet-adapter-react";
 import { Button } from "antd";
-import { PlusCircleOutlined, SketchOutlined } from "@ant-design/icons";
+import { PlusCircleOutlined } from "@ant-design/icons";
 import {
     Transaction,
     WalletAdapterNetwork,

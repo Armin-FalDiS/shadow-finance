@@ -12,11 +12,10 @@ import {
 } from "@demox-labs/aleo-wallet-adapter-base";
 import { MintArmOut } from "./MintArmOut";
 import Swap from "./Swap";
-import "@demox-labs/aleo-wallet-adapter-reactui/styles.css";
-import { Init } from "./Init";
 import { Liquidity } from "./liquidity/Liquidity";
 import { Col, Radio, type RadioChangeEvent, Row } from "antd";
 
+import "@demox-labs/aleo-wallet-adapter-reactui/styles.css";
 import "./App.css";
 
 enum NavTab {
