@@ -1,11 +1,7 @@
 import React, { useEffect, useState } from "react";
-import { Button, Cascader, InputNumber } from "antd";
+import { Button, Cascader, InputNumber, Form, Col, Row } from "antd";
 import { useWallet } from "@demox-labs/aleo-wallet-adapter-react";
-import {
-    getArmInReserve,
-    getArmOutReserve,
-    parseU64Response,
-} from "../general";
+
 import app from "../app.json";
 import { UserState } from "./UserState";
 import {
@@ -14,7 +10,9 @@ import {
     Transaction,
 } from "@demox-labs/aleo-wallet-adapter-base";
 import { EmptyLP } from "./EmptyLP";
-import { Remove } from "./Remove";
+import FormItem from "antd/es/form/FormItem";
+import { getLPTokenBalance } from "../general";
+
 interface Option {
     value: string;
     label: string;
@@ -23,7 +21,6 @@ export const enum LiquidiyTab {
     Empty = 1,
     Supply,
     UserState,
-    Burn,
 }
 
 export const Liquidity = () => {
@@ -55,7 +52,20 @@ export const Liquidity = () => {
     const [liquidityTabState, setLiquidityTabState] = useState(
         LiquidiyTab.UserState
     ); // a use effect is needed to get user state and then  set this accordingly and it needs wasm to work
-    const [transactionId, setTransactionId] = useState<string>();
+    const [_, setTransactionId] = useState<string>();
+    useEffect(()=>{
+       const getData = async ()=>{
+        if(publicKey){
+        const balance = await getLPTokenBalance(publicKey)
+        console.log(balance)
+        if (balance!==0){
+            setLiquidityTabState(LiquidiyTab.UserState)
+        }
+        getData()
+    }
+       }
+
+    },[])
 
     enum Tokens {
         ArmInToken = "ArmIn Token",
@@ -206,26 +216,36 @@ export const Liquidity = () => {
             />
         );
     } else if (liquidityTabState === LiquidiyTab.UserState) {
-        return <UserState setLiquidityTabState={setLiquidityTabState} />;
-    } else if (liquidityTabState === LiquidiyTab.Burn) {
-        return <Remove setLiquidityTabState={setLiquidityTabState} />;
-    } else if (liquidityTabState === LiquidiyTab.Supply) {
+        return (<UserState setLiquidityTabState={setLiquidityTabState} />);
+    }
+    else if (liquidityTabState === LiquidiyTab.Supply) {
         return (
-            <div>
-                <Cascader
-                    options={options}
-                    placeholder={"Please select a token"}
-                    onChange={(value) => {
-                        onChangeUpper(value);
-                    }}
-                    value={upperToken}
-                />
-                <InputNumber
-                    onChange={onChangeUpperAmount}
-                    value={upperTokenAmount}
-                />
-                <br />
-                <Button
+            <Row>
+<Col>
+<Form>
+                <Col>
+                    <Form.Item rules={[{ required: true }]}>
+                        <Cascader
+                            options={options}
+                            placeholder={"Please select a token"}
+                            onChange={(value) => {
+                                onChangeUpper(value);
+                            }}
+                            value={upperToken}
+                        />
+                    </Form.Item>
+                </Col>
+                <Col>
+
+                    <FormItem rules={[{ required: true }]}>
+                        <InputNumber
+                            onChange={onChangeUpperAmount}
+                            value={upperTokenAmount}
+                        />
+                    </FormItem>
+                </Col>
+
+              <Button
                     disabled={upperToken == undefined}
                     onClick={async () => {
                         await updateUpperBalance();
@@ -233,24 +253,32 @@ export const Liquidity = () => {
                 >
                     Update Balance
                 </Button>
-                <br />
-                <>
+
+                <Col>
                     Balanace/spendable {upperBalance}/{upperSpendable}
-                </>
-                <br />
-                <Cascader
-                    options={options}
-                    placeholder={"Please select a token"}
-                    onChange={(value) => {
-                        onChangeLower(value);
-                    }}
-                    value={lowerToken}
-                />
-                <InputNumber
-                    onChange={onChangeLowerAmount}
-                    value={lowerTokenAmount}
-                />
-                <br />
+                </Col>
+
+                <Col>
+
+                    <FormItem>
+                        <Cascader
+                            options={options}
+                            placeholder={"Please select a token"}
+                            onChange={(value) => {
+                                onChangeLower(value);
+                            }}
+                            value={lowerToken}
+                        />
+                        <InputNumber
+                            onChange={onChangeLowerAmount}
+                            value={lowerTokenAmount}
+                        />
+
+                    </FormItem>
+                </Col>
+
+
+
                 <Button
                     disabled={lowerToken == undefined}
                     onClick={async () => {
@@ -259,21 +287,21 @@ export const Liquidity = () => {
                 >
                     Update Balance
                 </Button>
-                <br />
-                <>
+
+                <Col>
                     Balanace/spenadble {lowerBalanace}/{lowerSpendable}
-                </>
-                <br />
-                <>Slippage</>
-                <br />
-                <>Transaction Fees</>
-                <br />
-                <>Exhange Rate</>
-                <br />
-                <>Estimated Amount</>
-                <br />
-                <>Price Impact</>
-                <br />
+                </Col>
+
+                <Col>Slippage</Col>
+
+                <Col>Transaction Fees</Col>
+
+                <Col>Exhange Rate</Col>
+
+                <Col>Estimated Amount</Col>
+
+                <Col>Price Impact</Col>
+
                 <Button
                     disabled={
                         !publicKey ||
@@ -289,7 +317,10 @@ export const Liquidity = () => {
                 >
                     Supply{" "}
                 </Button>
-            </div>
+               </Form>
+                </Col>
+
+                        </Row >
         );
     }
 };

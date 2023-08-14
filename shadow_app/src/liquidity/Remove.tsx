@@ -15,7 +15,7 @@ export const Remove = ({ setLiquidityTabState }: any) => {
 
     const { wallet, publicKey, requestTransaction } = useWallet();
     const [_, setTransactionId] = useState<string>();
-    const handleSubmit = async (event: React.MouseEvent<HTMLElement>) => {
+    const handleRemove = async (event: React.MouseEvent<HTMLElement>) => {
         event.preventDefault();
         if (wallet == null || !publicKey || requestTransaction == null) {
             throw new WalletNotConnectedError();
@@ -47,9 +47,6 @@ export const Remove = ({ setLiquidityTabState }: any) => {
             parsedInputs,
             app.shadow_swap.burn_fee
         );
-        console.log(parsedInputs);
-        console.log(aleoTransaction);
-
         const txId = await requestTransaction(aleoTransaction);
 
         setTransactionId(txId);
@@ -65,7 +62,7 @@ export const Remove = ({ setLiquidityTabState }: any) => {
                 Back
             </Button>
             <div>
-                <Button onClick={handleSubmit}>Remove</Button>
+                <Button onClick={handleRemove}>Remove</Button>
             </div>
         </div>
     );

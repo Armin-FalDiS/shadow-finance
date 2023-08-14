@@ -9,8 +9,8 @@ export const EmptyLP = ({ setLiquidityTabState }: any) => {
                     setLiquidityTabState(LiquidiyTab.Supply);
                 }}
             >
-                Add Liquidity{" "}
-            </Button>{" "}
+                Add Liquidity
+            </Button>
         </div>
     );
 };
