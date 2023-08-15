@@ -1,6 +1,12 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Button, Cascader, InputNumber, Form, Col, Row } from "antd";
 import { useWallet } from "@demox-labs/aleo-wallet-adapter-react";
+import {
+    getArmInReserve,
+    getArmOutReserve,
+    getLPTokenBalance,
+    getLPTokenTotalSupply,
+} from "../general";
 
 import app from "../app.json";
 import { UserState } from "./UserState";
@@ -49,23 +55,45 @@ export const Liquidity = () => {
     const [lowerSpendable, setLowerSpendable] = useState(0);
     const [upperSpendable, setUpperSpendable] = useState(0);
     const [lowerBalanace, setLowerBalance] = useState(0);
+    const [armInReserve, setArmInReserve] = useState(0);
+    const [armOutreserve, setArmOutReserve] = useState(0);
     const [liquidityTabState, setLiquidityTabState] = useState(
         LiquidiyTab.UserState
-    ); // a use effect is needed to get user state and then  set this accordingly and it needs wasm to work
-    const [_, setTransactionId] = useState<string>();
-    // useEffect(()=>{
-    //    const getData = async ()=>{
-    //     if(publicKey){
-    //     const balance = await getLPTokenBalance(publicKey)
-    //     console.log(balance)
-    //     if (balance!==0){
-    //         setLiquidityTabState(LiquidiyTab.UserState)
-    //     }
-    //     getData()
-    // }
-    //    }
+    );
+    const [ratio, setRatio] = useState(0);
+    const [LPBalance, setLPBalance] = useState<number>(0);
+    const [totalLPSupply, settotalLPSupply] = useState<number>(0);
+    const [LPShare, setLPShare] = useState<number>(0);
+    const SetTokenAmounts = async () => {
+        if (publicKey) {
+            const LPBalance = await getLPTokenBalance(publicKey);
+            setLPBalance(LPBalance);
+            const totalLPSupply = await getLPTokenTotalSupply();
+            settotalLPSupply(totalLPSupply);
+            const lpShare = LPBalance / totalLPSupply;
+            setLPShare(lpShare);
+            const armInReserve = await getArmInReserve();
+            const armOutReserve = await getArmOutReserve();
+            setArmInReserve(armInReserve);
+            setArmOutReserve(armOutReserve);
+            setRatio(armInReserve / armOutReserve);
+        }
+    };
 
-    // },[])
+    const [_, setTransactionId] = useState<string>();
+    useEffect(() => {
+        const getData = async () => {
+            if (publicKey) {
+                const balance = await getLPTokenBalance(publicKey);
+                console.log(balance);
+                if (balance !== 0) {
+                    setLiquidityTabState(LiquidiyTab.UserState);
+                }
+            }
+        };
+        getData();
+        SetTokenAmounts();
+    }, []);
 
     enum Tokens {
         ArmInToken = "ArmIn Token",
@@ -129,9 +157,19 @@ export const Liquidity = () => {
     };
     const onChangeUpperAmount = (value: number | null) => {
         if (value != null) setUpperTokenAmount(value);
+        if (upperToken === Tokens.ArmInToken) {
+            setLowerTokenAmount(upperTokenAmount * (1 / ratio));
+        } else {
+            setLowerTokenAmount(upperTokenAmount * ratio);
+        }
     };
     const onChangeLowerAmount = (value: number | null) => {
         if (value != null) setLowerTokenAmount(value);
+        if (lowerToken === Tokens.ArmInToken) {
+            setUpperTokenAmount(lowerTokenAmount * (1 / ratio));
+        } else {
+            setUpperTokenAmount(lowerTokenAmount * ratio);
+        }
     };
     const onChangeLower = (value: any) => {
         setLowerToken(value);
@@ -199,8 +237,6 @@ export const Liquidity = () => {
                 parsedInputs,
                 fee
             );
-            console.log(parsedInputs);
-            console.log(aleoTransaction);
 
             const txId = await requestTransaction(aleoTransaction);
 
@@ -216,15 +252,14 @@ export const Liquidity = () => {
             />
         );
     } else if (liquidityTabState === LiquidiyTab.UserState) {
-        return (<UserState setLiquidityTabState={setLiquidityTabState} />);
-    }
-    else if (liquidityTabState === LiquidiyTab.Supply) {
+        return (<UserState setLiquidityTabState={setLiquidityTabState} /> ) ;
+    } else if (liquidityTabState === LiquidiyTab.Supply) {
         return (
-            <Row>
-                <Col>
-                    <Form>
-                        <Col>
-                            <Form.Item rules={[{ required: true }]}>
+            <div>
+                <Form>
+                    <Row>
+                        <Col span={12}>
+                            <FormItem rules={[{ required: true }]}>
                                 <Cascader
                                     options={options}
                                     placeholder={"Please select a token"}
@@ -233,10 +268,9 @@ export const Liquidity = () => {
                                     }}
                                     value={upperToken}
                                 />
-                            </Form.Item>
+                            </FormItem>
                         </Col>
-                        <Col>
-
+                        <Col span={12}>
                             <FormItem rules={[{ required: true }]}>
                                 <InputNumber
                                     onChange={onChangeUpperAmount}
@@ -244,22 +278,22 @@ export const Liquidity = () => {
                                 />
                             </FormItem>
                         </Col>
+                    </Row>
 
-                        <Button
-                            disabled={upperToken == undefined}
-                            onClick={async () => {
-                                await updateUpperBalance();
-                            }}
-                        >
-                            Update Balance
-                        </Button>
+                    <Button
+                        disabled={upperToken == undefined}
+                        onClick={async () => {
+                            await updateUpperBalance();
+                        }}
+                    >
+                        Update Balance
+                    </Button>
 
-                        <Col>
-                            Balanace/spendable {upperBalance}/{upperSpendable}
-                        </Col>
-
-                        <Col>
-
+                    <Col>
+                        Balanace/spendable {upperBalance}/{upperSpendable}
+                    </Col>
+                    <Row>
+                        <Col span={12}>
                             <FormItem>
                                 <Cascader
                                     options={options}
@@ -269,58 +303,75 @@ export const Liquidity = () => {
                                     }}
                                     value={lowerToken}
                                 />
+                            </FormItem>
+                        </Col>
+                        <Col span={12}>
+                            <FormItem>
                                 <InputNumber
                                     onChange={onChangeLowerAmount}
                                     value={lowerTokenAmount}
                                 />
-
                             </FormItem>
                         </Col>
+                    </Row>
 
+                    <Button
+                        disabled={lowerToken == undefined}
+                        onClick={async () => {
+                            await updateLowerBalance();
+                        }}
+                    >
+                        Update Balance
+                    </Button>
 
+                    <Col>
+                        Balanace/spenadble {lowerBalanace}/{lowerSpendable}
+                    </Col>
+                    <>Price and Pool Share</>
 
-                        <Button
-                            disabled={lowerToken == undefined}
-                            onClick={async () => {
-                                await updateLowerBalance();
-                            }}
-                        >
-                            Update Balance
-                        </Button>
+                    <Col>
+                        {upperToken} per {lowerToken}
+                    </Col>
 
-                        <Col>
-                            Balanace/spenadble {lowerBalanace}/{lowerSpendable}
-                        </Col>
+                    <Col>
+                        {lowerToken} per {upperToken}:{" "}
+                    </Col>
 
-                        <Col>Slippage</Col>
+                    <Col>
+                        Share of Pool:{" "}
+                        {((upperTokenAmount * lowerTokenAmount) /
+                            armInReserve) *
+                            armOutreserve}
+                    </Col>
 
-                        <Col>Transaction Fees</Col>
+                    <Button
+                        disabled={
+                            !publicKey ||
+                            !functionName ||
+                            fee === undefined ||
+                            lowerToken === undefined ||
+                            upperToken === undefined ||
+                            upperToken.toString() === lowerToken.toString() ||
+                            upperTokenAmount === 0 ||
+                            lowerTokenAmount === 0
+                        }
+                        onClick={handleSubmit}
+                    >
+                        Supply{" "}
+                    </Button>
+                </Form>
+                <Row>
+                <Col>
+                <Button onClick={(event)=>{
+                    event.preventDefault()
+                    setLiquidityTabState(LiquidiyTab.UserState)
 
-                        <Col>Exhange Rate</Col>
+                }
 
-                        <Col>Estimated Amount</Col>
-
-                        <Col>Price Impact</Col>
-
-                        <Button
-                            disabled={
-                                !publicKey ||
-                                !functionName ||
-                                fee === undefined ||
-                                lowerToken === undefined ||
-                                upperToken === undefined ||
-                                upperToken.toString() === lowerToken.toString() ||
-                                upperTokenAmount === 0 ||
-                                lowerTokenAmount === 0
-                            }
-                            onClick={handleSubmit}
-                        >
-                            Supply{" "}
-                        </Button>
-                    </Form>
+                }>  Go User State </Button>
                 </Col>
-
-            </Row >
+            </Row>
+            </div>
         );
     }
 };
