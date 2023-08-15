@@ -81,10 +81,9 @@ export const MintArmOut = () => {
             <div>
                 <Button
                     icon={<PlusCircleOutlined />}
-                    type="primary"
+                    type="link"
                     shape="round"
                     size="large"
-                    disabled={!publicKey}
                     onClick={handleSubmit}
                     style={{ color: "white" }}
                 >

@@ -1,5 +1,5 @@
 import { useMemo, useState } from "react";
-import { WalletProvider } from "@demox-labs/aleo-wallet-adapter-react";
+import { WalletProvider, useWallet } from "@demox-labs/aleo-wallet-adapter-react";
 import {
     WalletModalProvider,
     WalletMultiButton,
@@ -32,6 +32,7 @@ export const App = () => {
         ],
         []
     );
+    const { connected } = useWallet();
     const [tab, setTab] = useState(NavTab.Swap);
 
     const handleNavigationTabChange = (event: RadioChangeEvent) => {
@@ -88,7 +89,7 @@ export const App = () => {
                     </Row>
                 </header>
 
-                <aside>
+                <aside hidden={!connected}>
                     <Row>
                         <Col>
                             <MintArmIn />
