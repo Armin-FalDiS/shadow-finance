@@ -43,8 +43,8 @@ export const UserState = ({ setLiquidityTabState }: any) => {
         {
             key: "1",
             title: "ArmInToken/ArmOutToken",
-            LP: LPBalance,
-            PoolShare: LPShare,
+            LP: LPBalance || 0,
+            PoolShare: LPShare || 0,
         },
     ];
     const getTokenAmounts = async () => {
@@ -104,22 +104,26 @@ export const UserState = ({ setLiquidityTabState }: any) => {
                             dataIndex="PoolShare"
                             key="PoolShare"
                         ></Column>
+                        <Column render={
+                            ()=>{
+                                return   ( <Button
+                                    onClick={async (event) => {
+                                        event.preventDefault();
+                                        await handleRemove(event);
+                                    }}
+                                >
+                                    Remove{" "}
+                                </Button>)
+                            }
+                        }></Column>
+
 
                         <Button></Button>
                     </Table>
                 </Col>
-                <Col>
-                    <div>
-                        <Button
-                            onClick={async (event) => {
-                                event.preventDefault();
-                                await handleRemove(event);
-                            }}
-                        >
-                            Remove{" "}
-                        </Button>
-                    </div>
-                </Col>
+
+
+
             </Row>
             <Row>
                 <Col>
