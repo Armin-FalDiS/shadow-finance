@@ -18,7 +18,6 @@ import {
 import { EmptyLP } from "./EmptyLP";
 import FormItem from "antd/es/form/FormItem";
 
-
 interface Option {
     value: string;
     label: string;
@@ -56,7 +55,7 @@ export const Liquidity = () => {
     const [upperSpendable, setUpperSpendable] = useState(0);
     const [lowerBalanace, setLowerBalance] = useState(0);
     const [armInReserve, setArmInReserve] = useState(0);
-    const [armOutreserve, setArmOutReserve] = useState(0);
+    const [armOutReserve, setArmOutReserve] = useState(0);
     const [liquidityTabState, setLiquidityTabState] = useState(
         LiquidiyTab.UserState
     );
@@ -252,99 +251,168 @@ export const Liquidity = () => {
             />
         );
     } else if (liquidityTabState === LiquidiyTab.UserState) {
-        return (<UserState setLiquidityTabState={setLiquidityTabState} /> ) ;
+        return <UserState setLiquidityTabState={setLiquidityTabState} />;
     } else if (liquidityTabState === LiquidiyTab.Supply) {
         return (
-            <div>
-                <Form>
+            <Form>
+                <Form className="token-box-container">
                     <Row>
-                        <Col span={12}>
-                            <FormItem rules={[{ required: true }]}>
-                                <Cascader
-                                    options={options}
-                                    placeholder={"Please select a token"}
-                                    onChange={(value) => {
-                                        onChangeUpper(value);
-                                    }}
-                                    value={upperToken}
-                                />
-                            </FormItem>
+                        <Col span={24}>
+                            <InputNumber
+                                bordered={false}
+                                size="large"
+                                onChange={onChangeUpperAmount}
+                                value={upperTokenAmount}
+                                addonBefore={
+                                    <Cascader
+                                        options={options}
+                                        placeholder={"Please select a token"}
+                                        onChange={(value) => {
+                                            onChangeUpper(value);
+                                        }}
+                                        value={upperToken}
+                                    />
+                                }
+                            />
                         </Col>
-                        <Col span={12}>
-                            <FormItem rules={[{ required: true }]}>
-                                <InputNumber
-                                    onChange={onChangeUpperAmount}
-                                    value={upperTokenAmount}
-                                />
-                            </FormItem>
+                    </Row>
+                    <br />
+
+                    <Form hidden={!upperToken}>
+                        <Row>
+                            <Col span={6} className="label-key">
+                                <label>Total Balance</label>
+                            </Col>
+                            <Col span={6} className="label-value">
+                                <label>{upperBalance}</label>
+                            </Col>
+                        </Row>
+                        <Row>
+                            <Col span={6} className="label-key">
+                                <label>Spendable Balance</label>
+                            </Col>
+                            <Col span={6} className="label-value">
+                                <label>{upperSpendable}</label>
+                            </Col>
+                        </Row>
+
+                        <br />
+
+                        <Row>
+                            <Col span={12} style={{ textAlign: "center" }}>
+                                <Button
+                                    onClick={async () => {
+                                        await updateUpperBalance();
+                                    }}
+                                >
+                                    Update Balance
+                                </Button>
+                            </Col>
+                        </Row>
+                    </Form>
+                </Form>
+                <br />
+                <Form className="token-box-container">
+                    <Row>
+                        <Col span={24}>
+                            <InputNumber
+                                onChange={onChangeLowerAmount}
+                                value={lowerTokenAmount}
+                                bordered={false}
+                                size="large"
+                                addonBefore={
+                                    <Cascader
+                                        options={options}
+                                        placeholder={"Please select a token"}
+                                        onChange={(value) => {
+                                            onChangeLower(value);
+                                        }}
+                                        value={lowerToken}
+                                    />
+                                }
+                            />
                         </Col>
                     </Row>
 
-                    <Button
-                        disabled={upperToken == undefined}
-                        onClick={async () => {
-                            await updateUpperBalance();
-                        }}
-                    >
-                        Update Balance
-                    </Button>
+                    <Form hidden={!lowerToken}>
+                        <Row>
+                            <Col span={6} className="label-key">
+                                <label>Total Balance</label>
+                            </Col>
+                            <Col span={6} className="label-value">
+                                <label>{lowerBalanace}</label>
+                            </Col>
+                        </Row>
+                        <Row>
+                            <Col span={6} className="label-key">
+                                <label>Spendable Balance</label>
+                            </Col>
+                            <Col span={6} className="label-value">
+                                <label>{lowerSpendable}</label>
+                            </Col>
+                        </Row>
 
-                    <Col>
-                        Balanace/spendable {upperBalance}/{upperSpendable}
-                    </Col>
-                    <Row>
-                        <Col span={12}>
-                            <FormItem>
-                                <Cascader
-                                    options={options}
-                                    placeholder={"Please select a token"}
-                                    onChange={(value) => {
-                                        onChangeLower(value);
+                        <br />
+
+                        <Row>
+                            <Col span={12} style={{ textAlign: "center" }}>
+                                <Button
+                                    onClick={async () => {
+                                        await updateLowerBalance();
                                     }}
-                                    value={lowerToken}
-                                />
-                            </FormItem>
-                        </Col>
-                        <Col span={12}>
-                            <FormItem>
-                                <InputNumber
-                                    onChange={onChangeLowerAmount}
-                                    value={lowerTokenAmount}
-                                />
-                            </FormItem>
-                        </Col>
-                    </Row>
+                                >
+                                    Update Balance
+                                </Button>
+                            </Col>
+                        </Row>
+                    </Form>
+                </Form>
+                <br />
+                <Row>
+                    <Col span={12} className="label-key">
+                        <label>Transaction Fee</label>
+                    </Col>
+                    <Col span={12} className="label-value">
+                        <label>2 credits</label>
+                    </Col>
+                </Row>
+                <Row>
+                    <Col span={12} className="label-key">
+                        <label>Share of Pool: </label>
+                    </Col>
+                    <Col span={12} className="label-value">
+                        <label>
+                            {" "}
+                            {((upperTokenAmount * lowerTokenAmount) /
+                                armInReserve) *
+                                armOutReserve || 0}{" "}
+                            %
+                        </label>
+                    </Col>
+                </Row>
+                <Row>
+                    <Col span={12} className="label-key">
+                        <label> ArmIn Token Per ArmOut Token</label>
+                    </Col>
+                    <Col span={12} className="label-value">
+                        <label> {armInReserve / armOutReserve || 0}</label>
+                    </Col>
+                </Row>
+                <Row>
+                    <Col span={12} className="label-key">
+                        <label> ArmOut Token Per ArmIn Token</label>
+                    </Col>
+                    <Col span={12} className="label-value">
+                        <label> {armOutReserve / armInReserve || 0}</label>
+                    </Col>
+                </Row>
 
+                <Col span={24}>
                     <Button
-                        disabled={lowerToken == undefined}
-                        onClick={async () => {
-                            await updateLowerBalance();
-                        }}
-                    >
-                        Update Balance
-                    </Button>
-
-                    <Col>
-                        Balanace/spenadble {lowerBalanace}/{lowerSpendable}
-                    </Col>
-                    <>Price and Pool Share</>
-
-                    <Col>
-                        {upperToken} per {lowerToken}
-                    </Col>
-
-                    <Col>
-                        {lowerToken} per {upperToken}:{" "}
-                    </Col>
-
-                    <Col>
-                        Share of Pool:{" "}
-                        {((upperTokenAmount * lowerTokenAmount) /
-                            armInReserve) *
-                            armOutreserve}
-                    </Col>
-
-                    <Button
+                        size="large"
+                        type="primary"
+                        shape="round"
+                        style={{ width: "100%" }}
                         disabled={
                             !publicKey ||
                             !functionName ||
@@ -359,19 +427,22 @@ export const Liquidity = () => {
                     >
                         Supply{" "}
                     </Button>
-                </Form>
-                <Row>
-                <Col>
-                <Button onClick={(event)=>{
-                    event.preventDefault()
-                    setLiquidityTabState(LiquidiyTab.UserState)
-
-                }
-
-                }>  Go User State </Button>
                 </Col>
-            </Row>
-            </div>
+
+                <Row>
+                    <Col>
+                        <Button
+                            onClick={(event) => {
+                                event.preventDefault();
+                                setLiquidityTabState(LiquidiyTab.UserState);
+                            }}
+                        >
+                            {" "}
+                            Go User State{" "}
+                        </Button>
+                    </Col>
+                </Row>
+            </Form>
         );
     }
 };

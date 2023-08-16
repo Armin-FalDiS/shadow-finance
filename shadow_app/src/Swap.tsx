@@ -364,7 +364,7 @@ const Swap = () => {
                     <label>Exhange Rate</label>
                 </Col>
                 <Col span={12} className="label-value">
-                    <label>{armInReserve / armOutReserve}</label>
+                    <label> {(armInReserve / armOutReserve)|| 0 }</label>
                 </Col>
             </Row>
 
