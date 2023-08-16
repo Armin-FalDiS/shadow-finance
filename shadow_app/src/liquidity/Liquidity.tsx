@@ -57,7 +57,7 @@ export const Liquidity = () => {
     const [armInReserve, setArmInReserve] = useState(0);
     const [armOutReserve, setArmOutReserve] = useState(0);
     const [liquidityTabState, setLiquidityTabState] = useState(
-        LiquidiyTab.UserState
+        LiquidiyTab.Empty
     );
     const [ratio, setRatio] = useState(0);
     const [LPBalance, setLPBalance] = useState<number>(0);
