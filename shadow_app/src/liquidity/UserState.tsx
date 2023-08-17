@@ -1,4 +1,4 @@
-import { Button, Col, List, Row, Table } from "antd";
+import { Button, Col,Row, Table } from "antd";
 import { useWallet } from "@demox-labs/aleo-wallet-adapter-react";
 import {
     WalletAdapterNetwork,
@@ -15,7 +15,7 @@ import {
     getLPTokenBalance,
     getLPTokenTotalSupply,
 } from "../general";
-const { Column, ColumnGroup } = Table;
+const { Column} = Table;
 export const UserState = ({ setLiquidityTabState }: any) => {
     const { wallet, publicKey, requestTransaction } = useWallet();
     const [_, setTransactionId] = useState<string>();
@@ -96,7 +96,7 @@ export const UserState = ({ setLiquidityTabState }: any) => {
         <div>
             <Row>
                 <Col>
-                    <Table dataSource={data}>
+                    <Table pagination={false} dataSource={data}>
                         <Column title="title" dataIndex="title" key="title" />
                         <Column title="LP" dataIndex="LP" key="LP" />
                         <Column
@@ -104,26 +104,24 @@ export const UserState = ({ setLiquidityTabState }: any) => {
                             dataIndex="PoolShare"
                             key="PoolShare"
                         ></Column>
-                        <Column render={
-                            ()=>{
-                                return   ( <Button
-                                    onClick={async (event) => {
-                                        event.preventDefault();
-                                        await handleRemove(event);
-                                    }}
-                                >
-                                    Remove{" "}
-                                </Button>)
-                            }
-                        }></Column>
-
+                        <Column
+                            render={() => {
+                                return (
+                                    <Button
+                                        onClick={async (event) => {
+                                            event.preventDefault();
+                                            await handleRemove(event);
+                                        }}
+                                    >
+                                        Remove{" "}
+                                    </Button>
+                                );
+                            }}
+                        ></Column>
 
                         <Button></Button>
                     </Table>
                 </Col>
-
-
-
             </Row>
             <Row>
                 <Col>
@@ -140,13 +138,15 @@ export const UserState = ({ setLiquidityTabState }: any) => {
             </Row>
             <Row>
                 <Col>
-                <Button onClick={(event)=>{
-                    event.preventDefault()
-                    setLiquidityTabState(LiquidiyTab.Empty)
-
-                }
-
-                }> EmptyLP </Button>
+                    <Button
+                        onClick={(event) => {
+                            event.preventDefault();
+                            setLiquidityTabState(LiquidiyTab.Empty);
+                        }}
+                    >
+                        {" "}
+                        EmptyLP{" "}
+                    </Button>
                 </Col>
             </Row>
         </div>

@@ -16,7 +16,7 @@ import {
     Transaction,
 } from "@demox-labs/aleo-wallet-adapter-base";
 import { EmptyLP } from "./EmptyLP";
-import FormItem from "antd/es/form/FormItem";
+
 
 interface Option {
     value: string;
