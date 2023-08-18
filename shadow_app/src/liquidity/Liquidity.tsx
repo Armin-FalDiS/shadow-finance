@@ -395,7 +395,7 @@ export const Liquidity = () => {
                         <label> ArmIn Token Per ArmOut Token</label>
                     </Col>
                     <Col span={12} className="label-value">
-                        <label> {armInReserve / armOutReserve || 0}</label>
+                        <label> {(armInReserve / armOutReserve).toFixed(2) || 0}</label>
                     </Col>
                 </Row>
                 <Row>
@@ -403,7 +403,7 @@ export const Liquidity = () => {
                         <label> ArmOut Token Per ArmIn Token</label>
                     </Col>
                     <Col span={12} className="label-value">
-                        <label> {armOutReserve / armInReserve || 0}</label>
+                        <label> {(armOutReserve / armInReserve).toFixed(2) || 0}</label>
                     </Col>
                 </Row>
 

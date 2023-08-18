@@ -8,7 +8,7 @@ const nodeUrl = app.node_url;
 await __wbg_init();
 
 export const parseU64Response = (res: any) =>
-    parseInt(res.data.substr(1, res.length - 4));
+    parseInt(res.data.substr(0, res.data.length - 3));
 
 export const getArmInReserve = async () => {
     try {
@@ -16,9 +16,11 @@ export const getArmInReserve = async () => {
             await axios.get(
                 `${nodeUrl}/testnet3/program/${programID}/mapping/reserves_shadow/0u8`
             )
+            
         );
         
     } catch (error) {
+        console.log(error)
         return 0
     }
 

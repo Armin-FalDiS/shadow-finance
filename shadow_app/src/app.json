@@ -15,7 +15,7 @@
     "shadow_swap": {
         "id": "shadow_swap_test1.aleo",
         "init_function": "mint_lp_init_shadow",
-        "init_fee": 3000000,
+        "init_fee": 10000000,
         "provide_function": "mint_lp_shadow",
         "provide_fee": 3000000,
         "burn_function": "burn_lp_shadow",
