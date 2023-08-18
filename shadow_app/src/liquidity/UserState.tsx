@@ -43,8 +43,8 @@ export const UserState = ({ setLiquidityTabState }: any) => {
         {
             key: "1",
             title: "ArmInToken/ArmOutToken",
-            LP: LPBalance || 0,
-            PoolShare: ((LPShare*100).toFixed(2)+ " %")  || 0,
+            LP: "LP "+(LPBalance || 0),
+            PoolShare: ("Pool Share: "+(LPShare*100).toFixed(2)+ " %")  || 0,
         },
     ];
     const getTokenAmounts = async () => {
@@ -96,7 +96,7 @@ export const UserState = ({ setLiquidityTabState }: any) => {
         <div>
             <Row>
                 <Col>
-                    <Table pagination={false} dataSource={data}>
+                    <Table showHeader={false} pagination={false} dataSource={data}>
                         <Column title="title" dataIndex="title" key="title" />
                         <Column title="LP" dataIndex="LP" key="LP" />
                         <Column
