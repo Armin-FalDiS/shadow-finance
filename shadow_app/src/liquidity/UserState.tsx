@@ -44,7 +44,7 @@ export const UserState = ({ setLiquidityTabState }: any) => {
             key: "1",
             title: "ArmInToken/ArmOutToken",
             LP: LPBalance || 0,
-            PoolShare: LPShare || 0,
+            PoolShare: ((LPShare*100).toFixed(2)+ " %")  || 0,
         },
     ];
     const getTokenAmounts = async () => {
