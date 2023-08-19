@@ -159,8 +159,8 @@ By utilizing this function, the user can trade tokens according to the present e
 Upon completion, the token reserve mappings are updated.
 
 function variatns are :
-transition swap_to_0_shadow(receiver: address, token1In: armout_token.leo/ArmoutToken, amount1In: u64, amount0Out: u64)
-transition swap_to_1_shadow(receiver: address, token0In: armin_token.leo/ArminToken, amount0In: u64, amount1Out: u64)
+transition swap_to_0_shadow(receiver: address, token1In: armout_token.leo/ArmoutToken, amount1In: u64, amount0Out: u64)  
+transition swap_to_1_shadow(receiver: address, token0In: armin_token.leo/ArminToken, amount0In: u64, amount1Out: u64)  
 
 
 
