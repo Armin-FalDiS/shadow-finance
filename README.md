@@ -66,15 +66,15 @@ You can either execute all of the functions directly with Aleo SKD/SnarkOS and t
 ## Token Mappings
 
 ### Token Supply
-mapping supply_$token: u8 => u64;
+supply_$token: u8 => u64;
 
 To maintain a record of the overall token supply, a mapping has been implemented. Given the current absence of alternative public state types, a mapping with an input value of 0 (0u8) has been used. The maximum limit for both token supplies has been set at 100,000,000,000 units. Please note that the token supply cannot exceed this value.
 
 
 ### Program Supply
-mapping programs_$token: field => u64
+programs_$token: field => u64
 
-Shadowfi utilizes a bhp256 hashed field of the Program ID, which is temporarily substituted with a placeholder until the Aleo platform incorporates the self.parent feature. This hashed field is then mapped to an integer, allowing programs to efficiently escrow. By implementing this mechanism, Shadowfi empowers programs to securely use tokens in liquidity pools and other relevant use cases.
+ShadowFi utilizes a bhp256 hashed field of the Program ID, which is temporarily substituted with a placeholder until the Aleo platform incorporates the self.parent feature. This hashed field is then mapped to an integer, allowing programs to efficiently escrow. By implementing this mechanism, ShadowFi empowers programs to securely use tokens in liquidity pools and other relevant use cases.
 
 ## Token Functions
 
@@ -83,7 +83,7 @@ To use the swap , you must first mint tokens from the token programs or receive 
 ### Mint
 mint(owner: address, amount: u64)  
 
-this function serves as a mechanism to assign a user an arbitrary number of tokens, effectively creating a record of ownership. Currently, anyone can utilize the mint function. Once the mint process is finalized, the total supply of the token will be adjusted accordingly, reflecting the newly issued tokens. mint has an upper limit of 100000 for its input
+This function serves as a mechanism to assign a user an arbitrary number of tokens, effectively creating a record of ownership. Currently, anyone can utilize the mint function. Once the mint process is finalized, the total supply of the token will be adjusted accordingly, reflecting the newly issued tokens. mint has an upper limit of 100000 for its input
 the two variants of this functions for the tokens are:  
 mint_armin  
 mint_armout  
@@ -115,6 +115,25 @@ transfer_armout_from_program
 <p align="right">(<a href="#top">back to top</a>)</p>
 
 ## Swap Mappings
+### Reserves Shadow
+
+reserves_shadow: u8 => u64
+
+ShadowFi uses a mapping to keep a record of the current token reserves. Due to the lack of alternative public state types, a mapping with input values of 0 and 1 (0u8, 1u8) is utilized. These variables are updated whenever there is an interaction that impacts the overall balance of tokens in the Swap.
+
+### Supply Shadow
+
+supply_shadow: u8 => u64;
+
+This mapping is responsible for keeping track of the total supply of LP Tokens issued by ShadowFi. This information then can be used in determining the proportionate ownership of users in a liquidity pool. The Total Supply value is continuously updated whenever new LP Tokens are issued or when liquidity is withdrawn from the pool.
+
+
+### LP Tokens Shadow 
+
+lp_tokens_shadow: field => u64;
+
+ShadowFi uses a bhp256 hashed field of the user address, which is mapped to an integer, to securely and privately track the LP tokens issued to users.
+
 
 
 ## Swap Functions
