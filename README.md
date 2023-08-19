@@ -36,8 +36,8 @@
         <li><a href="#Getting Started">Getting Started</a></li>
       </ul>
     </li>
-<li><a href="Swap Mappings">Token Mappings </a></li>
-<li><a href="Token Mappings">Token Mappings </a></li>
+<li><a href="#Token Mappings">Token Mappings </a></li>
+<li><a href="#Swap Mappings">Swap Mappings </a></li>
 <li><a href="#Token Functions">Token Functions</a></li>
 <li><a href="#Swap Functions">Swap Functions</a></li>
 
