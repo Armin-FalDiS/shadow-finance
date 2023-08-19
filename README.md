@@ -36,7 +36,8 @@
         <li><a href="#Getting Started">Getting Started</a></li>
       </ul>
     </li>
-
+<li><a href="Swap Mappings">Token Mappings </a></li>
+<li><a href="Token Mappings">Token Mappings </a></li>
 <li><a href="#Token Functions">Token Functions</a></li>
 <li><a href="#Swap Functions">Swap Functions</a></li>
 
@@ -53,13 +54,27 @@ At present, the project supports a limited selection of two premade tokens, prim
 
 
 ## Our Vision
+Our Vision for ShadowFi is to create a decentralized and trustless AMM swap platform that places a strong emphasis on privacy and censorship resistance. Our goal is to enable users to trade and swap anonymously, without any interference or control from ShadowFi. We have designed the platform in such a way that ShadowFi has no access to user addresses and all trades are completely trustless and private.
 
 ## Prerequisites
- Snarkos
- python 3.11
+Snarkos/Aleo SDK
 
 ## Getting Started
-You can either execute all of the functions directly with aleo sdk/snarkOS and tools like aleo.tools or use shadow-cli which is provided alongside the project
+You can either execute all of the functions directly with Aleo SKD/SnarkOS and tools like aleo.tools or use Our Frontend which is provided alongside the project
+
+
+## Token Mappings
+
+### Token Supply
+mapping supply_$token: u8 => u64;
+
+To maintain a record of the overall token supply, a mapping has been implemented. Given the current absence of alternative public state types, a mapping with an input value of 0 (0u8) has been used. The maximum limit for both token supplies has been set at 100,000,000,000 units. Please note that the token supply cannot exceed this value.
+
+
+### Program Supply
+mapping programs_$token: field => u64
+
+Shadowfi utilizes a bhp256 hashed field of the Program ID, which is temporarily substituted with a placeholder until the Aleo platform incorporates the self.parent feature. This hashed field is then mapped to an integer, allowing programs to efficiently escrow. By implementing this mechanism, Shadowfi empowers programs to securely use tokens in liquidity pools and other relevant use cases.
 
 ## Token Functions
 
@@ -99,6 +114,9 @@ transfer_armout_from_program
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
+## Swap Mappings
+
+
 ## Swap Functions
 
 ### Mint LP Init Shadow
@@ -118,6 +136,12 @@ This function enables any user to deposit tokens in proportion to the current pr
 This function allows the owner of an address  to burn their LP tokens and receive Liquidity in exchange. The proportion of tokens returned will depend on the current price in the pool. Once finalized, the token reserves and LP token mappings will be updated accordingly.  
 
 ### Swap To Shadow  
+By utilizing this function, the user can trade tokens according to the present exchange ratio in the pool. The exchange ratio is determined by the constant product ratio (k = x * y).
+Upon completion, the token reserve mappings are updated.
+
+function variatns are :
+transition swap_to_0_shadow(receiver: address, token1In: armout_token.leo/ArmoutToken, amount1In: u64, amount0Out: u64)
+transition swap_to_1_shadow(receiver: address, token0In: armin_token.leo/ArminToken, amount0In: u64, amount1Out: u64)
 
 
 
