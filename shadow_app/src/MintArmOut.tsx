@@ -92,7 +92,7 @@ export const MintArmOut = () => {
 
                 {transactionId && (
                     <div>
-                        <div>{`Transaction status: ${status}`}</div>
+                        <div>{`Transaction status: ${status ?? "Error"}`}</div>
                     </div>
                 )}
             </div>

@@ -16,14 +16,11 @@ export const getArmInReserve = async () => {
             await axios.get(
                 `${nodeUrl}/testnet3/program/${programID}/mapping/reserves_shadow/0u8`
             )
-            
         );
-        
     } catch (error) {
-        console.log(error)
-        return 0
+        console.log(error);
+        return 0;
     }
-
 };
 
 export const getArmOutReserve = async () => {
@@ -33,19 +30,18 @@ export const getArmOutReserve = async () => {
                 `${nodeUrl}/testnet3/program/${programID}/mapping/reserves_shadow/1u8`
             )
         );
-        
     } catch (error) {
-        return 0
+        return 0;
     }
-
 };
 
 export const getLPTokenBalance = async (address: string) => {
-    const hashed_address = bhp256(address);
+    const hashedAddress = bhp256(address);
+
     try {
         return parseU64Response(
             await axios.get(
-                `${nodeUrl}/testnet3/program/${programID}/mapping/lp_tokens_shadow/${hashed_address}`
+                `${nodeUrl}/testnet3/program/${programID}/mapping/lp_tokens_shadow/${hashedAddress}`
             )
         );
     } catch (error) {
@@ -60,9 +56,7 @@ export const getLPTokenTotalSupply = async () => {
                 `${nodeUrl}/testnet3/program/${programID}/mapping/supply_shadow/0u8`
             )
         );
-        
     } catch (error) {
-        return 0
+        return 0;
     }
-
 };

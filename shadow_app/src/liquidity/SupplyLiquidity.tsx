@@ -1,22 +1,42 @@
 import React, { useEffect, useState } from "react";
-import { Button, Cascader, InputNumber, Form, Row, Col } from "antd";
+import { Button, Cascader, InputNumber, Form, Col, Row } from "antd";
 import { useWallet } from "@demox-labs/aleo-wallet-adapter-react";
-import app from "./app.json";
+import { getArmInReserve, getArmOutReserve } from "../general";
+
+import app from "../app.json";
 import {
     WalletAdapterNetwork,
     WalletNotConnectedError,
     Transaction,
 } from "@demox-labs/aleo-wallet-adapter-base";
-import { getArmInReserve, getArmOutReserve } from "./general";
 
 interface Token {
     value: string;
     label: string;
 }
 
-const Swap = () => {
+export const SupplyLiquidity = ({ setShowMe }: any) => {
     const { wallet, publicKey, requestRecords, requestTransaction } =
         useWallet();
+
+    const [programId] = useState(app.shadow_swap.id);
+    const [functionName] = useState(app.shadow_swap.provide_function);
+    const [fee] = useState(app.shadow_swap.provide_fee);
+    const [upperToken, setUpperToken] = useState<any>();
+    const [lowerToken, setLowerToken] = useState<any>();
+    const [upperTokenAmount, setUpperTokenAmount] = useState(0);
+    const [lowerTokenAmount, setLowerTokenAmount] = useState(0);
+    const [upperBalance, setUpperBalance] = useState(0);
+    const [lowerSpendable, setLowerSpendable] = useState(0);
+    const [upperSpendable, setUpperSpendable] = useState(0);
+    const [lowerBalanace, setLowerBalance] = useState(0);
+    const [armInReserve, setArmInReserve] = useState(0);
+    const [armOutReserve, setArmOutReserve] = useState(0);
+    const [ratio, setRatio] = useState(0);
+    const [LPBalance, setLPBalance] = useState<number>(0);
+    const [totalLPSupply, setTotalLPSupply] = useState<number>(0);
+    const [LPShare, setLPShare] = useState<number>(0);
+    const [transactionId, setTransactionId] = useState<string>();
 
     const tokens: Token[] = [
         {
@@ -28,36 +48,31 @@ const Swap = () => {
             label: "ArmOut Token",
         },
     ];
+
+    const fetchTokenAmounts = async () => {
+        if (publicKey) {
+            // const LPBalance = await getLPTokenBalance(publicKey);
+            // setLPBalance(LPBalance);
+            // const totalLPSupply = await getLPTokenTotalSupply();
+            // settotalLPSupply(totalLPSupply);
+            // const lpShare = LPBalance / totalLPSupply;
+            // setLPShare(lpShare);
+            const armInReserve = await getArmInReserve();
+            setArmInReserve(armInReserve);
+            const armOutReserve = await getArmOutReserve();
+            setArmOutReserve(armOutReserve);
+            setRatio(armInReserve / armOutReserve);
+        }
+    };
+
+    useEffect(() => {
+        fetchTokenAmounts();
+    }, []);
+
     enum Tokens {
         ArmInToken = "ArmIn Token",
         ArmOutToken = "ArmOut Token",
     }
-
-    const [programId] = useState(app.shadow_swap.id);
-    const [functionName, setFunctionName] = useState(
-        app.shadow_swap.swap_to_0_function
-    );
-    const [fee] = useState(app.shadow_swap.swap_to_0_fee);
-    const [upperToken, setUpperToken] = useState<any>();
-    const [lowerToken, setLowerToken] = useState<any>();
-    const [upperTokenAmount, setUpperTokenAmount] = useState(0);
-    const [lowerTokenAmount, setLowerTokenAmount] = useState(0);
-    const [upperBalance, setUpperBalance] = useState(0);
-    const [lowerSpendable, setLowerSpendable] = useState(0);
-    const [upperSpendable, setUpperSpendable] = useState(0);
-    const [lowerBalanace, setLowerBalance] = useState(0);
-    const [armInReserve, setArmInReserve] = useState(0);
-    const [armOutReserve, setArmOutReserve] = useState(0);
-    const [transactionId, setTransactionId] = useState<string>();
-    useEffect(() => {
-        const setData = async () => {
-            const armInReserve = await getArmInReserve();
-            const armOutReserve = await getArmOutReserve();
-            setArmInReserve(armInReserve);
-            setArmOutReserve(armOutReserve);
-        };
-        setData();
-    }, []);
 
     const updateUpperBalance = async () => {
         let program = "";
@@ -85,6 +100,7 @@ const Swap = () => {
             setUpperSpendable(Math.max(...amounts));
         }
     };
+
     const updateLowerBalance = async () => {
         let program = "";
 
@@ -93,6 +109,7 @@ const Swap = () => {
             : (program = app.armout_token.id);
 
         if (!publicKey) throw new WalletNotConnectedError();
+
         if (requestRecords != null) {
             let records = await requestRecords(program);
             records = records.filter((record) => {
@@ -103,7 +120,6 @@ const Swap = () => {
                     record.data.amount.substr(0, record.data.amount.length - 11)
                 );
             });
-
             let sum = 0;
             amounts.forEach((num) => {
                 sum += num;
@@ -112,47 +128,41 @@ const Swap = () => {
             setLowerSpendable(Math.max(...amounts));
         }
     };
+
     const onChangeUpper = (value: any) => {
         if (value != null) setUpperToken(value);
     };
+
     const onChangeUpperAmount = (value: number | null) => {
         if (value != null) setUpperTokenAmount(value);
         if (upperToken === Tokens.ArmInToken) {
-            setLowerTokenAmount(
-                (armOutReserve * upperTokenAmount) /
-                    (armInReserve - upperTokenAmount)
-            );
+            setLowerTokenAmount(upperTokenAmount * (1 / ratio));
         } else {
-            setLowerTokenAmount(
-                (armInReserve * upperTokenAmount) /
-                    (armOutReserve + upperTokenAmount)
-            );
+            setLowerTokenAmount(upperTokenAmount * ratio);
         }
     };
+
     const onChangeLowerAmount = (value: number | null) => {
         if (value != null) setLowerTokenAmount(value);
         if (lowerToken === Tokens.ArmInToken) {
-            setUpperTokenAmount(
-                (armOutReserve * lowerTokenAmount) /
-                    (armInReserve - lowerTokenAmount)
-            );
+            setUpperTokenAmount(lowerTokenAmount * (1 / ratio));
         } else {
-            setUpperTokenAmount(
-                (armInReserve * lowerTokenAmount) /
-                    (armOutReserve + lowerTokenAmount)
-            );
+            setUpperTokenAmount(lowerTokenAmount * ratio);
         }
     };
+
     const onChangeLower = (value: any) => {
         setLowerToken(value);
     };
-    function tryParseJSON(input: string) {
+
+    const tryParseJSON = (input: string) => {
         try {
             return JSON.parse(input);
         } catch (error) {
             return input;
         }
-    }
+    };
+
     const getIndexOfHighestRecord = (records: any[]) => {
         const amounts = records.map((record) => {
             return parseInt(
@@ -179,22 +189,21 @@ const Swap = () => {
             });
             const arminSpendableIndex = getIndexOfHighestRecord(armInRecords);
             const armOutSpendableIndex = getIndexOfHighestRecord(armOutRecords);
-
-            if (upperToken == Tokens.ArmInToken) {
-                setFunctionName(app.shadow_swap.swap_to_1_function);
+            if (upperToken === Tokens.ArmInToken) {
                 inputsArray = [
                     publicKey,
                     armInRecords[arminSpendableIndex],
                     upperTokenAmount + "u64",
-                    lowerTokenAmount + "u64",
+                    armOutRecords[armOutSpendableIndex],
+                    lowerTokenAmount,
                 ];
-            } else if (upperToken == Tokens.ArmInToken) {
-                setFunctionName(app.shadow_swap.swap_to_0_function);
+            } else if (upperToken === Tokens.ArmOutToken) {
                 inputsArray = [
                     publicKey,
-                    armOutRecords[armOutSpendableIndex],
-                    upperTokenAmount + "u64",
+                    armInRecords[arminSpendableIndex],
                     lowerTokenAmount + "u64",
+                    armOutRecords[armOutSpendableIndex],
+                    upperTokenAmount,
                 ];
             }
 
@@ -218,17 +227,42 @@ const Swap = () => {
     };
 
     return (
-        <Form>
+        <>
+            <Row>
+                <Col>
+                    <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="32"
+                        height="32"
+                        viewBox="0 0 32 32"
+                        fill="none"
+                        onClick={() => setShowMe(false)}
+                    >
+                        <path
+                            d="M25.3337 16H6.66699"
+                            stroke="white"
+                            strokeWidth="2"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                        />
+                        <path
+                            d="M16.0003 25.3334L6.66699 16.0001L16.0003 6.66675"
+                            stroke="white"
+                            strokeWidth="2"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                        />
+                    </svg>
+                </Col>
+            </Row>
             <Form className="token-box-container">
                 <Row>
                     <Col span={24}>
                         <InputNumber
+                            bordered={false}
                             size="large"
                             onChange={onChangeUpperAmount}
                             value={upperTokenAmount}
-                            min={0}
-                            max={upperSpendable}
-                            bordered={false}
                             addonBefore={
                                 <Cascader
                                     options={tokens}
@@ -242,7 +276,6 @@ const Swap = () => {
                         />
                     </Col>
                 </Row>
-
                 <br />
 
                 <Form hidden={!upperToken}>
@@ -278,19 +311,15 @@ const Swap = () => {
                     </Row>
                 </Form>
             </Form>
-
             <br />
-
             <Form className="token-box-container">
                 <Row>
                     <Col span={24}>
                         <InputNumber
-                            size="large"
                             onChange={onChangeLowerAmount}
                             value={lowerTokenAmount}
-                            min={0}
-                            max={lowerSpendable}
                             bordered={false}
+                            size="large"
                             addonBefore={
                                 <Cascader
                                     options={tokens}
@@ -304,8 +333,6 @@ const Swap = () => {
                         />
                     </Col>
                 </Row>
-
-                <br />
 
                 <Form hidden={!lowerToken}>
                     <Row>
@@ -340,9 +367,7 @@ const Swap = () => {
                     </Row>
                 </Form>
             </Form>
-
             <br />
-
             <Row>
                 <Col span={12} className="label-key">
                     <label>Transaction Fee</label>
@@ -353,20 +378,14 @@ const Swap = () => {
             </Row>
             <Row>
                 <Col span={12} className="label-key">
-                    <label>Slippage</label>
-                </Col>
-                <Col span={12} className="label-value">
-                    <label>1.5%</label>
-                </Col>
-            </Row>
-            <Row>
-                <Col span={12} className="label-key">
-                    <label>Exhange Rate</label>
+                    <label>Share of Pool: </label>
                 </Col>
                 <Col span={12} className="label-value">
                     <label>
-                        {" "}
-                        {(armInReserve / armOutReserve).toFixed(2) || 0}
+                        {((upperTokenAmount * lowerTokenAmount) /
+                            armInReserve) *
+                            armOutReserve || 0}
+                        %
                     </label>
                 </Col>
             </Row>
@@ -379,21 +398,22 @@ const Swap = () => {
                         size="large"
                         type="primary"
                         shape="round"
-                        onClick={handleSubmit}
                         disabled={
-                            !upperToken ||
+                            !publicKey ||
+                            !functionName ||
+                            !fee ||
                             !lowerToken ||
+                            !upperToken ||
                             upperToken == lowerToken ||
                             !upperTokenAmount ||
                             !lowerTokenAmount
                         }
+                        onClick={handleSubmit}
                     >
-                        Swap
+                        Supply
                     </Button>
                 </Col>
             </Row>
-        </Form>
+        </>
     );
 };
-
-export default Swap;

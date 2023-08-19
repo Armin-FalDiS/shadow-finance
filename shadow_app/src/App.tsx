@@ -1,5 +1,8 @@
 import { useMemo, useState } from "react";
-import { WalletProvider, useWallet } from "@demox-labs/aleo-wallet-adapter-react";
+import {
+    WalletProvider,
+    useWallet,
+} from "@demox-labs/aleo-wallet-adapter-react";
 import {
     WalletModalProvider,
     WalletMultiButton,
@@ -12,12 +15,11 @@ import {
 } from "@demox-labs/aleo-wallet-adapter-base";
 import { MintArmOut } from "./MintArmOut";
 import Swap from "./Swap";
-import { Liquidity } from "./liquidity/Liquidity";
 import { Col, Radio, type RadioChangeEvent, Row } from "antd";
 
 import "@demox-labs/aleo-wallet-adapter-reactui/styles.css";
 import "./App.css";
-import { publicKey } from "js-snarkvm";
+import { Liquidity } from "./liquidity";
 
 enum NavTab {
     "Swap",

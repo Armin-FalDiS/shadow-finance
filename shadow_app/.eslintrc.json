@@ -24,6 +24,7 @@
         "@typescript-eslint/strict-boolean-expressions": "off",
         "@typescript-eslint/no-misused-promises": "off",
         "@typescript-eslint/restrict-plus-operands": "off",
+        "react-hooks/exhaustive-deps": "off",
         "eqeqeq": "off",
         "prettier/prettier": "warn"
     }
