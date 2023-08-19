@@ -105,3 +105,8 @@ label {
 .ant-select-clear {
     visibility: hidden;
 }
+
+.ender-col {
+    display: flex;
+    justify-content: end;
+}

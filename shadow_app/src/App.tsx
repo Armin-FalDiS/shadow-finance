@@ -17,6 +17,7 @@ import { Col, Radio, type RadioChangeEvent, Row } from "antd";
 
 import "@demox-labs/aleo-wallet-adapter-reactui/styles.css";
 import "./App.css";
+import { publicKey } from "js-snarkvm";
 
 enum NavTab {
     "Swap",
@@ -32,7 +33,7 @@ export const App = () => {
         ],
         []
     );
-    const { connected } = useWallet();
+    const { publicKey } = useWallet();
     const [tab, setTab] = useState(NavTab.Swap);
 
     const handleNavigationTabChange = (event: RadioChangeEvent) => {
@@ -89,7 +90,7 @@ export const App = () => {
                     </Row>
                 </header>
 
-                <aside hidden={!connected}>
+                <aside hidden={!publicKey}>
                     <Row>
                         <Col>
                             <MintArmIn />
