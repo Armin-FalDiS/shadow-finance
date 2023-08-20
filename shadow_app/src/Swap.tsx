@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Button, Cascader, InputNumber, Form, Row, Col } from "antd";
 import { useWallet } from "@demox-labs/aleo-wallet-adapter-react";
-import app from "./app.json";
+import app from "../app.json";
 import {
     WalletAdapterNetwork,
     WalletNotConnectedError,

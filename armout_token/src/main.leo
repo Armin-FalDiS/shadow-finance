@@ -1,4 +1,4 @@
-program armout_token.aleo {
+program armout_token_v0.aleo {
     mapping supply_armout: u8 => u64;
     mapping programs_armout: field => u64;
 

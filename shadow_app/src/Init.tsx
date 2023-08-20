@@ -8,7 +8,7 @@ import {
     WalletAdapterNetwork,
     WalletNotConnectedError,
 } from "@demox-labs/aleo-wallet-adapter-base";
-import app from "./app.json";
+import app from "../app.json";
 
 function tryParseJSON(input: string) {
     try {

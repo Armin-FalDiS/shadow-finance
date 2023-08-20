@@ -1,5 +1,5 @@
 import __wbg_init, { bhp256 } from "js-snarkvm";
-import app from "./app.json";
+import app from "../app.json";
 import axios from "axios";
 
 const programID = app.shadow_swap.id;
