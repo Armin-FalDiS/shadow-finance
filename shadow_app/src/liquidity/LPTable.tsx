@@ -6,6 +6,7 @@ import {
     Transaction,
 } from "@demox-labs/aleo-wallet-adapter-base";
 import { useEffect, useState } from "react";
+import { getLPTokenTotalSupply } from "../general";
 
 import app from "../app.json";
 import {
@@ -17,17 +18,15 @@ const { Column } = Table;
 
 export const LPTable = () => {
     const { wallet, publicKey, requestTransaction } = useWallet();
-    const [transactionId, setTransactionId] = useState<string>();
     const [LPBalance, setLPBalance] = useState<number>(0);
-    const [totalLPSupply, setTotalLPSupply] = useState<number>(0);
+
     const [LPShare, setLPShare] = useState<number>(0);
 
     const fetchTokenAmounts = async () => {
         if (publicKey) {
             const LPBalance = await getLPTokenBalance(publicKey);
             setLPBalance(LPBalance);
-            // const totalLPSupply = await getLPTokenTotalSupply();
-            // settotalLPSupply(totalLPSupply);
+            const totalLPSupply = await getLPTokenTotalSupply();
             const lpShare = LPBalance / totalLPSupply;
             setLPShare(lpShare);
         }
@@ -79,9 +78,9 @@ export const LPTable = () => {
             parsedInputs,
             app.shadow_swap.burn_fee
         );
-        const txId = await requestTransaction(aleoTransaction);
+      await requestTransaction(aleoTransaction);
 
-        setTransactionId(txId);
+
     };
 
     const data = [
@@ -90,7 +89,7 @@ export const LPTable = () => {
             pairName: "ArmIn / ArmOut",
             stats: (
                 <>
-                    <label>LP: {LPBalance || "??"}</label>
+                    <label>LP: {LPBalance + " " || "?? "}</label>
                     <label>
                         Pool Share:
                         {(LPShare ? (LPShare * 100).toFixed(2) : "??") + "%"}
