@@ -247,7 +247,7 @@ const Swap = () => {
 
     return (
         <Form>
-            <Form className="token-box-container">
+            <section className="token-box-container">
                 <Row>
                     <Col span={24}>
                         <InputNumber
@@ -273,7 +273,7 @@ const Swap = () => {
 
                 <br />
 
-                <Form hidden={!upperToken}>
+                <div hidden={!upperToken}>
                     <Row>
                         <Col span={6} className="label-key">
                             <label>Total Balance</label>
@@ -304,12 +304,12 @@ const Swap = () => {
                             </Button>
                         </Col>
                     </Row>
-                </Form>
-            </Form>
+                </div>
+            </section>
 
             <br />
 
-            <Form className="token-box-container">
+            <section className="token-box-container">
                 <Row>
                     <Col span={24}>
                         <InputNumber
@@ -335,7 +335,7 @@ const Swap = () => {
 
                 <br />
 
-                <Form hidden={!lowerToken}>
+                <div hidden={!lowerToken}>
                     <Row>
                         <Col span={6} className="label-key">
                             <label>Total Balance</label>
@@ -366,8 +366,8 @@ const Swap = () => {
                             </Button>
                         </Col>
                     </Row>
-                </Form>
-            </Form>
+                </div>
+            </section>
 
             <br />
 
