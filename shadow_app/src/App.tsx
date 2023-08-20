@@ -1,8 +1,5 @@
 import { useMemo, useState } from "react";
-import {
-    WalletProvider,
-    useWallet,
-} from "@demox-labs/aleo-wallet-adapter-react";
+import { WalletProvider } from "@demox-labs/aleo-wallet-adapter-react";
 import {
     WalletModalProvider,
     WalletMultiButton,
@@ -35,7 +32,6 @@ export const App = () => {
         ],
         []
     );
-    const { publicKey } = useWallet();
     const [tab, setTab] = useState(NavTab.Swap);
 
     const handleNavigationTabChange = (event: RadioChangeEvent) => {
@@ -56,7 +52,7 @@ export const App = () => {
                             span={8}
                             style={{ display: "flex", justifyContent: "start" }}
                         >
-                            <div style={{ color: "red" }}>ShadowFi</div>
+                            <img src="logo.png" alt="ShadowFi" />
                         </Col>
 
                         <Col
@@ -92,7 +88,7 @@ export const App = () => {
                     </Row>
                 </header>
 
-                <aside hidden={!publicKey}>
+                <aside>
                     <Row>
                         <Col>
                             <MintArmIn />
