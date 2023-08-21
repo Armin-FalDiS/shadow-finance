@@ -28,12 +28,11 @@
 <details>
   <summary>Table of Contents</summary>
   <ol>
+    <li><a href="#Getting Started">Getting Started</a></li>
     <li>
       <a href="#About The Project">About The Project</a>
             <ul>
-        <li><a href="#Our Vision">Our Vision</a></li>    
-        <li><a href="#Prerequisites">Prerequisites</a></li>
-        <li><a href="#Getting Started">Getting Started</a></li>
+        <li><a href="#Our Vision">Our Vision</a></li>
       </ul>
     </li>
 <li><a href="#Token Mappings">Token Mappings </a></li>
@@ -43,6 +42,11 @@
 
   </ol>
 </details>
+
+## Getting Started
+You can reach the frontend from [here](https://github.com/Armin-FalDiS/shadowfi). You can also execute all of the functions directly with Aleo SDK/SnarkOS and tools like aleo.tools.
+
+There is also [this video](https://drive.google.com/file/d/1X_f8PVwt4QtFoVI6dcATeXuhPtdEsbkU/view) that you may watch which showcases the project.
 
 ## About The Project
 
@@ -55,12 +59,6 @@ At present, the project supports a limited selection of two premade tokens, prim
 
 ## Our Vision
 Our Vision for ShadowFi is to create a decentralized and trustless AMM swap platform that places a strong emphasis on privacy and censorship resistance. Our goal is to enable users to trade and swap anonymously, without any interference or control from ShadowFi. We have designed the platform in such a way that ShadowFi has no access to user addresses and all trades are completely trustless and private.
-
-## Prerequisites
-Snarkos/Aleo SDK
-
-## Getting Started
-You can either execute all of the functions directly with Aleo SKD/SnarkOS and tools like aleo.tools or use Our Frontend which is provided alongside the project
 
 
 ## Token Mappings
