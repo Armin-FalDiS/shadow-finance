@@ -44,7 +44,7 @@
 </details>
 
 ## Getting Started
-You can find the frontend [here](https://armin-faldis.github.io/shadowfi/). You can also execute all of the functions directly with Aleo SDK/SnarkOS and tools like aleo.tools.
+You can find the frontend [here](https://shadowfi.xyz). You can also execute all of the functions directly with Aleo SDK/SnarkOS and tools like aleo.tools.
 
 There is also [this video](https://drive.google.com/file/d/1X_f8PVwt4QtFoVI6dcATeXuhPtdEsbkU/view) that you may watch which showcases the project.
 
