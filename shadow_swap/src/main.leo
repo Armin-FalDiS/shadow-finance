@@ -97,8 +97,8 @@ program shadow_swap_v0.aleo {
         let reserve0: u64 = Mapping::get(reserves_shadow, 0u8);
         let reserve1: u64 = Mapping::get(reserves_shadow, 1u8);
 
-        assert(amount0 <= (lp / total_supply) * reserve0);
-        assert(amount1 <= (lp / total_supply) * reserve1);
+        assert(amount0 <= (lp * reserve0) / total_supply);
+        assert(amount1 <= (lp * reserve1) / total_supply);
 
         Mapping::set(reserves_shadow, 0u8, reserve0 - amount0);
         Mapping::set(reserves_shadow, 1u8, reserve1 - amount1);
