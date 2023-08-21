@@ -1,10 +1,6 @@
 {
-    "program": "armin_token.aleo",
+    "program": "armin_token_v0.aleo",
     "version": "0.0.0",
-    "description": "",
-    "development": {
-        "private_key": "APrivateKey1zkpK57oNNjUaro954X1kptF3boydAiE67zq3ugNZamMgZoE",
-        "address": "aleo1nfd57vm8rvtqxxccmpypzpv5ne8lgwrpff5ppa4554hhqevvjsfqz603m2"
-    },
+    "description": "Fictional token for Shadow Finance (Swap)",
     "license": "MIT"
 }

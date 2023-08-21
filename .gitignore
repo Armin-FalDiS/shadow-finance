@@ -2,3 +2,5 @@ outputs/
 build/
 .vscode
 .ledger-3-0
+node_modules/
+dist/

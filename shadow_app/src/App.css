@@ -1,0 +1,139 @@
+* {
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+}
+
+main {
+    border-radius: 32px;
+    background: rgba(0, 0, 0, 0.45);
+    backdrop-filter: blur(42px);
+    padding: 5%;
+    width: 50%;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+aside {
+    float: left;
+    margin: 2%;
+    padding: 1%;
+}
+
+.ant-radio-button-wrapper {
+    background-color: transparent !important;
+    color: white !important;
+}
+
+.ant-radio-button-wrapper-checked {
+    background-color: #1c14ff !important;
+    color: white !important;
+}
+
+.ant-radio-group {
+    background-color: #0000000d;
+    padding: 20px;
+    border-radius: 20px;
+}
+
+.ant-btn-primary {
+    background-color: #ec8924;
+    color: #0b0b0e;
+    border: transparent;
+    width: 100%;
+}
+
+.ant-btn-primary:disabled {
+    background-color: #a4703c;
+    color: #424247;
+    width: 100%;
+}
+
+.ant-btn-default {
+    background-color: #ec8924;
+    color: #0b0b0e;
+    border: transparent;
+}
+
+.ant-btn-default:disabled {
+    background-color: #a4703c;
+    color: #424247;
+}
+
+label {
+    color: white;
+}
+
+.label-key {
+    text-align: start;
+    opacity: 0.7;
+}
+
+.label-value {
+    text-align: end;
+}
+
+.token-box-container {
+    border-radius: 20px;
+    border: 1px solid #ffffff33;
+    background-color: #ffffff0d;
+    padding: 5%;
+    align-items: center;
+    align-self: stretch;
+}
+
+.ant-select-selector {
+    background-color: #1162f5 !important;
+    color: #ffffff !important;
+    border: transparent !important;
+}
+
+.ant-select-selection-placeholder {
+    color: #ffffff !important;
+}
+
+.ant-input-number-group-wrapper {
+    width: 100%;
+}
+
+.ant-input-number-group-addon {
+    border: transparent !important;
+}
+
+.ant-input-number-input {
+    color: #ffffff !important;
+}
+
+.ant-select-clear {
+    visibility: hidden;
+}
+
+.ender-col {
+    display: flex;
+    justify-content: end;
+}
+
+.token-pair-container {
+    display: flex;
+    padding: 12px;
+    justify-content: center;
+    align-items: center;
+    gap: 24px;
+    border-radius: 16px;
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    background: rgba(255, 255, 255, 0.05);
+}
+
+.ant-table {
+    background-color: transparent !important;
+    color: white !important;
+}
+
+.ant-table-cell-row-hover {
+    background-color: transparent !important;
+}
+
+.centralized-col {
+    display: flex;
+    justify-content: center;
+}
