@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useWallet } from "@demox-labs/aleo-wallet-adapter-react";
-import { Button } from "antd";
+import { Button, Form } from "antd";
 import { PlusCircleOutlined } from "@ant-design/icons";
 import {
     Transaction,
@@ -77,25 +77,23 @@ export const MintArmOut = () => {
     };
 
     return (
-        <div>
-            <div>
-                <Button
-                    icon={<PlusCircleOutlined />}
-                    type="link"
-                    shape="round"
-                    size="large"
-                    onClick={handleSubmit}
-                    style={{ color: "white" }}
-                >
-                    ArmOut Token
-                </Button>
+        <Form disabled={!publicKey}>
+            <Button
+                icon={<PlusCircleOutlined />}
+                type="link"
+                shape="round"
+                size="large"
+                onClick={handleSubmit}
+                style={{ color: "white" }}
+            >
+                ArmOut Token
+            </Button>
 
-                {transactionId && (
-                    <div>
-                        <div style={{ color: "white" }}>{`Transaction status: ${status ?? "Error"}`}</div>
-                    </div>
-                )}
-            </div>
-        </div>
+            {transactionId && (
+                <div>
+                    <div style={{ color: "white" }}>{`Transaction status: ${status ?? "Error"}`}</div>
+                </div>
+            )}
+        </Form>
     );
 };
