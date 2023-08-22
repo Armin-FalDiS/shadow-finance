@@ -39,76 +39,78 @@ export const App = () => {
     };
 
     return (
-        <WalletProvider
-            wallets={wallets}
-            decryptPermission={DecryptPermission.UponRequest}
-            network={WalletAdapterNetwork.Testnet}
-            autoConnect
-        >
-            <WalletModalProvider>
-                <header style={{ margin: "3%" }}>
-                    <Row align="middle">
-                        <Col
-                            span={8}
-                            style={{ display: "flex", justifyContent: "start" }}
-                        >
-                            <img src="logo.png" alt="ShadowFi" />
-                        </Col>
+        <div className="wrapper">
+            <WalletProvider
+                wallets={wallets}
+                decryptPermission={DecryptPermission.UponRequest}
+                network={WalletAdapterNetwork.Testnet}
+                autoConnect
+            >
+                <WalletModalProvider>
+                    <header style={{ margin: "3%" }}>
+                        <Row align="middle">
+                            <Col
+                                span={8}
+                                style={{ display: "flex", justifyContent: "start" }}
+                            >
+                                <img src="logo.png" alt="ShadowFi" />
+                            </Col>
 
-                        <Col
-                            span={8}
-                            style={{
-                                display: "flex",
-                                justifyContent: "center",
-                            }}
-                        >
-                            <nav>
-                                <Radio.Group
-                                    optionType="button"
-                                    size="large"
-                                    onChange={handleNavigationTabChange}
-                                    value={tab}
-                                >
-                                    <Radio.Button value={NavTab.Swap}>
-                                        Swap
-                                    </Radio.Button>
-                                    <Radio.Button value={NavTab.Liquidity}>
-                                        Liquidity
-                                    </Radio.Button>
-                                </Radio.Group>
-                            </nav>
-                        </Col>
+                            <Col
+                                span={8}
+                                style={{
+                                    display: "flex",
+                                    justifyContent: "center",
+                                }}
+                            >
+                                <nav>
+                                    <Radio.Group
+                                        optionType="button"
+                                        size="large"
+                                        onChange={handleNavigationTabChange}
+                                        value={tab}
+                                    >
+                                        <Radio.Button value={NavTab.Swap}>
+                                            Swap
+                                        </Radio.Button>
+                                        <Radio.Button value={NavTab.Liquidity}>
+                                            Liquidity
+                                        </Radio.Button>
+                                    </Radio.Group>
+                                </nav>
+                            </Col>
 
-                        <Col
-                            span={8}
-                            style={{ display: "flex", justifyContent: "end" }}
-                        >
-                            <WalletMultiButton />
-                        </Col>
-                    </Row>
-                </header>
+                            <Col
+                                span={8}
+                                style={{ display: "flex", justifyContent: "end" }}
+                            >
+                                <WalletMultiButton />
+                            </Col>
+                        </Row>
+                    </header>
 
-                <aside>
-                    <Row>
-                        <Col>
-                            <MintArmIn />
-                        </Col>
-                    </Row>
+                    <aside>
+                        <Row>
+                            <Col>
+                                <MintArmIn />
+                            </Col>
+                        </Row>
 
-                    <br />
+                        <br />
 
-                    <Row>
-                        <Col>
-                            <MintArmOut />
-                        </Col>
-                    </Row>
-                </aside>
+                        <Row>
+                            <Col>
+                                <MintArmOut />
+                            </Col>
+                        </Row>
+                    </aside>
 
-                <main>
-                    {tab == NavTab.Swap && <Swap />}
-                    {tab == NavTab.Liquidity && <Liquidity />}
-                </main>
-            </WalletModalProvider>
-        </WalletProvider>
+                    <main>
+                        {tab == NavTab.Swap && <Swap />}
+                        {tab == NavTab.Liquidity && <Liquidity />}
+                    </main>
+                </WalletModalProvider>
+            </WalletProvider>
+        </div>
     );
 };
