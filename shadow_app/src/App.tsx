@@ -39,7 +39,6 @@ export const App = () => {
     };
 
     return (
-        <div className="wrapper">
         <WalletProvider
             wallets={wallets}
             decryptPermission={DecryptPermission.UponRequest}
@@ -56,54 +55,54 @@ export const App = () => {
                             <img src="logo.png" alt="ShadowFi" />
                         </Col>
 
-                            <Col
-                                span={8}
-                                style={{
-                                    display: "flex",
-                                    justifyContent: "center",
-                                }}
-                            >
-                                <nav>
-                                    <Radio.Group
-                                        optionType="button"
-                                        size="large"
-                                        onChange={handleNavigationTabChange}
-                                        value={tab}
-                                    >
-                                        <Radio.Button value={NavTab.Swap}>
-                                            Swap
-                                        </Radio.Button>
-                                        <Radio.Button value={NavTab.Liquidity}>
-                                            Liquidity
-                                        </Radio.Button>
-                                    </Radio.Group>
-                                </nav>
-                            </Col>
+                        <Col
+                            span={8}
+                            style={{
+                                display: "flex",
+                                justifyContent: "center",
+                            }}
+                        >
+                            <nav>
+                                <Radio.Group
+                                    optionType="button"
+                                    size="large"
+                                    onChange={handleNavigationTabChange}
+                                    value={tab}
+                                >
+                                    <Radio.Button value={NavTab.Swap}>
+                                        Swap
+                                    </Radio.Button>
+                                    <Radio.Button value={NavTab.Liquidity}>
+                                        Liquidity
+                                    </Radio.Button>
+                                </Radio.Group>
+                            </nav>
+                        </Col>
 
-                            <Col
-                                span={8}
-                                style={{ display: "flex", justifyContent: "end" }}
-                            >
-                                <WalletMultiButton />
-                            </Col>
-                        </Row>
-                    </header>
+                        <Col
+                            span={8}
+                            style={{ display: "flex", justifyContent: "end" }}
+                        >
+                            <WalletMultiButton />
+                        </Col>
+                    </Row>
+                </header>
 
-                    <aside>
-                        <Row>
-                            <Col>
-                                <MintArmIn />
-                            </Col>
-                        </Row>
+                <aside>
+                    <Row>
+                        <Col>
+                            <MintArmIn />
+                        </Col>
+                    </Row>
 
-                        <br />
+                    <br />
 
-                        <Row>
-                            <Col>
-                                <MintArmOut />
-                            </Col>
-                        </Row>
-                    </aside>
+                    <Row>
+                        <Col>
+                            <MintArmOut />
+                        </Col>
+                    </Row>
+                </aside>
 
                 <main>
                     {tab == NavTab.Swap && <Swap />}
@@ -111,6 +110,5 @@ export const App = () => {
                 </main>
             </WalletModalProvider>
         </WalletProvider>
-        </div>
     );
 };
