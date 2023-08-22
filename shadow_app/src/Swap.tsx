@@ -8,6 +8,7 @@ import {
     Transaction,
 } from "@demox-labs/aleo-wallet-adapter-base";
 import { getArmInReserve, getArmOutReserve } from "./general";
+import { TokenBalanceBox } from "./TokenBalanceBox";
 
 interface Token {
     value: string;
@@ -148,8 +149,8 @@ const Swap = () => {
                 setLowerTokenAmount(
                     (armOutReserve -
                         (armInReserve * armOutReserve) /
-                            (armInReserve + value)) *
-                        0.98
+                        (armInReserve + value)) *
+                    0.98
                 );
             } else if (
                 lowerToken?.[0] === Tokens.ArmInToken &&
@@ -158,8 +159,8 @@ const Swap = () => {
                 setLowerTokenAmount(
                     (armInReserve -
                         (armInReserve * armOutReserve) /
-                            (armOutReserve + value)) *
-                        0.98
+                        (armOutReserve + value)) *
+                    0.98
                 );
             }
         }
@@ -174,7 +175,7 @@ const Swap = () => {
                 setUpperTokenAmount(
                     ((armInReserve * armOutReserve) / (armOutReserve - value) -
                         armInReserve) *
-                        1.01
+                    1.01
                 );
             } else if (
                 lowerToken?.[0] === Tokens.ArmInToken &&
@@ -183,7 +184,7 @@ const Swap = () => {
                 setUpperTokenAmount(
                     ((armInReserve * armOutReserve) / (armInReserve - value) -
                         armOutReserve) *
-                        1.01
+                    1.01
                 );
             }
         }
@@ -264,7 +265,7 @@ const Swap = () => {
     };
 
     return (
-        <Form>
+        <Form disabled={!publicKey}>
             <section className="token-box-container">
                 <Row>
                     <Col span={24}>
@@ -291,38 +292,12 @@ const Swap = () => {
 
                 <br />
 
-                <div hidden={!upperToken}>
-                    <Row>
-                        <Col span={6} className="label-key">
-                            <label>Total Balance</label>
-                        </Col>
-                        <Col span={6} className="label-value">
-                            <label>{upperBalance}</label>
-                        </Col>
-                    </Row>
-                    <Row>
-                        <Col span={6} className="label-key">
-                            <label>Spendable Balance</label>
-                        </Col>
-                        <Col span={6} className="label-value">
-                            <label>{upperSpendable}</label>
-                        </Col>
-                    </Row>
-
-                    <br />
-
-                    <Row>
-                        <Col span={12} style={{ textAlign: "center" }}>
-                            <Button
-                                onClick={async () => {
-                                    await updateUpperBalance();
-                                }}
-                            >
-                                Update Balance
-                            </Button>
-                        </Col>
-                    </Row>
-                </div>
+                <TokenBalanceBox
+                    token={upperToken}
+                    total={upperBalance}
+                    spendable={upperSpendable}
+                    updateBalance={updateUpperBalance}
+                /> 
             </section>
 
             <br />
@@ -353,38 +328,12 @@ const Swap = () => {
 
                 <br />
 
-                <div hidden={!lowerToken}>
-                    <Row>
-                        <Col span={6} className="label-key">
-                            <label>Total Balance</label>
-                        </Col>
-                        <Col span={6} className="label-value">
-                            <label>{lowerBalanace}</label>
-                        </Col>
-                    </Row>
-                    <Row>
-                        <Col span={6} className="label-key">
-                            <label>Spendable Balance</label>
-                        </Col>
-                        <Col span={6} className="label-value">
-                            <label>{lowerSpendable}</label>
-                        </Col>
-                    </Row>
-
-                    <br />
-
-                    <Row>
-                        <Col span={12} style={{ textAlign: "center" }}>
-                            <Button
-                                onClick={async () => {
-                                    await updateLowerBalance();
-                                }}
-                            >
-                                Update Balance
-                            </Button>
-                        </Col>
-                    </Row>
-                </div>
+                <TokenBalanceBox
+                    token={lowerToken}
+                    total={lowerBalanace}
+                    spendable={lowerSpendable}
+                    updateBalance={updateLowerBalance}
+                />
             </section>
 
             <br />

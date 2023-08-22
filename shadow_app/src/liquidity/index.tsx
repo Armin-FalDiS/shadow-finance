@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { getLPTokenBalance } from "../general";
 import { EmptyLP } from "./EmptyLP";
 import { LPTable } from "./LPTable";
-import { Button, Col, Row } from "antd";
+import { Button, Col, Form, Row } from "antd";
 import { SupplyLiquidity } from "./SupplyLiquidity";
 
 export const Liquidity = () => {
@@ -26,7 +26,7 @@ export const Liquidity = () => {
         return <SupplyLiquidity setShowMe={setShowSupplyLiquidity} />;
     } else {
         return (
-            <>
+            <Form disabled={!publicKey}>
                 {LPBalance == 0 && <EmptyLP />}
                 {LPBalance > 0 && <LPTable />}
 
@@ -46,7 +46,7 @@ export const Liquidity = () => {
                         </Button>
                     </Col>
                 </Row>
-            </>
+            </Form>
         );
     }
 };

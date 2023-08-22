@@ -9,6 +9,7 @@ import {
     WalletNotConnectedError,
     Transaction,
 } from "@demox-labs/aleo-wallet-adapter-base";
+import { TokenBalanceBox } from "../TokenBalanceBox";
 
 interface Token {
     value: string;
@@ -74,7 +75,7 @@ export const SupplyLiquidity = ({ setShowMe }: any) => {
     useEffect(() => {
         setExchangeRate();
         fetchTokenAmounts();
-    },[upperToken, lowerToken]);
+    }, [upperToken, lowerToken]);
 
     enum Tokens {
         ArmInToken = "ArmIn Token",
@@ -255,14 +256,14 @@ export const SupplyLiquidity = ({ setShowMe }: any) => {
                 fee
             );
 
-           await requestTransaction(aleoTransaction);
+            await requestTransaction(aleoTransaction);
 
- 
+
         }
     };
 
     return (
-        <>
+        <Form disabled={!publicKey}>
             <Row>
                 <Col>
                     <svg
@@ -290,7 +291,7 @@ export const SupplyLiquidity = ({ setShowMe }: any) => {
                     </svg>
                 </Col>
             </Row>
-            <Form className="token-box-container">
+            <div className="token-box-container">
                 <Row>
                     <Col span={24}>
                         <InputNumber
@@ -313,41 +314,16 @@ export const SupplyLiquidity = ({ setShowMe }: any) => {
                 </Row>
                 <br />
 
-                <Form hidden={!upperToken}>
-                    <Row>
-                        <Col span={6} className="label-key">
-                            <label>Total Balance</label>
-                        </Col>
-                        <Col span={6} className="label-value">
-                            <label>{upperBalance}</label>
-                        </Col>
-                    </Row>
-                    <Row>
-                        <Col span={6} className="label-key">
-                            <label>Spendable Balance</label>
-                        </Col>
-                        <Col span={6} className="label-value">
-                            <label>{upperSpendable}</label>
-                        </Col>
-                    </Row>
 
-                    <br />
-
-                    <Row>
-                        <Col span={12} style={{ textAlign: "center" }}>
-                            <Button
-                                onClick={async () => {
-                                    await updateUpperBalance();
-                                }}
-                            >
-                                Update Balance
-                            </Button>
-                        </Col>
-                    </Row>
-                </Form>
-            </Form>
+                <TokenBalanceBox
+                    token={upperToken}
+                    total={upperBalance}
+                    spendable={upperSpendable}
+                    updateBalance={updateUpperBalance}
+                />
+            </div>
             <br />
-            <Form className="token-box-container">
+            <div className="token-box-container">
                 <Row>
                     <Col span={24}>
                         <InputNumber
@@ -369,39 +345,13 @@ export const SupplyLiquidity = ({ setShowMe }: any) => {
                     </Col>
                 </Row>
 
-                <Form hidden={!lowerToken}>
-                    <Row>
-                        <Col span={6} className="label-key">
-                            <label>Total Balance</label>
-                        </Col>
-                        <Col span={6} className="label-value">
-                            <label>{lowerBalanace}</label>
-                        </Col>
-                    </Row>
-                    <Row>
-                        <Col span={6} className="label-key">
-                            <label>Spendable Balance</label>
-                        </Col>
-                        <Col span={6} className="label-value">
-                            <label>{lowerSpendable}</label>
-                        </Col>
-                    </Row>
-
-                    <br />
-
-                    <Row>
-                        <Col span={12} style={{ textAlign: "center" }}>
-                            <Button
-                                onClick={async () => {
-                                    await updateLowerBalance();
-                                }}
-                            >
-                                Update Balance
-                            </Button>
-                        </Col>
-                    </Row>
-                </Form>
-            </Form>
+                <TokenBalanceBox
+                    token={lowerToken}
+                    total={lowerBalanace}
+                    spendable={lowerSpendable}
+                    updateBalance={updateLowerBalance}
+                />
+            </div>
             <br />
             <Row>
                 <Col span={12} className="label-key">
@@ -419,8 +369,8 @@ export const SupplyLiquidity = ({ setShowMe }: any) => {
                     <label>
                         {(((upperTokenAmount * lowerTokenAmount) /
                             ((armInReserve * armOutReserve) +
-                            (upperTokenAmount * lowerTokenAmount))*100).toFixed(2)) || 0}{" %"}
-                        
+                                (upperTokenAmount * lowerTokenAmount)) * 100).toFixed(2)) || 0}{" %"}
+
                     </label>
                 </Col>
             </Row>
@@ -459,6 +409,6 @@ export const SupplyLiquidity = ({ setShowMe }: any) => {
                     </Button>
                 </Col>
             </Row>
-        </>
+        </Form>
     );
 };
