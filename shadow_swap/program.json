@@ -1,5 +1,5 @@
 {
-    "program": "shadow_swap_v0.aleo",
+    "program": "shadow_swap_v0r1.aleo",
     "version": "0.0.0",
     "description": "ShadowFi's private decentalized exchange",
     "license": "MIT"

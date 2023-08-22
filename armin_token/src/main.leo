@@ -1,4 +1,4 @@
-program armin_token_v0.aleo {
+program armin_token_v0r1.aleo {
     mapping supply_armin: u8 => u64;
     mapping programs_armin: field => u64;
 

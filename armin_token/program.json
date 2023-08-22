@@ -1,5 +1,5 @@
 {
-    "program": "armin_token_v0.aleo",
+    "program": "armin_token_v0r1.aleo",
     "version": "0.0.0",
     "description": "Fictional token for Shadow Finance (Swap)",
     "license": "MIT"
