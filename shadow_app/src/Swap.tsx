@@ -13,7 +13,12 @@ import { TokenBalanceBox } from "./TokenBalanceBox";
 interface Token {
     value: string;
     label: string;
-}
+};
+
+enum Tokens {
+    ArmInToken = "ArmIn Token",
+    ArmOutToken = "ArmOut Token",
+};
 
 const Swap = () => {
     const { wallet, publicKey, requestRecords, requestTransaction } =
@@ -29,15 +34,8 @@ const Swap = () => {
             label: "ArmOut Token",
         },
     ];
-    enum Tokens {
-        ArmInToken = "ArmIn Token",
-        ArmOutToken = "ArmOut Token",
-    }
 
     const [programId] = useState(app.shadow_swap.id);
-    const [functionName, setFunctionName] = useState(
-        app.shadow_swap.swap_to_0_function
-    );
     const [fee] = useState(app.shadow_swap.swap_to_0_fee);
     const [upperToken, setUpperToken] = useState<any>();
     const [lowerToken, setLowerToken] = useState<any>();
@@ -229,16 +227,18 @@ const Swap = () => {
             const arminSpendableIndex = getIndexOfHighestRecord(armInRecords);
             const armOutSpendableIndex = getIndexOfHighestRecord(armOutRecords);
 
+            let functionName;
+
             if (upperToken[0] == Tokens.ArmInToken) {
-                setFunctionName(app.shadow_swap.swap_to_1_function);
+                functionName = app.shadow_swap.swap_to_1_function;
                 inputsArray = [
                     publicKey,
                     armInRecords[arminSpendableIndex],
                     upperTokenAmount.toFixed() + "u64",
                     lowerTokenAmount.toFixed() + "u64",
                 ];
-            } else if (upperToken[0] == Tokens.ArmOutToken) {
-                setFunctionName(app.shadow_swap.swap_to_0_function);
+            } else {
+                functionName = app.shadow_swap.swap_to_0_function;
                 inputsArray = [
                     publicKey,
                     armOutRecords[armOutSpendableIndex],
@@ -297,7 +297,7 @@ const Swap = () => {
                     total={upperBalance}
                     spendable={upperSpendable}
                     updateBalance={updateUpperBalance}
-                /> 
+                />
             </section>
 
             <br />
