@@ -5,7 +5,7 @@ import axios from "axios";
 const programID = app.shadow_swap.id;
 const nodeUrl = app.node_url;
 
-await __wbg_init();
+__wbg_init();
 
 export const parseU64Response = (res: any) =>
     parseInt(res.data.substr(0, res.data.length - 3));

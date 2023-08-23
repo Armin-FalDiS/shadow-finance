@@ -17,7 +17,7 @@ import { Col, Radio, type RadioChangeEvent, Row } from "antd";
 import "@demox-labs/aleo-wallet-adapter-reactui/styles.css";
 import "./App.css";
 import { Liquidity } from "./liquidity";
-import { SocialBar } from "./SocialBar";
+import { FollowBar } from "./FollowBar";
 
 enum NavTab {
     "Swap",
@@ -47,7 +47,7 @@ export const App = () => {
             autoConnect
         >
             <div style={{ textAlign: "end", marginTop: "2%", marginRight: "2%" }}>
-                <SocialBar />
+                <FollowBar />
             </div>
             <WalletModalProvider>
                 <header style={{ margin: "0 3% 3%" }}>
