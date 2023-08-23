@@ -137,28 +137,29 @@ label {
     display: flex;
     justify-content: center;
 }
+
 .social-container {
-    background: #bebdbd;
-    padding: 10px 10px;
-  }
-  a.social {
-    margin: 0 1rem;
+    background: transparent;
+}
+
+a.social {
+    margin: 0 0.75%;
     transition: transform 250ms;
     display: inline-block;
-  }
-  a.social:hover {
-    transform: translateY(-2px);
-  }
+}
 
-  a.youtube {
+a.social:hover {
+    transform: translateY(-2px);
+}
+
+a.youtube {
     color: #eb3223;
-  }
-  
-  a.github {
-    color : #171515
-  }
-  
-  a.twitter {
-    color: #49a1eb;
-  }
-  
+}
+
+a.github {
+    color: black;
+}
+
+a.twitter {
+    color: #41a9ff;
+}
