@@ -10,7 +10,7 @@ export const SocialBar = () => {
     return (
         <div className="social-container">
             <a
-                href="https://www.youtube.com/c/jamesqquick"
+                href="https://youtube.com/@Shadowfi_xyz"
                 className="youtube social"
             >
                 <FontAwesomeIcon icon={faYoutube} size="2x" />
