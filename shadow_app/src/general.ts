@@ -5,7 +5,9 @@ import axios from "axios";
 const programID = app.shadow_swap.id;
 const nodeUrl = app.node_url;
 
-__wbg_init();
+let isWasmLoaded: boolean = false;
+
+__wbg_init().then(() => (isWasmLoaded = true));
 
 export const parseU64Response = (res: any) =>
     parseInt(res.data.substr(0, res.data.length - 3));
@@ -36,6 +38,13 @@ export const getArmOutReserve = async () => {
 };
 
 export const getLPTokenBalance = async (address: string) => {
+    let tries = 100;
+
+    while (tries-- && !isWasmLoaded) {
+        console.log("Waiting for WASM to load...");
+        await new Promise((r) => setTimeout(r, 200));
+    }
+
     const hashedAddress = bhp256(address);
 
     try {
