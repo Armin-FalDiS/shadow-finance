@@ -265,7 +265,7 @@ export const SupplyLiquidity = ({ setShowMe }: any) => {
     return (
         <Form disabled={!publicKey}>
             <Row>
-                <Col style={{margin: "-10% 0 0 -10%"}}>
+                <Col style={{ margin: "-10% 0 0 -10%" }}>
                     <svg
                         xmlns="http://www.w3.org/2000/svg"
                         width="32"
@@ -327,6 +327,7 @@ export const SupplyLiquidity = ({ setShowMe }: any) => {
                 <Row>
                     <Col span={24}>
                         <InputNumber
+                            readOnly={true}
                             onChange={onChangeLowerAmount}
                             value={lowerTokenAmount}
                             bordered={false}
