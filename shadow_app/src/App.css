@@ -20,20 +20,24 @@ aside {
     padding: 1%;
 }
 
-.ant-radio-button-wrapper {
+.tab-box {
+    padding: 6px;
+    border-radius: 12px;
+    border: 1px solid #eee;
+    background: rgba(255, 255, 255, 0.13);
+    backdrop-filter: blur(2px);
+}
+
+.tab-btn {
+    padding: 25px;
+    font-size: xx-large;
+    height: auto !important;
+    line-height: 0;
+    width: 100%;
+}
+
+.tab-btn-unchecked {
     background-color: transparent !important;
-    color: white !important;
-}
-
-.ant-radio-button-wrapper-checked {
-    background-color: #1c14ff !important;
-    color: white !important;
-}
-
-.ant-radio-group {
-    background-color: #0000000d;
-    padding: 20px;
-    border-radius: 20px;
 }
 
 .ant-btn-primary {

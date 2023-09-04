@@ -12,7 +12,7 @@ import {
 } from "@demox-labs/aleo-wallet-adapter-base";
 import { MintArmOut } from "./MintArmOut";
 import Swap from "./Swap";
-import { Col, Radio, type RadioChangeEvent, Row } from "antd";
+import { Col, Radio, type RadioChangeEvent, Row, Button } from "antd";
 
 import "@demox-labs/aleo-wallet-adapter-reactui/styles.css";
 import "./App.css";
@@ -35,8 +35,16 @@ export const App = () => {
     );
     const [tab, setTab] = useState(NavTab.Swap);
 
-    const handleNavigationTabChange = (event: RadioChangeEvent) => {
-        setTab(event.target.value);
+    const handleNavigationTabChange = (selectedTab: string) => {
+        if (selectedTab == "swap") {
+            document.getElementById("swap-tab-btn")?.classList.remove("tab-btn-unchecked");
+            document.getElementById("liquidity-tab-btn")?.classList.add("tab-btn-unchecked");
+            setTab(NavTab.Swap);
+        } else {
+            document.getElementById("swap-tab-btn")?.classList.add("tab-btn-unchecked");
+            document.getElementById("liquidity-tab-btn")?.classList.remove("tab-btn-unchecked");
+            setTab(NavTab.Liquidity);
+        }
     };
 
     return (
@@ -51,7 +59,7 @@ export const App = () => {
                 <header style={{ margin: "0 3% 3%" }}>
                     <Row align={"middle"}>
                         <Col
-                            span={8}
+                            span={6}
                             style={{ display: "flex", justifyContent: "start" }}
                         >
                             <div>
@@ -78,36 +86,32 @@ export const App = () => {
                                 </svg>
                             </div>
                         </Col>
-
                         <Col
-                            span={8}
-                            style={{
-                                display: "flex",
-                                justifyContent: "center",
-                            }}
-                        >
-                            <nav>
-                                <Radio.Group
-                                    optionType="button"
-                                    size="large"
-                                    onChange={handleNavigationTabChange}
-                                    value={tab}
-                                >
-                                    <Radio.Button value={NavTab.Swap}>
-                                        Swap
-                                    </Radio.Button>
-                                    <Radio.Button value={NavTab.Liquidity}>
-                                        Liquidity
-                                    </Radio.Button>
-                                </Radio.Group>
-                            </nav>
-                        </Col>
-
-                        <Col
-                            span={8}
+                            span={3}
+                            offset={15}
                             style={{ display: "flex", justifyContent: "end" }}
                         >
                             <WalletMultiButton />
+                        </Col>
+                    </Row>
+                    <Row>
+                        <Col
+                            className="tab-box"
+                            span={6}
+                            offset={9}
+                        >
+                            <Row>
+                                <Col span={12}>
+                                    <Button id="swap-tab-btn" className="tab-btn" onClick={() => handleNavigationTabChange("swap")}>
+                                        Swap
+                                    </Button>
+                                </Col>
+                                <Col span={12}>
+                                    <Button id="liquidity-tab-btn" className="tab-btn tab-btn-unchecked" onClick={() => handleNavigationTabChange("liquidity")}>
+                                        Liquidity
+                                    </Button>
+                                </Col>
+                            </Row>
                         </Col>
                     </Row>
                 </header>
