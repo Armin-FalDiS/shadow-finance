@@ -1,8 +1,13 @@
+@font-face {
+    font-family: InterMedium;
+    src: url(Inter-Medium.ttf);
+}
+
 * {
     -moz-box-sizing: border-box;
     -webkit-box-sizing: border-box;
     box-sizing: border-box;
-    font-family: Helvetica;
+    font-family: InterMedium, Helvetica !important;
 }
 
 body {
@@ -202,19 +207,17 @@ svg#logo-text {
 
 .aside-title {
     color: var(--white, #fff);
-    font-family: SF Pro;
-    font-size: 24px;
+    font-size: 28px;
     font-style: normal;
-    font-weight: 650;
-    line-height: normal;
+    font-weight: 850;
+    line-height: 0.3;
 }
 
 .aside-desc {
     color: var(--white, #fff);
-    font-family: SF Pro;
-    font-size: 16px;
+    font-size: 18px;
     font-style: normal;
-    font-weight: 400;
+    font-weight: 600;
     line-height: normal;
 }
 
