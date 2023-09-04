@@ -2,6 +2,25 @@
     -moz-box-sizing: border-box;
     -webkit-box-sizing: border-box;
     box-sizing: border-box;
+    font-family: Helvetica;
+}
+
+body {
+    background: #121212;
+}
+
+#root {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    overflow-y: auto;
+    background: linear-gradient(
+        180deg,
+        rgba(236, 137, 36, 0.17) 0%,
+        rgba(0, 0, 0, 0) 43.51%
+    );
 }
 
 main {
@@ -30,7 +49,7 @@ aside {
 
 .tab-btn {
     padding: 25px;
-    font-size: xx-large;
+    font-size: large;
     height: auto !important;
     line-height: 0;
     width: 100%;
@@ -94,9 +113,10 @@ label {
 }
 
 .ant-select-selector {
-    background-color: #1162f5 !important;
+    background-color: #ff9500 !important;
     color: #ffffff !important;
     border: transparent !important;
+    font-size: large !important;
 }
 
 .ant-select-selection-placeholder {

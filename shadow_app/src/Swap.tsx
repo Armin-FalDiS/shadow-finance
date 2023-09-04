@@ -343,7 +343,7 @@ const Swap = () => {
                     <label>Transaction Fee</label>
                 </Col>
                 <Col span={12} className="label-value">
-                    <label>2 credits</label>
+                    <label>10 credits</label>
                 </Col>
             </Row>
             <Row>
@@ -351,7 +351,7 @@ const Swap = () => {
                     <label>Slippage</label>
                 </Col>
                 <Col span={12} className="label-value">
-                    <label>1.5%</label>
+                    <label>2%</label>
                 </Col>
             </Row>
             <Row>

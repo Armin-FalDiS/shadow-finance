@@ -359,7 +359,7 @@ export const SupplyLiquidity = ({ setShowMe }: any) => {
                     <label>Transaction Fee</label>
                 </Col>
                 <Col span={12} className="label-value">
-                    <label>2 credits</label>
+                    <label>10 credits</label>
                 </Col>
             </Row>
             <Row>
