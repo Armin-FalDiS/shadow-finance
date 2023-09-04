@@ -114,7 +114,29 @@ export const App = () => {
 
                 <aside>
                     <Row>
-                        <Col>
+                        <svg width="34" height="34" viewBox="0 0 34 34" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <g id="Group">
+                                <path id="Path" d="M4.25 11.3333H29.75" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                                <path id="Path_2" d="M4.25 18.4167V8.5C4.25 6.15279 6.15279 4.25 8.5 4.25H25.5C27.8472 4.25 29.75 6.15279 29.75 8.5V19.8333C29.75 22.1805 27.8472 24.0833 25.5 24.0833H21.25" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                                <path id="Path_3" d="M24.083 18.4166H19.833" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                                <path id="Path_4" fill-rule="evenodd" clip-rule="evenodd" d="M9.91667 29.7501C9.91667 26.6205 7.37961 24.0834 4.25 24.0834C7.37961 24.0834 9.91667 21.5464 9.91667 18.4167C9.91667 21.5464 12.4537 24.0834 15.5833 24.0834C12.4537 24.0834 9.91667 26.6205 9.91667 29.7501Z" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                            </g>
+                        </svg>
+                    </Row>
+                    <Row>
+                        <p className="aside-title">
+                            Faucet
+                        </p>
+                    </Row>
+                    <Row>
+                        <span className="aside-desc">
+                            Get your test tokens here!
+                        </span>
+                    </Row>
+                    <br />
+                    <br />
+                    <Row>
+                        <Col span={24}>
                             <MintArmIn />
                         </Col>
                     </Row>
@@ -122,7 +144,7 @@ export const App = () => {
                     <br />
 
                     <Row>
-                        <Col>
+                        <Col span={24}>
                             <MintArmOut />
                         </Col>
                     </Row>

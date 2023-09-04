@@ -77,7 +77,7 @@ export const MintArmOut = () => {
     };
 
     return (
-        <Form disabled={!publicKey}>
+        <Form className="mint-box" disabled={!publicKey}>
             <Button
                 icon={<PlusCircleOutlined />}
                 type="link"

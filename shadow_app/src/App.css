@@ -168,3 +168,27 @@ svg#logo-text {
     align-self: center;
     margin-bottom: 30px;
 }
+
+.aside-title {
+    color: var(--white, #fff);
+    font-family: SF Pro;
+    font-size: 24px;
+    font-style: normal;
+    font-weight: 650;
+    line-height: normal;
+}
+
+.aside-desc {
+    color: var(--white, #fff);
+    font-family: SF Pro;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+}
+
+.mint-box {
+    border-radius: 12px;
+    border: 1px solid #eee;
+    background: rgba(255, 255, 255, 0.13);
+}
