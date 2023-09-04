@@ -2,6 +2,25 @@
     -moz-box-sizing: border-box;
     -webkit-box-sizing: border-box;
     box-sizing: border-box;
+    font-family: Helvetica;
+}
+
+body {
+    background: #121212;
+}
+
+#root {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    overflow-y: auto;
+    background: linear-gradient(
+        180deg,
+        rgba(236, 137, 36, 0.17) 0%,
+        rgba(0, 0, 0, 0) 43.51%
+    );
 }
 
 main {
@@ -20,44 +39,55 @@ aside {
     padding: 1%;
 }
 
-.ant-radio-button-wrapper {
+.tab-box {
+    padding: 6px;
+    border-radius: 12px;
+    border: 1px solid #eee;
+    background: rgba(255, 255, 255, 0.13);
+    backdrop-filter: blur(2px);
+}
+
+.tab-btn {
+    padding: 25px;
+    font-size: large;
+    height: auto !important;
+    line-height: 0;
+    width: 100%;
+}
+
+.tab-btn-unchecked {
     background-color: transparent !important;
-    color: white !important;
-}
-
-.ant-radio-button-wrapper-checked {
-    background-color: #1c14ff !important;
-    color: white !important;
-}
-
-.ant-radio-group {
-    background-color: #0000000d;
-    padding: 20px;
-    border-radius: 20px;
 }
 
 .ant-btn-primary {
-    background-color: #ec8924;
-    color: #0b0b0e;
-    border: transparent;
+    color: var(--white, #fff);
     width: 100%;
+    border-radius: 12px;
+    border: 1px solid #ff9500;
+    background: #ff9e0b;
+    box-shadow: 0px 0px 10px 0px rgba(255, 255, 255, 0.14) inset;
 }
 
 .ant-btn-primary:disabled {
-    background-color: #a4703c;
-    color: #424247;
+    color: var(--white, #fff);
     width: 100%;
+    border-radius: 12px;
+    border: 1px solid #ff9500;
+    background: #ff9e0b;
+    box-shadow: 0px 0px 10px 0px rgba(255, 255, 255, 0.14) inset;
+    opacity: 0.5;
 }
 
 .ant-btn-default {
-    background-color: #ec8924;
-    color: #0b0b0e;
+    background-color: #ff9e0b;
+    color: var(--white, #fff);
     border: transparent;
 }
 
 .ant-btn-default:disabled {
-    background-color: #a4703c;
-    color: #424247;
+    background-color: #ff9e0b;
+    color: var(--white, #fff);
+    opacity: 0.5;
 }
 
 label {
@@ -83,9 +113,10 @@ label {
 }
 
 .ant-select-selector {
-    background-color: #1162f5 !important;
+    background-color: #ff9500 !important;
     color: #ffffff !important;
     border: transparent !important;
+    font-size: large !important;
 }
 
 .ant-select-selection-placeholder {
@@ -162,4 +193,39 @@ a.github {
 
 a.twitter {
     color: #41a9ff;
+}
+
+svg#logo-text {
+    align-self: center;
+    margin-bottom: 30px;
+}
+
+.aside-title {
+    color: var(--white, #fff);
+    font-family: SF Pro;
+    font-size: 24px;
+    font-style: normal;
+    font-weight: 650;
+    line-height: normal;
+}
+
+.aside-desc {
+    color: var(--white, #fff);
+    font-family: SF Pro;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+}
+
+.mint-box {
+    border-radius: 12px;
+    border: 1px solid #eee;
+    background: rgba(255, 255, 255, 0.13);
+}
+
+.wallet-adapter-button-trigger {
+    border-radius: 12px;
+    border: 1px solid #ff9e0b;
+    background: #ff9500;
 }

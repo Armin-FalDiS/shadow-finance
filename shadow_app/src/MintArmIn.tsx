@@ -77,7 +77,7 @@ export const MintArmIn = () => {
     };
 
     return (
-        <Form disabled={!publicKey}>
+        <Form className="mint-box" disabled={!publicKey}>
             <Button
                 icon={<PlusCircleOutlined />}
                 type="link"
@@ -91,7 +91,9 @@ export const MintArmIn = () => {
 
             {transactionId && (
                 <div>
-                    <div style={{ color: "white" }}>{`Transaction status: ${status ?? "Error"}`}</div>
+                    <div style={{ color: "white" }}>{`Transaction status: ${
+                        status ?? "Error"
+                    }`}</div>
                 </div>
             )}
         </Form>

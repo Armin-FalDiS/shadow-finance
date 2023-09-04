@@ -8,7 +8,10 @@ import { Col, Row } from "antd";
 
 export const FollowBar = () => {
     return (
-        <div className="social-container" style={{ marginTop: "2%", marginRight: "3%" }}>
+        <div
+            className="social-container"
+            style={{ marginTop: "2%", marginRight: "3%" }}
+        >
             <Row justify="end">
                 <Col>
                     <a

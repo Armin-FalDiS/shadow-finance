@@ -42,7 +42,7 @@ export const getLPTokenBalance = async (address: string) => {
 
     while (tries-- && !isWasmLoaded) {
         console.log("Waiting for WASM to load...");
-        await new Promise((r) => setTimeout(r, 200));
+        await new Promise((resolve) => setTimeout(resolve, 200));
     }
 
     const hashedAddress = bhp256(address);
