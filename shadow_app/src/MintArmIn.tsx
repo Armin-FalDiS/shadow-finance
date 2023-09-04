@@ -91,7 +91,9 @@ export const MintArmIn = () => {
 
             {transactionId && (
                 <div>
-                    <div style={{ color: "white" }}>{`Transaction status: ${status ?? "Error"}`}</div>
+                    <div style={{ color: "white" }}>{`Transaction status: ${
+                        status ?? "Error"
+                    }`}</div>
                 </div>
             )}
         </Form>

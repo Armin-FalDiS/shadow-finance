@@ -13,12 +13,12 @@ import { TokenBalanceBox } from "./TokenBalanceBox";
 interface Token {
     value: string;
     label: string;
-};
+}
 
 enum Tokens {
     ArmInToken = "ArmIn Token",
     ArmOutToken = "ArmOut Token",
-};
+}
 
 const Swap = () => {
     const { wallet, publicKey, requestRecords, requestTransaction } =
@@ -147,8 +147,8 @@ const Swap = () => {
                 setLowerTokenAmount(
                     (armOutReserve -
                         (armInReserve * armOutReserve) /
-                        (armInReserve + value)) *
-                    0.98
+                            (armInReserve + value)) *
+                        0.98
                 );
             } else if (
                 lowerToken?.[0] === Tokens.ArmInToken &&
@@ -157,8 +157,8 @@ const Swap = () => {
                 setLowerTokenAmount(
                     (armInReserve -
                         (armInReserve * armOutReserve) /
-                        (armOutReserve + value)) *
-                    0.98
+                            (armOutReserve + value)) *
+                        0.98
                 );
             }
         }
@@ -173,7 +173,7 @@ const Swap = () => {
                 setUpperTokenAmount(
                     ((armInReserve * armOutReserve) / (armOutReserve - value) -
                         armInReserve) *
-                    1.01
+                        1.01
                 );
             } else if (
                 lowerToken?.[0] === Tokens.ArmInToken &&
@@ -182,7 +182,7 @@ const Swap = () => {
                 setUpperTokenAmount(
                     ((armInReserve * armOutReserve) / (armInReserve - value) -
                         armOutReserve) *
-                    1.01
+                        1.01
                 );
             }
         }

@@ -1,6 +1,11 @@
 import { Button, Col, Row } from "antd";
 
-export const TokenBalanceBox = ({ token, total, spendable, updateBalance }: any) => {
+export const TokenBalanceBox = ({
+    token,
+    total,
+    spendable,
+    updateBalance,
+}: any) => {
     return (
         <div hidden={!token}>
             <Row>
@@ -35,4 +40,4 @@ export const TokenBalanceBox = ({ token, total, spendable, updateBalance }: any)
             </Row>
         </div>
     );
-}
+};

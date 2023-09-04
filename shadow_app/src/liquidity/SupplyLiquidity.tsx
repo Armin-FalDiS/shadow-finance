@@ -16,6 +16,11 @@ interface Token {
     label: string;
 }
 
+enum Tokens {
+    ArmInToken = "ArmIn Token",
+    ArmOutToken = "ArmOut Token",
+}
+
 export const SupplyLiquidity = ({ setShowMe }: any) => {
     const { wallet, publicKey, requestRecords, requestTransaction } =
         useWallet();
@@ -34,7 +39,6 @@ export const SupplyLiquidity = ({ setShowMe }: any) => {
     const [armInReserve, setArmInReserve] = useState(0);
     const [armOutReserve, setArmOutReserve] = useState(0);
     const [ratio, setRatio] = useState<number | string>(0);
-
 
     const tokens: Token[] = [
         {
@@ -71,16 +75,10 @@ export const SupplyLiquidity = ({ setShowMe }: any) => {
         }
     };
 
-
     useEffect(() => {
         setExchangeRate();
         fetchTokenAmounts();
     }, [upperToken, lowerToken]);
-
-    enum Tokens {
-        ArmInToken = "ArmIn Token",
-        ArmOutToken = "ArmOut Token",
-    }
 
     const updateUpperBalance = async () => {
         let program = "";
@@ -257,8 +255,6 @@ export const SupplyLiquidity = ({ setShowMe }: any) => {
             );
 
             await requestTransaction(aleoTransaction);
-
-
         }
     };
 
@@ -314,7 +310,6 @@ export const SupplyLiquidity = ({ setShowMe }: any) => {
                 </Row>
                 <br />
 
-
                 <TokenBalanceBox
                     token={upperToken}
                     total={upperBalance}
@@ -368,22 +363,23 @@ export const SupplyLiquidity = ({ setShowMe }: any) => {
                 </Col>
                 <Col span={12} className="label-value">
                     <label>
-                        {(((upperTokenAmount * lowerTokenAmount) /
-                            ((armInReserve * armOutReserve) +
-                                (upperTokenAmount * lowerTokenAmount)) * 100).toFixed(2)) || 0}{" %"}
-
+                        {(
+                            ((upperTokenAmount * lowerTokenAmount) /
+                                (armInReserve * armOutReserve +
+                                    upperTokenAmount * lowerTokenAmount)) *
+                            100
+                        ).toFixed(2) || 0}
+                        {" %"}
                     </label>
                 </Col>
             </Row>
             <Row>
-
                 <Col span={12} className="label-key">
                     <label>Exhange Rate</label>
                 </Col>
                 <Col span={12} className="label-value">
                     <label>{ratio?.toString()?.substring(0, 4) || 0}</label>
                 </Col>
-
             </Row>
 
             <br />
