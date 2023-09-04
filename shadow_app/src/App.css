@@ -163,3 +163,8 @@ a.github {
 a.twitter {
     color: #41a9ff;
 }
+
+svg#logo-text {
+    align-self: center;
+    margin-bottom: 30px;
+}
