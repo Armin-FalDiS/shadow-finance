@@ -37,27 +37,34 @@ aside {
 }
 
 .ant-btn-primary {
-    background-color: #ec8924;
-    color: #0b0b0e;
-    border: transparent;
+    color: var(--white, #fff);
     width: 100%;
+    border-radius: 12px;
+    border: 1px solid #ff9500;
+    background: #ff9e0b;
+    box-shadow: 0px 0px 10px 0px rgba(255, 255, 255, 0.14) inset;
 }
 
 .ant-btn-primary:disabled {
-    background-color: #a4703c;
-    color: #424247;
+    color: var(--white, #fff);
     width: 100%;
+    border-radius: 12px;
+    border: 1px solid #ff9500;
+    background: #ff9e0b;
+    box-shadow: 0px 0px 10px 0px rgba(255, 255, 255, 0.14) inset;
+    opacity: 0.5;
 }
 
 .ant-btn-default {
-    background-color: #ec8924;
-    color: #0b0b0e;
+    background-color: #ff9e0b;
+    color: var(--white, #fff);
     border: transparent;
 }
 
 .ant-btn-default:disabled {
-    background-color: #a4703c;
-    color: #424247;
+    background-color: #ff9e0b;
+    color: var(--white, #fff);
+    opacity: 0.5;
 }
 
 label {
@@ -191,4 +198,10 @@ svg#logo-text {
     border-radius: 12px;
     border: 1px solid #eee;
     background: rgba(255, 255, 255, 0.13);
+}
+
+.wallet-adapter-button-trigger {
+    border-radius: 12px;
+    border: 1px solid #ff9e0b;
+    background: #ff9500;
 }

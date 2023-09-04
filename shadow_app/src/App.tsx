@@ -49,7 +49,7 @@ export const App = () => {
             <FollowBar />
             <WalletModalProvider>
                 <header style={{ margin: "0 3% 3%" }}>
-                    <Row align="middle">
+                    <Row align={"middle"}>
                         <Col
                             span={8}
                             style={{ display: "flex", justifyContent: "start" }}
