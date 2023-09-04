@@ -12,7 +12,7 @@ import {
 } from "@demox-labs/aleo-wallet-adapter-base";
 import { MintArmOut } from "./MintArmOut";
 import Swap from "./Swap";
-import { Col, Radio, type RadioChangeEvent, Row, Button } from "antd";
+import { Col, Row, Button } from "antd";
 
 import "@demox-labs/aleo-wallet-adapter-reactui/styles.css";
 import "./App.css";

@@ -39,8 +39,8 @@ export const LPTable = () => {
     const getTokenAmounts = async () => {
         const armInReserve = await getArmInReserve();
         const armOutReserve = await getArmOutReserve();
-        const armInShare = Math.floor((LPShare) *armInReserve);
-        const armOutShare = Math.floor((LPShare)* armOutReserve);
+        const armInShare = Math.floor((LPShare) * armInReserve);
+        const armOutShare = Math.floor((LPShare) * armOutReserve);
 
         return [armInShare, armOutShare];
     };
@@ -79,7 +79,7 @@ export const LPTable = () => {
             parsedInputs,
             app.shadow_swap.burn_fee
         );
-      await requestTransaction(aleoTransaction);
+        await requestTransaction(aleoTransaction);
 
 
     };
@@ -91,9 +91,10 @@ export const LPTable = () => {
             stats: (
                 <>
                     <label>LP: {LPBalance + " " || "?? "}</label>
+                    <br />
                     <label>
-                        Pool Share: 
-                        {(LPShare ? ( " " +(LPShare * 100).toFixed(2)) : "??") + "%"}
+                        Pool Share:
+                        {(LPShare ? (" " + (LPShare * 100).toFixed(2)) : "??") + "%"}
                     </label>
                 </>
             ),
