@@ -5,7 +5,7 @@
 <br />
 <div align="center">
   <a href="https://github.com/Armin-FalDis/shadow-finance">
-    <img src="images/logo.svg" alt="Logo" width="80" height="80">
+    <img src="https://github.com/Armin-FalDiS/shadow-finance/assets/20294274/f95820fc-d300-4ac6-aa9d-c05587771cd0" alt="Logo" width="100" height="100">
   </a>
 
   <h3 align="center">Shadow Finance</h3>
