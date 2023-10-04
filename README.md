@@ -4,7 +4,7 @@
 <!-- PROJECT LOGO -->
 <br />
 <div align="center">
-  <a href="https://github.com/Armin-FalDis/shadow-finance">
+  <a href="https://shadowfi.xyz/">
     <img src="https://github.com/Armin-FalDiS/shadow-finance/assets/20294274/f95820fc-d300-4ac6-aa9d-c05587771cd0" alt="Logo" width="100" height="100">
   </a>
 
@@ -16,13 +16,15 @@
     <a href="https://github.com/Armin-FalDis/shadow-finance"><strong>Explore the docs »</strong></a>
     <br />
     <br />
-    <a href="https://github.com/Armin-FalDis/shadow-finance">View Demo</a>
+    <a href="https://shadowfi.xyz/">View Demo</a>
     ·
     <a href="https://github.com/Armin-FalDis/shadow-finance">Report Bug</a>
     ·
     <a href="https://github.com/Armin-FalDis/shadow-finance">Request Feature</a>
   </p>
 </div>
+
+Our Website : https://shadowfi.xyz/
 
 <!-- TABLE OF CONTENTS -->
 <details>
@@ -50,15 +52,14 @@ There is also [this video](https://drive.google.com/file/d/1X_f8PVwt4QtFoVI6dcAT
 
 ## About The Project
 
-Shadow Finance is a privacy-focused automated market maker (AMM) swap built on the Aleo blockchain. It leverages Aleo's zero-knowledge snark technology to enable trustless private trading.
-
-At present, the project supports a limited selection of two premade tokens, primarily designed for demonstration purposes. Each token has a set of functions that users can engage with. This setup allows for experimentation and exploration of the token functionalities within the project's framework. both tokens have a total supply limit of one hundred billion (100000000000).
+ShadowFi is a decentralized private liquidity marketplace built on Aleo, designed to function as its Base liquidity layer. As a privacy-first liquidity exchange, our primary objective is to address prevalent issues around incentivizing liquidity provision and availability faced by both protocols and users, while simultaneously offering end users a secure, feature-rich  application with a user-friendly interface.
+At present, the project supports a limited selection of two premade tokens, primarily designed for demonstration purposes. Each token has a set of functions that users can engage with. This setup allows for experimentation and exploration of the token functionalities within the project's framework. both tokens have a total supply limit of one hundred billion (100000000000).You can read more  [here](https://shadowfi.xyz](https://medium.com/@shadowfi.xyz/shadowfi-a-decentralized-liquidity-marketplace-on-aleo-d84ebe299d48)).
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
 
 ## Our Vision
-Our Vision for ShadowFi is to create a decentralized and trustless AMM swap platform that places a strong emphasis on privacy and censorship resistance. Our goal is to enable users to trade and swap anonymously, without any interference or control from ShadowFi. We have designed the platform in such a way that ShadowFi has no access to user addresses and all trades are completely trustless and private.
+Our vision for ShadowFi is to become a  central private liquidity hub on Aleo, helping to address the cold start liquidity problem that projects often face and enhance liquidity provision by incentivizing fee generation instead of inefficient liquidity distribution. We achieve this by aligning the incentives of voters, traders, liquidity providers, and protocols.. Our goal is to enable users to trade and swap anonymously, without any interference or control from ShadowFi. We have designed the platform in such a way that ShadowFi has no access to user addresses and all trades are completely trustless and private.
 
 
 ## Token Mappings
