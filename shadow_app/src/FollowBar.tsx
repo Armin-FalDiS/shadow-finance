@@ -4,6 +4,7 @@ import {
     faGithub,
     faTwitter,
     faMedium,
+    faDiscord,
 } from "@fortawesome/free-brands-svg-icons";
 import { Col, Row } from "antd";
 
@@ -16,8 +17,18 @@ export const FollowBar = () => {
             <Row justify="end">
                 <Col>
                     <a
+                        href="https://shadowfi.xyz/discord/"
+                        className="discord social"
+                        style={{ marginRight: "24px" }}
+                    >
+                        <FontAwesomeIcon icon={faDiscord} size="2x" />
+                    </a>
+                </Col>
+                <Col>
+                    <a
                         href="https://medium.com/@shadowfi.xyz"
                         className="medium social"
+                        style={{ marginRight: "24px" }}
                     >
                         <FontAwesomeIcon icon={faMedium} size="2x" />
                     </a>
@@ -26,7 +37,7 @@ export const FollowBar = () => {
                     <a
                         href="https://youtube.com/@Shadowfi_xyz"
                         className="youtube social"
-                        style={{ marginLeft: "24px", marginRight: "24px" }}
+                        style={{ marginRight: "24px" }}
                     >
                         <FontAwesomeIcon icon={faYoutube} size="2x" />
                     </a>
